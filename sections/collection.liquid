@@ -1,0 +1,321 @@
+{%- liquid
+  # LAYOUT
+  assign vertical_spacing = section.settings.vertical_spacing
+  assign custom_spacing = section.settings.custom_spacing
+  assign top_spacing = section.settings.top_spacing
+  assign bottom_spacing = section.settings.bottom_spacing
+  assign top_spacing_mobile = section.settings.top_spacing_mobile
+  assign bottom_spacing_mobile = section.settings.bottom_spacing_mobile
+  assign page_width = section.settings.page_width
+  assign grid_items = section.settings.grid_items
+
+  # CTAS
+  assign cta_1 = metaobjects.cta[section.settings.cta_1]
+  assign cta_2 = metaobjects.cta[section.settings.cta_2]
+  assign cta_cards = collection.metafields.collection_data.ctas.value | default: collection.metafields.collection_data.cta_cards.value
+
+  if cta_cards != blank
+    for cta_card in cta_cards
+      assign cta_card_span = cta_card.collection_grid_size | plus: 0
+      assign grid_items = grid_items | minus: cta_card_span
+
+      if forloop.first
+        assign collection_advert_1 = cta_card
+      else
+        assign collection_advert_2 = cta_card
+      endif
+    endfor
+  elsif cta_1 != blank and cta_2 != blank
+    assign cta_1_span = cta_1.collection_grid_size | plus: 0
+    assign cta_2_span = cta_2.collection_grid_size | plus: 0
+    assign total_cta_span = cta_1_span | plus: cta_2_span
+    assign grid_items = grid_items | minus: total_cta_span
+    assign collection_advert_1 = cta_1
+    assign collection_advert_2 = cta_2
+  elsif cta_1 != blank
+    assign cta_1_span = cta_1.collection_grid_size | plus: 0
+    assign grid_items = grid_items | minus: cta_1_span
+    assign collection_advert_1 = cta_1
+  elsif cta_2 != blank
+    assign cta_2_span = cta_2.collection_grid_size | plus: 0
+    assign grid_items = grid_items | minus: cta_2_span
+    assign collection_advert_2 = cta_2
+  endif
+-%}
+
+<section
+  class="section-container {% unless custom_spacing %}{{ vertical_spacing }}{% else %}custom-spacing{% endunless %} {% if section.settings.filter_positioning == "vertical" %}{{ page_width }}{% endif %}"
+  style="
+  {%- if custom_spacing -%}
+    {%- if vertical_spacing == 'vertical-padding' -%}
+      padding-top: {{ top_spacing }}px; padding-bottom: {{ bottom_spacing }}px;--mobile-padding-top: {{ top_spacing_mobile }}px; --mobile-padding-bottom: {{ bottom_spacing_mobile }}px;
+    {%- elsif vertical_spacing == 'vertical-margin' -%}
+      margin-top: {{ top_spacing }}px; margin-bottom: {{ bottom_spacing }}px;--mobile-margin-top: {{ top_spacing_mobile }}px; --mobile-margin-bottom: {{ bottom_spacing_mobile }}px;
+    {%- elsif vertical_spacing == 'vertical-margin vertical-padding' -%}
+      padding-top: {{ top_spacing }}px; padding-bottom: {{ bottom_spacing }}px; margin-top: {{ top_spacing }}px; margin-bottom: {{ bottom_spacing }}px; --mobile-padding-top: {{ top_spacing_mobile }}px; --mobile-padding-bottom: {{ bottom_spacing_mobile }}px; --mobile-margin-top: {{ top_spacing_mobile }}px; --mobile-margin-bottom: {{ bottom_spacing_mobile }}px;
+    {%- endif -%}
+  {%- endif -%}
+  "
+  data-filter-grid
+>
+  {%- paginate collection.products by grid_items -%}
+    <div class="collection-grid-filters grid pb-5 to-md-g-0 g-3 {% if section.settings.filter_positioning == 'horizontal' %}horizontal-filters to-md-mt-6{% endif %}">
+      {%- if section.settings.filter_positioning == 'vertical' -%}
+        {%- render 'filters-vertical', page_width: page_width -%}
+      {%- else -%}
+        {%- render 'filters-horizontal', page_width: page_width -%}
+      {%- endif -%}
+      <grid-load-more
+        class="collection-grid-wrapper {% if section.settings.filter_positioning == "horizontal" %}{{ page_width }}{% endif %} section-container w-100"
+        data-section="collection"
+        data-selectors="product-card, .plp-cta-card"
+        data-next-url="{{ paginate.next.url }}"
+      >
+        <div grid class="collection-grid grid" data-next-url="{{- paginate.next.url -}}">
+          {%- if collection.products.size == 0 -%}
+            <div class="heading-h1 no-results">{{ 'collections.no_products' | t }}</div>
+          {%- else -%}
+            {%- liquid
+              assign lazy_loading = false
+
+              for product in collection.products
+                # Lazy Loading Check
+                if forloop.index > 4
+                  assign lazy_loading = true
+                endif
+
+                render 'product-card', product: product, lazy: lazy_loading
+
+                if forloop.index == 6 and collection_advert_1 != blank
+                  assign advert_1_span = collection_advert_1.collection_grid_size | default: 1
+                  render 'cta', cta: collection_advert_1, class: 'plp-cta-card', style: 'image_card', grid_span: advert_1_span
+                elsif forloop.index == 10 and collection_advert_2 != blank
+                  assign advert_2_span = collection_advert_2.collection_grid_size | default: 1
+                  render 'cta', cta: collection_advert_2, class: 'plp-cta-card', style: 'image_card', grid_span: advert_2_span
+                endif
+              endfor
+            -%}
+          {%- endif -%}
+        </div>
+        {%- if paginate.pages > 1 -%}
+          <div class="margin-auto pt-5 w-max flex flex-center">
+            <button load-more-btn class="button-1 margin-auto text-center w-max">
+              {{- 'general.load_more' | t -}}
+              <div class="pagination-links visually-hidden">
+                {%- if paginate.previous.url != blank -%}
+                  <a
+                    prev-link
+                    class="prev-link"
+                    href="{{- paginate.previous.url -}}"
+                    aria-label="Previous collection page"
+                  >
+                    {{- 'general.previous_page' | t -}}
+                  </a>
+                {%- endif -%}
+                {%- if paginate.next.url != blank -%}
+                  <a
+                    next-link
+                    class="next-link"
+                    href="{{- paginate.next.url -}}"
+                    aria-label="Next collection page"
+                  >
+                    {{- 'general.next_page' | t -}}
+                  </a>
+                {%- endif -%}
+              </div>
+            </button>
+          </div>
+        {%- endif -%}
+      </grid-load-more>
+    </div>
+  {%- endpaginate -%}
+</section>
+
+{%- stylesheet -%}
+  .collection-grid {
+    gap: clamp(
+      var(--listing-grid-gap-mobile),
+      calc(var(--listing-grid-intercept) + var(--listing-grid-slope) * 1vw),
+      var(--listing-grid-gap)
+    );
+  }
+  .collection-listing .collection-grid-filters {
+    grid-template-columns: 1fr 4fr;
+  }
+  .collection-listing .collection-grid-filters.horizontal-filters {
+    grid-template-columns: 1fr;
+  }
+  .collection-listing .collection-grid {
+    grid-template-columns: repeat(auto-fill, minmax(clamp(260px, 20vw, 340px), 1fr));
+  }
+  .collection-listing .plp-cta-card {
+    min-height: 454px;
+  }
+
+  @media (max-width: 991.98px) {
+    .collection-listing .collection-grid-filters {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    .collection-listing .plp-cta-card {
+      grid-column: span 1 !important;
+      min-height: 454px;
+    }
+  }
+{%- endstylesheet -%}
+
+{% schema %}
+{
+  "name": "Collection Listing",
+  "tag": "section",
+  "class": "collection-listing",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "filter_positioning",
+      "label": "Filter Positioning",
+      "options": [
+        {
+          "value": "horizontal",
+          "label": "Horizontal"
+        },
+        {
+          "value": "vertical",
+          "label": "Vertical"
+        }
+      ],
+      "default": "horizontal"
+    },
+    {
+      "type": "range",
+      "id": "grid_items",
+      "label": "Grid Items",
+      "min": 12,
+      "max": 50,
+      "step": 1,
+      "default": 15
+    },
+    {
+      "type": "select",
+      "id": "page_width",
+      "label": "Page Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Default"
+        },
+        {
+          "value": "page-width--narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "page-width--wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "select",
+      "id": "vertical_spacing",
+      "label": "Vertical Spacing",
+      "options": [
+        {
+          "value": "vertical-margin",
+          "label": "Margin"
+        },
+        {
+          "value": "vertical-padding",
+          "label": "Padding"
+        },
+        {
+          "value": "vertical-margin vertical-padding",
+          "label": "Margin and Padding"
+        },
+        {
+          "value": "",
+          "label": "None"
+        }
+      ],
+      "default": "vertical-margin",
+      "info": "This uses the global spacing settings from the theme settings to ensure consistent spacing between sections. If you want to use custom spacing, please check the 'Custom Spacing' option."
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_spacing",
+      "label": "Custom Spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "top_spacing",
+      "label": "Top Spacing",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 120,
+      "visible_if": "{{ section.settings.custom_spacing == true }}"
+    },
+    {
+      "type": "range",
+      "id": "bottom_spacing",
+      "label": "Bottom Spacing",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 120,
+      "visible_if": "{{ section.settings.custom_spacing == true }}"
+    },
+    {
+      "type": "range",
+      "id": "top_spacing_mobile",
+      "label": "Mobile Top Spacing",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 60,
+      "visible_if": "{{ section.settings.custom_spacing == true }}"
+    },
+    {
+      "type": "range",
+      "id": "bottom_spacing_mobile",
+      "label": "Mobile Bottom Spacing",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 60,
+      "visible_if": "{{ section.settings.custom_spacing == true }}"
+    },
+    {
+      "type": "metaobject",
+      "id": "cta_1",
+      "label": "Collection CTA 1",
+      "metaobject_type": "cta"
+    },
+    {
+      "type": "metaobject",
+      "id": "cta_2",
+      "label": "Collection CTA 2",
+      "metaobject_type": "cta"
+    }
+  ],
+  "enabled_on": {
+    "templates": ["collection"]
+  },
+  "presets": [
+    {
+      "name": "Collection Listing"
+    }
+  ]
+}
+{% endschema %}

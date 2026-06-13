@@ -1,0 +1,24 @@
+{%- if block.settings.address != blank %}
+  <li class="flex align-center g-2" {{ block.shopify_attributes }}>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="23" viewBox="0 0 20 23" fill="none">
+      <path d="M10.6334 22.0323C10.4424 22.1695 10.2131 22.2433 9.9779 22.2433C9.74271 22.2433 9.51344 22.1695 9.32241 22.0323C3.66994 18.004 -2.329 9.71795 3.73549 3.73046C5.40038 2.09296 7.64251 1.17573 9.9779 1.17676C12.319 1.17676 14.5652 2.09548 16.2203 3.72929C22.2848 9.71678 16.2859 18.0017 10.6334 22.0323Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M9.97741 11.71C10.5982 11.71 11.1936 11.4633 11.6325 11.0244C12.0715 10.5854 12.3181 9.99005 12.3181 9.36926C12.3181 8.74847 12.0715 8.1531 11.6325 7.71414C11.1936 7.27517 10.5982 7.02856 9.97741 7.02856C9.35662 7.02856 8.76126 7.27517 8.32229 7.71414C7.88333 8.1531 7.63672 8.74847 7.63672 9.36926C7.63672 9.99005 7.88333 10.5854 8.32229 11.0244C8.76126 11.4633 9.35662 11.71 9.97741 11.71Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    {{- block.settings.address -}}
+  </li>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Address",
+  "tag": null,
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "address",
+      "label": "Address"
+    }
+  ],
+  "presets": [{ "name": "Address" }]
+}
+{% endschema %}

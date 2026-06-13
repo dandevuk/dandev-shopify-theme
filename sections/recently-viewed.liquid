@@ -1,0 +1,280 @@
+{%- liquid
+  assign style_selector = section.settings.style_selector
+  assign section_styling = section.settings.section_styling
+  assign background_color = section.settings.background_color
+  assign text_color = section.settings.text_color
+
+  assign text_alignment = section.settings.text_alignment
+  assign vertical_spacing = section.settings.vertical_spacing
+  assign page_width = section.settings.page_width
+
+  assign slider_id = 'recently-viewed-' | append: section.id
+  assign show_pagination = section.settings.show_pagination
+  assign enable_loop = section.settings.loop
+  assign enable_autoplay = section.settings.autoplay
+  assign autoplay_delay_setting = section.settings.autoplay_delay | default: 3
+  assign autoplay_delay_ms = autoplay_delay_setting | times: 1000
+
+  assign max_products = section.settings.max_products | default: 12
+
+  assign nav_scope = '#shopify-section-' | append: section.id
+
+  assign slides_per_view_mobile = settings.slides_per_view_mobile | default: 1.25
+  assign slides_per_view_tablet = settings.slides_per_view_tablet | default: 2
+  assign slides_per_view_desktop = settings.slides_per_view_desktop | default: 3
+  assign slides_per_view_large_desktop = settings.slides_per_view_large_desktop | default: 4
+
+  assign slider_spacing_mobile = settings.slider_spacing_mobile | default: 16
+  assign slider_spacing_tablet = settings.slider_spacing_tablet | default: 20
+  assign slider_spacing_desktop = settings.slider_spacing_desktop | default: 24
+  assign slider_spacing_large_desktop = settings.slider_spacing_large_desktop | default: 24
+
+  assign max_slides_per_view = slides_per_view_mobile
+  if slides_per_view_tablet > max_slides_per_view
+    assign max_slides_per_view = slides_per_view_tablet
+  endif
+  if slides_per_view_desktop > max_slides_per_view
+    assign max_slides_per_view = slides_per_view_desktop
+  endif
+  if slides_per_view_large_desktop > max_slides_per_view
+    assign max_slides_per_view = slides_per_view_large_desktop
+  endif
+
+  assign min_slides_for_loop = max_slides_per_view | ceil | plus: 1
+-%}
+
+<div
+  class="mobile-slider-overflow"
+  data-recently-viewed-section
+  data-section-id="{{ section.id }}"
+  data-max-products="{{ max_products }}"
+>
+  <div
+    class="section-container {{ vertical_spacing }} {{ text_alignment }} {{ section_styling }} recently-viewed"
+    {% if style_selector == 'custom' %}
+      style="background: {{ background_color }}; color: {{ text_color }};"
+    {% endif %}
+  >
+    <div class="{{ page_width }}">
+      <div class="section-header grid-section">
+        {% content_for 'block', type: 'section-content', id: 'section-content' %}
+        {% content_for 'block', type: 'section-navigation', id: 'section-navigation' %}
+      </div>
+      <div
+        id="blaze-{{ slider_id }}"
+        class="blaze-slider recently-viewed-slider mt-5"
+        style="--slides-to-show-mobile:{{ slides_per_view_mobile }};--slides-to-show-tablet:{{ slides_per_view_tablet }};--slides-to-show-desktop:{{ slides_per_view_desktop }};--slides-to-show-wide:{{ slides_per_view_large_desktop }};--slide-gap-mobile:{{ slider_spacing_mobile }}px;--slide-gap-tablet:{{ slider_spacing_tablet }}px;--slide-gap-desktop:{{ slider_spacing_desktop }}px;--slide-gap-wide:{{ slider_spacing_large_desktop }}px;"
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="Recently viewed products"
+        data-blaze-slider
+        data-recently-viewed-slider
+        data-slider-nav-scope="{{ nav_scope }}"
+        data-slider-mobile="{{ slides_per_view_mobile }}"
+        data-slider-tablet="{{ slides_per_view_tablet }}"
+        data-slider-desktop="{{ slides_per_view_desktop }}"
+        data-slider-wide="{{ slides_per_view_large_desktop }}"
+        data-slider-gap-mobile="{{ slider_spacing_mobile }}"
+        data-slider-gap-tablet="{{ slider_spacing_tablet }}"
+        data-slider-gap-desktop="{{ slider_spacing_desktop }}"
+        data-slider-gap-wide="{{ slider_spacing_large_desktop }}"
+        data-slider-loop="{% if enable_loop %}true{% else %}false{% endif %}"
+        data-slider-autoplay="{% if enable_autoplay %}true{% else %}false{% endif %}"
+        data-slider-autoplay-interval="{{ autoplay_delay_ms }}"
+        data-slider-pagination="{% if show_pagination %}true{% else %}false{% endif %}"
+        data-min-slides-for-loop="{{ min_slides_for_loop }}"
+      >
+        <div class="blaze-track-container">
+          <div class="blaze-track"></div>
+        </div>
+        {%- if show_pagination -%}
+          <div
+            class="blaze-pagination relative top-0 left-0 bottom-0 mt-5 hidden to-sm-block"
+          ></div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script
+  src="{{ 'recently-viewed.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
+
+{% schema %}
+{
+  "name": "Recently Viewed",
+  "tag": "section",
+  "class": "slider-section recently-viewed-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Slider behaviour"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_navigation",
+      "label": "Show navigation arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pagination",
+      "label": "Show pagination dots",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Enable loop",
+      "default": false,
+      "info": "Requires at least the maximum slides per view across breakpoints + 1 items. Loop will automatically disable if fewer recently viewed products are available."
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Enable autoplay",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_delay",
+      "label": "Autoplay delay (s)",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 3,
+      "info": "Only used when autoplay is enabled."
+    },
+    {
+      "type": "header",
+      "content": "Behaviour"
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "label": "Maximum products",
+      "min": 2,
+      "max": 20,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "select",
+      "id": "style_selector",
+      "label": "Styling type",
+      "options": [
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "theme"
+    },
+    {
+      "type": "select",
+      "id": "section_styling",
+      "label": "Section style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "third",
+          "label": "Third"
+        }
+      ],
+      "default": "primary",
+      "info": "Only used when Styling type is set to Theme.",
+      "visible_if": "{{ section.settings.style_selector == 'theme' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "background_color",
+      "label": "Background colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text colour",
+      "default": "#393939",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "page_width",
+      "label": "Page width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Default"
+        },
+        {
+          "value": "page-width--narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "page-width--wide",
+          "label": "Wide"
+        },
+        {
+          "value": "page-width--full",
+          "label": "Full"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "select",
+      "id": "vertical_spacing",
+      "label": "Vertical spacing",
+      "options": [
+        {
+          "value": "vertical-margin",
+          "label": "Margin"
+        },
+        {
+          "value": "vertical-padding",
+          "label": "Padding"
+        },
+        {
+          "value": "vertical-margin vertical-padding",
+          "label": "Margin and padding"
+        },
+        {
+          "value": "",
+          "label": "None"
+        }
+      ],
+      "default": "vertical-margin"
+    }
+  ],
+  "blocks": [{ "type": "section-content" }],
+  "disabled_on": {
+    "groups": ["*"]
+  },
+  "presets": [
+    {
+      "name": "Recently Viewed",
+      "category": "Products"
+    }
+  ]
+}
+{% endschema %}

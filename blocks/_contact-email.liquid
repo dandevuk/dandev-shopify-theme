@@ -1,0 +1,33 @@
+{%- liquid
+  if block.settings.email != blank
+    assign email = block.settings.email
+  elsif shop.email != blank
+    assign email = shop.email
+  endif
+-%}
+
+{%- if email != blank -%}
+  <li class="flex align-center g-2" {{ block.shopify_attributes }}>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" viewBox="0 0 22 18" fill="none">
+      <path d="M3.84766 3.92841L10.7177 9.81841C10.7877 9.87841 10.9077 9.87841 10.9777 9.81841L17.8477 3.92841M2.04766 0.868408H19.6477C20.3077 0.868408 20.8477 1.40841 20.8477 2.06841V14.4684C20.8477 15.7884 19.7677 16.8684 18.4477 16.8684H3.24766C1.92766 16.8684 0.847656 15.7884 0.847656 14.4684V2.06841C0.847656 1.40841 1.38766 0.868408 2.04766 0.868408Z" stroke="#000000" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <a href="mailto:{{- email -}}" class="no-decoration" aria-label="Email {{ email -}}">
+      {{- email -}}
+    </a>
+  </li>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Email Address",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email address"
+    }
+  ],
+  "presets": [{ "name": "Email Address" }]
+}
+{% endschema %}

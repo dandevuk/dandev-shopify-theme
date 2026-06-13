@@ -1,0 +1,357 @@
+{%- liquid
+  assign img_lazy = false
+
+  if section.index > 2
+    assign img_lazy = true
+  endif
+
+  # STYLING
+  assign style_selector = section.settings.style_selector
+  assign section_styling = section.settings.section_styling
+  assign background_color = section.settings.background_color
+  assign text_color = section.settings.text_color
+
+  assign background_image_type = section.settings.background_image_type
+  assign background_image_theme = section.settings.background_image_theme
+  assign bg_image = section.settings.bg_image
+
+  if background_image_type == 'none'
+    assign bg_image = blank
+  elsif background_image_type == 'theme'
+    if background_image_theme == '1'
+      assign bg_image = settings.section_background_image
+    elsif background_image_theme == '2'
+      assign bg_image = settings.section_background_image_2
+    endif
+  endif
+
+  # LAYOUT
+  assign vertical_spacing = section.settings.vertical_spacing
+  assign page_width = section.settings.page_width
+-%}
+<div
+  class="{{ vertical_spacing }} section-container {{ section_styling }} relative"
+  {% if style_selector == 'custom' %}
+    style="background: {{ background_color }}; color: {{ text_color }};--custom-text-color: {{ text_color }};"
+  {% endif %}
+>
+  {%- if bg_image != blank -%}
+    <div class="absolute inset-0 opacity-10 z-0 overflow-hidden">
+      {%- render 'image',
+        image: bg_image,
+        max_width: 2000,
+        use_placeholder: true,
+        lazy: img_lazy,
+        class: 'object-cover'
+      -%}
+    </div>
+  {%- endif -%}
+  <div class="slider-section-content relative flex flex-col g-4 w-100">
+    <div class="{{ page_width }} section-header flex-between flex-wrap g-4 no-text-margins">
+      <div class="section-content flex flex-col g-4 w-40 to-sm-w-100">
+        {%- content_for 'block', type: 'heading', id: 'heading' -%}
+        {%- content_for 'block', type: 'richtext', id: 'richtext' -%}
+      </div>
+      <div class="section-navigation">
+        <div class="section-navigation-container flex-end h-100 flex-wrap g-3 align-end">
+          {%- content_for 'block', type: 'link', id: 'link' -%}
+          {%- content_for 'block', type: '_slider-navigation-arrows', id: 'slider-navigation-arrows' -%}
+        </div>
+      </div>
+    </div>
+
+    <div class="content-container">
+      {% content_for 'blocks' %}
+    </div>
+  </div>
+</div>
+
+{%- stylesheet -%}
+  .slider-section .section-header:has(.section-content:empty):has(.section-navigation-container:empty) {
+    display: none;
+  }
+  .slider-section:has(.no-navigation) .blaze-navigation-arrows {
+    display: none;
+  }
+  @media only screen and (max-width: 767.98px) {
+    .slider-section:has(.desktop-navigation) .blaze-navigation-arrows {
+      display: none;
+    }
+  }
+  @media only screen and (min-width: 768px) {
+    .slider-section:has(.mobile-navigation) .blaze-navigation-arrows {
+      display: none;
+    }
+  }
+{%- endstylesheet -%}
+
+{% schema %}
+{
+  "name": "Slider",
+  "tag": "section",
+  "class": "slider-section",
+  "max_blocks": 1,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "select",
+      "id": "style_selector",
+      "label": "Styling Type",
+      "options": [
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "theme"
+    },
+    {
+      "type": "select",
+      "id": "section_styling",
+      "label": "Section Style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "third",
+          "label": "Third"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ section.settings.style_selector == 'theme' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "background_color",
+      "label": "Background Colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Colour",
+      "default": "#393939",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "background_image_type",
+      "label": "Background Type",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "background_image_theme",
+      "label": "Background Theme",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "1",
+      "visible_if": "{{ section.settings.background_image_type == 'theme' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image",
+      "info": "Used if 'Custom' is selected for Background Type",
+      "visible_if": "{{ section.settings.background_image_type == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "page_width",
+      "label": "Page Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Default"
+        },
+        {
+          "value": "page-width--narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "page-width--wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "select",
+      "id": "vertical_spacing",
+      "label": "Vertical Spacing",
+      "options": [
+        {
+          "value": "vertical-margin",
+          "label": "Margin"
+        },
+        {
+          "value": "vertical-padding",
+          "label": "Padding"
+        },
+        {
+          "value": "vertical-margin vertical-padding",
+          "label": "Margin and Padding"
+        },
+        {
+          "value": "",
+          "label": "None"
+        }
+      ],
+      "default": "vertical-margin"
+    }
+  ],
+  "blocks": [
+    { "type": "_slider-products" },
+    { "type": "_slider-collections" },
+    { "type": "_slider-articles" },
+    { "type": "_slider-usps" },
+    { "type": "_slider-products-cta" }
+  ],
+  "disabled_on": {
+    "groups": ["*"]
+  },
+  "presets": [
+    {
+      "name": "Slider",
+      "category": "Content"
+    },
+    {
+      "name": "Product Card Slider",
+      "category": "Products",
+      "blocks": [
+        {
+          "id": "heading",
+          "type": "heading",
+          "static": true,
+          "settings": {
+            "heading": "Featured Products"
+          }
+        },
+        {
+          "type": "_slider-products",
+          "settings": {
+            "block_collection": "best-sellers"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Collection Card Slider",
+      "category": "Collections",
+      "blocks": [
+        {
+          "id": "heading",
+          "type": "heading",
+          "static": true,
+          "settings": {
+            "heading": "Featured Collections"
+          }
+        },
+        {
+          "type": "_slider-collections"
+        }
+      ]
+    },
+    {
+      "name": "Article Slider",
+      "category": "Blogs",
+      "blocks": [
+        {
+          "id": "heading",
+          "type": "heading",
+          "static": true,
+          "settings": {
+            "heading": "Latest News"
+          }
+        },
+        {
+          "type": "_slider-articles",
+          "settings": {
+            "block_blog": "news"
+          }
+        }
+      ]
+    },
+    {
+      "name": "USP Slider",
+      "category": "Content",
+      "blocks": [
+        {
+          "id": "heading",
+          "type": "heading",
+          "static": true,
+          "settings": {
+            "heading": "USP Slider"
+          }
+        },
+        {
+          "type": "_slider-usps",
+          "settings": {
+            "usp_group": "homepage"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products with CTA Slider",
+      "category": "Products",
+      "blocks": [
+        {
+          "id": "heading",
+          "type": "heading",
+          "static": true,
+          "settings": {
+            "heading": "Featured Products with CTA"
+          }
+        },
+        {
+          "type": "_slider-products-cta",
+          "settings": {
+            "block_collection": "best-sellers"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

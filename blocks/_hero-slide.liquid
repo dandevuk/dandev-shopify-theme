@@ -1,0 +1,432 @@
+{%- liquid
+  # CONTENT
+  assign is_first_image = block.settings.is_first_image
+  assign image = block.settings.image
+  assign mobile_image = block.settings.mobile_image
+
+  # LAYOUT
+  assign layout_style = block.settings.layout_style
+  assign text_alignment = block.settings.text_alignment
+  assign truncate_text = block.settings.truncate_text
+  assign truncate_lines = block.settings.truncate_lines
+  assign text_vertical_position = block.settings.text_content_vertical_position
+  assign text_horizontal_position = block.settings.text_content_horizontal_position
+
+  # STYLING
+  assign style_selector = block.settings.style_selector
+  assign section_styling = block.settings.section_styling
+  assign overlay_type = block.settings.overlay_type
+  assign overlay_styling = block.settings.overlay_styling
+  assign overlay_background = block.settings.overlay_color
+  assign background_color = block.settings.background_color
+  assign text_color = block.settings.text_color
+
+  assign lazy_load = false
+  if is_first_image == false
+    assign lazy_load = true
+  endif
+-%}
+
+<div {{ block.shopify_attributes }}>
+  <div
+    class="hero-container overflow-hidden margin-auto relative section-container {{ section_styling }} {{ layout_style }}"
+    style="{% if style_selector == 'custom' %}background: {{ background_color }}; color: {{ text_color }};{% endif %}"
+  >
+    <div class="page-width flex {% if layout_style == 'full-width' %}{{ text_vertical_position }}{% endif %}">
+      <div class="hero-grid grid-section">
+        <div
+          class="content no-text-margins {% if layout_style == 'full-width' %}{{ text_horizontal_position }} {{ text_alignment }}{% else %}span-6 flex align-center{% endif %} relative container-v-padding {% if truncate_text %}truncate-text{% endif %}"
+          {% if truncate_text %}
+            style="--webkit-line-clamp: {{ truncate_lines }};"
+          {% endif %}
+        >
+          {% content_for 'blocks' %}
+        </div>
+        {%- if image != blank -%}
+          <div class="media {% if layout_style == 'side-by-side' %}span-6{% else %}absolute inset-0{% endif %} h-100 w-100">
+            <div class="media-item">
+              <div class="media-wrapper relative h-100 overflow-hidden">
+                <div class="media-container absolute inset-0 h-100 w-100">
+                  {%- if layout_style == 'side-by-side' -%}
+                    {%- render 'image',
+                      image: image,
+                      image_mobile: mobile_image,
+                      mobile_width: 600,
+                      max_width: 1000,
+                      use_placeholder: true,
+                      lazy: lazy_load
+                    -%}
+                  {%- else -%}
+                    {%- render 'image',
+                      image: image,
+                      image_mobile: mobile_image,
+                      mobile_width: 600,
+                      max_width: 1600,
+                      use_placeholder: true,
+                      lazy: lazy_load
+                    -%}
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+          </div>
+          {%- if layout_style == 'full-width' and overlay_type != 'none' -%}
+            <div
+              class="absolute inset-0 h-100 w-100 overlay {% if overlay_styling == 'primary' %}gradient-bg{% elsif overlay_styling == 'secondary' %}gradient-bg-alt{% endif %}"
+              {% if section.settings.overlay_type == 'custom' %}
+                style="background: {{ overlay_background }};"
+              {% endif %}
+            ></div>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- stylesheet -%}
+  @media only screen and (max-width: 767.98px) {
+    .hero-slider .hero-container .hero-grid .content {
+      order: 2;
+    }
+  }
+
+  /* Breadcrumbs */
+
+  .hero-slider .hero-container .hero-grid .content .breadcrumbs-container ul {
+    margin: 0;
+  }
+
+  @media only screen and (max-width: 767.98px) {
+    .hero-slider .hero-container .hero-grid .content .breadcrumbs-container ul li {
+      padding: 0 4px;
+    }
+  }
+
+  /* Media section */
+
+  @media only screen and (max-width: 767.98px) {
+    .hero-slider .hero-container .hero-grid .media {
+      order: 1;
+      aspect-ratio: 3/2;
+    }
+  }
+
+  .hero-slider .hero-container .hero-grid .media .media-item {
+    width: 100%;
+    height: 100%;
+  }
+
+  @media only screen and (max-width: 767.98px) {
+    .hero-slider .hero-container .hero-grid .media .media-item {
+      width: calc(100% + (var(--page-width-padding) * 2));
+      position: relative;
+      left: calc(-1 * var(--page-width-padding));
+    }
+  }
+
+  /* Media wrapper */
+  .hero-slider .hero-container .hero-grid .media .media-item .media-wrapper {
+    width: 100%;
+  }
+
+  @media only screen and (min-width: 768px) {
+    .hero-slider .side-by-side .hero-container .hero-grid .media .media-item .media-wrapper {
+      width: calc((100vw / 2) - (var(--page-width-padding) - 58px));
+    }
+  }
+
+  /* Media container */
+
+  .hero-slider
+    .hero-container
+    .hero-grid
+    .media
+    .media-item
+    .media-wrapper
+    .media-container
+    picture,
+  .hero-slider .hero-container .hero-grid .media .media-item .media-wrapper .media-container img,
+  .hero-slider .hero-container .hero-grid .media .media-item .media-wrapper .media-container svg,
+  .hero-slider .hero-container .hero-grid .media .media-item .media-wrapper .media-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--object-position);
+  }
+
+  @media only screen and (max-width: 767.98px) {
+    .hero-slider
+      .hero-container
+      .hero-grid
+      .media
+      .media-item
+      .media-wrapper
+      .media-container
+      picture,
+    .hero-slider .hero-container .hero-grid .media .media-item .media-wrapper .media-container img,
+    .hero-slider .hero-container .hero-grid .media .media-item .media-wrapper .media-container svg,
+    .hero-slider
+      .hero-container
+      .hero-grid
+      .media
+      .media-item
+      .media-wrapper
+      .media-container
+      video {
+      left: 0;
+      width: 100%;
+      transform: unset;
+    }
+  }
+
+  .hero-slider .full-width .content {
+    z-index: 1;
+  }
+
+  .hero-slider .full-width .content.truncate-text .rte {
+    display: -webkit-box;
+    line-clamp: var(--webkit-line-clamp);
+    -webkit-line-clamp: var(--webkit-line-clamp);
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+{%- endstylesheet -%}
+
+{% schema %}
+{
+  "name": "Hero Slide",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "checkbox",
+      "id": "is_first_image",
+      "label": "Is First Image",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile Image"
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "select",
+      "id": "layout_style",
+      "label": "Layout Style",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "side-by-side",
+          "label": "Side by Side"
+        }
+      ],
+      "default": "full-width"
+    },
+    {
+      "type": "select",
+      "id": "style_selector",
+      "label": "Styling Type",
+      "options": [
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "theme"
+    },
+    {
+      "type": "select",
+      "id": "section_styling",
+      "label": "Section Style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "third",
+          "label": "Third"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ block.settings.style_selector == 'theme' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "background_color",
+      "label": "Background Colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ block.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Colour",
+      "default": "#393939",
+      "visible_if": "{{ block.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "overlay_type",
+      "label": "Overlay Type",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ block.settings.layout_style == 'full-width' }}"
+    },
+    {
+      "type": "select",
+      "id": "overlay_styling",
+      "label": "Overlay Style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "third",
+          "label": "Third"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ block.settings.overlay_type == 'theme' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "overlay_color",
+      "label": "Overlay Colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ block.settings.overlay_type == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "text_content_horizontal_position",
+      "label": "Text Horizontal Position",
+      "options": [
+        {
+          "value": "span-5",
+          "label": "Left"
+        },
+        {
+          "value": "span-center-6",
+          "label": "Center"
+        },
+        {
+          "value": "span-end-5",
+          "label": "Right"
+        }
+      ],
+      "default": "span-5",
+      "visible_if": "{{ block.settings.layout_style == 'full-width' }}"
+    },
+    {
+      "type": "select",
+      "id": "text_content_vertical_position",
+      "label": "Text Vertical Position",
+      "options": [
+        {
+          "value": "align-start",
+          "label": "Top"
+        },
+        {
+          "value": "align-center",
+          "label": "Center"
+        },
+        {
+          "value": "align-end",
+          "label": "Bottom"
+        }
+      ],
+      "default": "align-center",
+      "visible_if": "{{ block.settings.layout_style == 'full-width' }}"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "Left"
+        },
+        {
+          "value": "text-center",
+          "label": "Centre"
+        },
+        {
+          "value": "text-right",
+          "label": "Right"
+        }
+      ],
+      "default": "text-left",
+      "visible_if": "{{ block.settings.layout_style == 'full-width' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "truncate_text",
+      "label": "Truncate Text",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "truncate_lines",
+      "label": "Truncate by number of lines",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 3,
+      "visible_if": "{{ block.settings.truncate_text == true }}"
+    }
+  ],
+  "blocks": [{ "type": "section-content" }],
+  "presets": [
+    {
+      "name": "Hero Slide"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,69 @@
+<div class="rte {{ block.settings.text_size }}" {{ block.shopify_attributes }}>
+  {%- if block.settings.inline_richtext != blank -%}
+    {{ block.settings.inline_richtext }}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Inline Richtext",
+  "tag": null,
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "inline_richtext",
+      "label": "Inline Richtext",
+      "default": "Add text here"
+    },
+    {
+      "type": "select",
+      "id": "text_size",
+      "label": "Text size",
+      "default": "large-body-text",
+      "options": [
+        {
+          "value": "heading-h0",
+          "label": "Heading H0"
+        },
+        {
+          "value": "heading-h1",
+          "label": "Heading H1"
+        },
+        {
+          "value": "heading-h2",
+          "label": "Heading H2"
+        },
+        {
+          "value": "heading-h3",
+          "label": "Heading H3"
+        },
+        {
+          "value": "heading-h4",
+          "label": "Heading H4"
+        },
+        {
+          "value": "heading-h5",
+          "label": "Heading H5"
+        },
+        {
+          "value": "heading-h6",
+          "label": "Heading H6"
+        },
+        {
+          "value": "large-body-text",
+          "label": "Large Body Text"
+        },
+        {
+          "value": "caption-text",
+          "label": "Caption Text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Inline Richtext"
+    }
+  ]
+}
+{% endschema %}

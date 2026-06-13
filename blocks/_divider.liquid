@@ -1,0 +1,51 @@
+<div class="{{ block.settings.divider_size }} w-100 span-12" {{ block.shopify_attributes }}></div>
+
+{% schema %}
+{
+  "name": "Divider",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "divider_size",
+      "label": "Divider Size",
+      "options": [
+        {
+          "value": "pt-7 pb-7",
+          "label": "XXL"
+        },
+        {
+          "value": "pt-6 pb-6",
+          "label": "XL"
+        },
+        {
+          "value": "pt-5 pb-5",
+          "label": "Large"
+        },
+        {
+          "value": "pt-4 pb-4",
+          "label": "Medium"
+        },
+        {
+          "value": "pt-3 pb-3",
+          "label": "Small"
+        },
+        {
+          "value": "pt-2 pb-2",
+          "label": "XS"
+        },
+        {
+          "value": "pt-1 pb-1",
+          "label": "XXS"
+        }
+      ],
+      "default": "pt-4 pb-4"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Divider"
+    }
+  ]
+}
+{% endschema %}

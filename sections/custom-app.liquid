@@ -1,0 +1,248 @@
+{%- liquid
+  # STYLING
+  assign style_selector = section.settings.style_selector
+  assign section_styling = section.settings.section_styling
+  assign background_color = section.settings.background_color
+  assign text_color = section.settings.text_color
+
+  # LAYOUT
+  assign text_alignment = section.settings.text_alignment
+  assign vertical_spacing = section.settings.vertical_spacing
+  assign custom_spacing = section.settings.custom_spacing
+  assign top_spacing = section.settings.top_spacing
+  assign bottom_spacing = section.settings.bottom_spacing
+  assign top_spacing_mobile = section.settings.top_spacing_mobile
+  assign bottom_spacing_mobile = section.settings.bottom_spacing_mobile
+  assign page_width = section.settings.page_width
+
+  # ID Attribute
+  assign id_text = section.settings.id_text | strip
+-%}
+<div
+  class="section-container {% unless custom_spacing %}{{ vertical_spacing }}{% else %}custom-spacing{% endunless %} {{ text_alignment }} {{ section_styling }}"
+  style="
+    {%- if custom_spacing -%}
+      {%- if vertical_spacing == 'vertical-padding' -%}
+        padding-top: {{ top_spacing }}px; padding-bottom: {{ bottom_spacing }}px;--mobile-padding-top: {{ top_spacing_mobile }}px; --mobile-padding-bottom: {{ bottom_spacing_mobile }}px;
+      {%- elsif vertical_spacing == 'vertical-margin' -%}
+        margin-top: {{ top_spacing }}px; margin-bottom: {{ bottom_spacing }}px;--mobile-margin-top: {{ top_spacing_mobile }}px; --mobile-margin-bottom: {{ bottom_spacing_mobile }}px;
+      {%- elsif vertical_spacing == 'vertical-margin vertical-padding' -%}
+        padding-top: {{ top_spacing }}px; padding-bottom: {{ bottom_spacing }}px; margin-top: {{ top_spacing }}px; margin-bottom: {{ bottom_spacing }}px; --mobile-padding-top: {{ top_spacing_mobile }}px; --mobile-padding-bottom: {{ bottom_spacing_mobile }}px; --mobile-margin-top: {{ top_spacing_mobile }}px; --mobile-margin-bottom: {{ bottom_spacing_mobile }}px;
+      {%- endif -%}
+    {%- endif -%}
+    {% if style_selector == 'custom' %}
+      background: {{ background_color }}; color: {{ text_color }};
+    {% endif %}
+  "
+  {% if id_text != blank %}
+    id="{{ id_text }}"
+  {% endif %}
+>
+  <div class="{{ page_width }}">
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Custom App",
+  "tag": "section",
+  "class": "custom-app",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "select",
+      "id": "style_selector",
+      "label": "Styling Type",
+      "options": [
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "theme"
+    },
+    {
+      "type": "select",
+      "id": "section_styling",
+      "label": "Section style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "third",
+          "label": "Third"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ section.settings.style_selector == 'theme' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "background_color",
+      "label": "Background Colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Colour",
+      "default": "#393939",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "Left"
+        },
+        {
+          "value": "text-center",
+          "label": "Centre"
+        }
+      ],
+      "default": "text-left"
+    },
+    {
+      "type": "select",
+      "id": "page_width",
+      "label": "Page Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Default"
+        },
+        {
+          "value": "page-width--narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "page-width--wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "select",
+      "id": "vertical_spacing",
+      "label": "Vertical Spacing",
+      "options": [
+        {
+          "value": "vertical-margin",
+          "label": "Margin"
+        },
+        {
+          "value": "vertical-padding",
+          "label": "Padding"
+        },
+        {
+          "value": "vertical-margin vertical-padding",
+          "label": "Margin and Padding"
+        },
+        {
+          "value": "",
+          "label": "None"
+        }
+      ],
+      "default": "vertical-margin",
+      "info": "This uses the global spacing settings from the theme settings to ensure consistent spacing between sections. If you want to use custom spacing, please check the 'Custom Spacing' option."
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_spacing",
+      "label": "Custom Spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "top_spacing",
+      "label": "Top Spacing",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 120,
+      "visible_if": "{{ section.settings.custom_spacing == true }}"
+    },
+    {
+      "type": "range",
+      "id": "bottom_spacing",
+      "label": "Bottom Spacing",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 120,
+      "visible_if": "{{ section.settings.custom_spacing == true }}"
+    },
+    {
+      "type": "range",
+      "id": "top_spacing_mobile",
+      "label": "Mobile Top Spacing",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 60,
+      "visible_if": "{{ section.settings.custom_spacing == true }}"
+    },
+    {
+      "type": "range",
+      "id": "bottom_spacing_mobile",
+      "label": "Mobile Bottom Spacing",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 60,
+      "visible_if": "{{ section.settings.custom_spacing == true }}"
+    },
+    {
+      "type": "header",
+      "content": "Targeting"
+    },
+    {
+      "type": "text",
+      "id": "id_text",
+      "label": "ID Attribute",
+      "info": "Add an optional ID to the section for advanced targeting with anchor links and CSS."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "disabled_on": {
+    "groups": ["*"]
+  },
+  "presets": [
+    {
+      "name": "Custom App",
+      "category": "Apps & Custom Code"
+    }
+  ]
+}
+{% endschema %}

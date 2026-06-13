@@ -1,0 +1,122 @@
+<div
+  class="mobile-menu-outer-wrapper absolute left-0 w-100 {% if block.settings.open_to_custiomise and request.design_mode %}active{% endif %}"
+  style="max-width: 400px;"
+  {{ block.shopify_attributes }}
+>
+  <div class="mobile-menu h-100 w-100 flex-between align-start flex-col overflow-auto z-1">
+    <nav class="mobile-menu-navigation accordion-category w-100 pt-2 flex flex-col pr-2 pl-2">
+      {% content_for 'blocks' %}
+    </nav>
+    <div class="mobile-menu-bottom w-100 grid-section pt-3 pb-3 g-3 pr-2 pl-2">
+      <div class="span-6 span-sm-3">
+        {%- render 'wishlist-icon', text: true -%}
+      </div>
+      <div class="span-6 span-sm-3 flex flex-end">
+        {%- if localization.available_countries.size > 1 -%}
+          <button
+            class="flex-center border-radius-circle p-0"
+            aria-label="{{ 'location_selector.open_location_selector' | t }}"
+            data-modal-trigger="location-selector-id"
+          >
+            {{ 'icon-globe-small.svg' | inline_asset_content }}
+          </button>
+        {%- endif -%}
+      </div>
+      <div class="span-12">
+        <a
+          class="account flex align-center no-decoration flex-1 w-100"
+          aria-label="Go To Account"
+          href="{{ routes.account_url }}"
+        >
+          <div class="icon-wrapper">
+            {{ 'icon-header-account.svg' | inline_asset_content }}
+          </div>
+          {{ 'sections.header.my_account' | t }}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .mobile-menu-outer-wrapper {
+    top: auto;
+    height: calc(100dvh - 82px);
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .mobile-menu-outer-wrapper.active {
+    display: flex;
+    width: 100%;
+    pointer-events: all;
+    visibility: visible;
+  }
+
+  .mobile-menu-outer-wrapper::before {
+    position: fixed;
+    top: var(--announcement-bar-height, 0);
+    left: 0;
+    z-index: -1;
+    display: block;
+    width: 100%;
+    height: calc(100% - var(--announcement-bar-height, 0px));
+    background: #000000e6;
+    content: '';
+    opacity: 0.73;
+    isolation: isolate;
+  }
+  .mobile-menu-outer-wrapper .mobile-menu {
+    background: var(--body-background-color);
+    transform: translateX(-100%);
+    transition: 0.1s ease-in-out 0s;
+  }
+  .mobile-menu-outer-wrapper.active .mobile-menu {
+    transform: translateX(0%);
+    transition: 0.2s ease-in-out 0.2s;
+  }
+
+  .mobile-menu-outer-wrapper .mobile-menu .mobile-menu-bottom a,
+  .mobile-menu-outer-wrapper
+    .mobile-menu
+    .mobile-menu-bottom
+    button:not([aria-controls='language-list']),
+  .mobile-menu-outer-wrapper
+    .mobile-menu
+    .mobile-menu-bottom
+    span:not([aria-controls='language-list']) {
+    gap: var(--content-spacing-2);
+  }
+  .mobile-menu-outer-wrapper .mobile-menu .mobile-menu-bottom qf-wishlist-icon a {
+    justify-content: flex-start;
+  }
+  .mobile-menu-outer-wrapper .mobile-menu .mobile-menu-bottom .caret svg {
+    width: 8px;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Mobile Menu",
+  "tag": null,
+  "blocks": [
+    { "type": "_mobile-mega-menu_accordion" },
+    { "type": "_top-level_link" },
+    { "type": "_mobile-cta-group" },
+    { "type": "_mobile-mega-menu_divider" }
+  ],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "open_to_custiomise",
+      "label": "Open to customise",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mobile Menu"
+    }
+  ]
+}
+{% endschema %}

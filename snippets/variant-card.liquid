@@ -1,0 +1,70 @@
+{%- liquid
+  assign featured_image = prod.featured_image
+-%}
+<variant-card
+  class="product-card w-100 h-100 flex-col flex-between g-2"
+  data-product-handle="{{- prod.handle -}}"
+  data-variant-id="{{ matched_variant_id }}"
+  data-product-id="{{- prod.id -}}"
+  {% if order != blank %}
+    style="order: {{ order }}"
+  {% endif %}
+>
+  <a
+    class="product-image w-100 border-radius ar-1"
+    href="{{- prod.selected_or_first_available_variant.url -}}"
+    aria-label="{{- prod.title | prepend: "Link to " -}}"
+    style="border: 1px solid var(--brand-color-5);background-color: #fff;"
+  >
+    {%- if featured_image != blank -%}
+      {%- render 'image',
+        image: featured_image,
+        max_width: 400,
+        format: 'jpg',
+        use_placeholder: true,
+        lazy: true,
+        class: 'primary-image object-contain',
+        context_text: prod.title
+      -%}
+
+      {%- if prod.images.size > 1 and has_color_options == blank -%}
+        {%- render 'image',
+          image: prod.images[1],
+          max_width: 400,
+          format: 'jpg',
+          use_placeholder: true,
+          lazy: lazy,
+          class: 'secondary-image object-contain',
+          context_text: prod.title
+        -%}
+      {%- endif -%}
+
+    {%- else -%}
+      {%- if settings.product_fallback != blank -%}
+        {%- render 'image',
+          image: settings.product_fallback,
+          max_width: 400,
+          format: 'jpg',
+          use_placeholder: true,
+          lazy: lazy,
+          context_text: prod.title
+        -%}
+      {%- else -%}
+        {{- 'product-1' | placeholder_svg_tag -}}
+      {%- endif -%}
+    {%- endif -%}
+  </a>
+</variant-card>
+
+{%- stylesheet -%}
+  variant-card .product-form product-form .product-title {
+    min-height: unset;
+  }
+
+  @media only screen and (max-width: 767.98px) {
+    variant-card .product-image {
+      padding-bottom: 40% !important;
+      aspect-ratio: unset !important;
+    }
+  }
+{%- endstylesheet -%}

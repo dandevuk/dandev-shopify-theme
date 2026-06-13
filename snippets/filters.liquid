@@ -1,0 +1,8 @@
+{%- comment -%}
+  Entry point: delegates to the horizontal or vertical filter markup based on `positioning`.
+{%- endcomment -%}
+{%- if positioning == 'horizontal' -%}
+  {%- render 'filters-horizontal', page_width: page_width, positioning: positioning -%}
+{%- else -%}
+  {%- render 'filters-vertical', page_width: page_width, positioning: positioning -%}
+{%- endif -%}

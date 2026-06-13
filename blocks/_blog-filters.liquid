@@ -1,0 +1,68 @@
+{%- liquid
+  assign filter_by_text = 'blogs.filter_by' | t
+  assign all_text = 'blogs.all' | t
+  assign filter_tags = blank
+  assign filter_prefix = block.settings.filter_prefix
+  assign filter_count = 0
+  for tag in blog.all_tags
+    if tag contains filter_prefix
+      assign filter_tags = filter_tags | append: tag | append: ','
+      assign filter_count = filter_count | plus: 1
+    endif
+  endfor
+  assign filter_tags = filter_tags | split: ','
+-%}
+
+{% if filter_count > 0 -%}
+  <div class="flex-center flex-wrap to-sm-flex-col g-2">
+    <div class="filter-by-text large-body-text white-space-nowrap flex align-center">
+      {{ filter_by_text }}
+    </div>
+    <div class="flex-center flex-wrap g-2">
+      {%- if current_tags.size > 0 -%}
+        <a href="{{ blog.url }}" class="blog-filter-button button-narrow m-0 no-decoration">{{ all_text }}</a>
+      {%- else -%}
+        <div class="blog-filter-button button-narrow selected m-0 no-decoration">{{ all_text }}</div>
+      {%- endif -%}
+      {%- for filter in filter_tags -%}
+        {%- if filter == blank -%}
+          {%- continue -%}
+        {%- endif -%}
+        {%- if current_tags contains filter -%}
+          {% capture filter_link %}{{ filter | link_to_remove_tag: filter }}{% endcapture %}
+          {{ filter_link | replace: '<a', '<a class="blog-filter-button button-narrow selected m-0 no-decoration"' | replace: '>filter_', '>' }}
+        {%- elsif current_tags.size > 0 -%}
+          {%- if blog.tags contains filter -%}
+            {% capture filter_link %}{{ filter | link_to_add_tag: filter }}{% endcapture %}
+            {{ filter_link | replace: '<a', '<a class="blog-filter-button button-narrow m-0 no-decoration"' | replace: '>filter_', '>' }}
+          {%- else -%}
+            <span class="blog-filter-button button-narrow m-0 disabled no-decoration" aria-disabled="true">{{ filter | remove_first: 'filter_' }}</span>
+          {%- endif -%}
+        {%- else -%}
+          {% capture filter_link %}{{ filter | link_to_add_tag: filter }}{% endcapture %}
+          {{ filter_link | replace: '<a', '<a class="blog-filter-button button-narrow m-0 no-decoration"' | replace: '>filter_', '>' }}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+{% endif -%}
+
+{% schema %}
+{
+  "name": "Blog Filters",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "filter_prefix",
+      "label": "Filter prefix",
+      "default": "filter_"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog Filters"
+    }
+  ]
+}
+{% endschema %}

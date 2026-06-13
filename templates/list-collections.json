@@ -1,0 +1,117 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "page_header_hJyjmN": {
+      "type": "page-header",
+      "blocks": {
+        "section_content_F6pYkh": {
+          "type": "section-content",
+          "settings": {
+            "content_spacing": "g-3"
+          },
+          "blocks": {
+            "heading_egediQ": {
+              "type": "heading",
+              "name": "Heading",
+              "settings": {
+                "heading": "Our Collections",
+                "heading_type": "h1",
+                "heading_size": "heading-h1"
+              },
+              "blocks": {}
+            },
+            "richtext_iAh9AN": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "richtext": "<p>Here are all our collections</p>"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "heading_egediQ",
+            "richtext_iAh9AN"
+          ]
+        }
+      },
+      "block_order": [
+        "section_content_F6pYkh"
+      ],
+      "name": "Page Header",
+      "settings": {
+        "style_selector": "theme",
+        "section_styling": "third",
+        "background_color": "linear-gradient(180deg, rgba(90, 48, 48, 1), rgba(255, 255, 255, 1) 100%)",
+        "text_color": "#ffffff",
+        "overlay_type": "custom",
+        "overlay_styling": "secondary",
+        "overlay_color": "linear-gradient(180deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) 100%)",
+        "layout_style": "full-width",
+        "text_alignment": "center",
+        "truncate_text": true,
+        "truncate_lines": 3
+      }
+    },
+    "recently_viewed_R779H7": {
+      "type": "recently-viewed",
+      "blocks": {
+        "section-content": {
+          "type": "section-content",
+          "static": true,
+          "settings": {
+            "content_spacing": "g-1"
+          },
+          "blocks": {
+            "heading_BGThiE": {
+              "type": "heading",
+              "name": "Heading",
+              "settings": {
+                "heading": "Recently Viewed",
+                "heading_type": "h2",
+                "heading_size": "heading-h1"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "heading_BGThiE"
+          ]
+        },
+        "section-navigation": {
+          "type": "section-navigation",
+          "static": true,
+          "settings": {},
+          "blocks": {}
+        }
+      },
+      "name": "Recently Viewed",
+      "settings": {
+        "show_navigation": true,
+        "show_pagination": true,
+        "loop": false,
+        "autoplay": false,
+        "autoplay_delay": 3,
+        "max_products": 12,
+        "style_selector": "theme",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "page_width": "page-width",
+        "vertical_spacing": "vertical-padding"
+      }
+    }
+  },
+  "order": [
+    "page_header_hJyjmN",
+    "recently_viewed_R779H7"
+  ]
+}

@@ -1,0 +1,36 @@
+<div class="mobile-cta-group flex g-3 mb-3 w-100 overflow-auto pt-1" {{ block.shopify_attributes }}>
+  {% content_for 'blocks' %}
+</div>
+
+{% stylesheet %}
+  .mobile-cta-group {
+    width: calc(100% + 32px);
+    margin-right: -16px;
+    margin-left: -16px;
+    padding-right: 16px;
+    padding-left: 16px;
+    scrollbar-width: none;
+  }
+
+  .mobile-cta-group::-webkit-scrollbar {
+    display: none;
+  }
+  .mobile-cta-group .cta {
+    height: auto;
+    min-width: 250px;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Mobile CTA Group",
+  "tag": null,
+  "blocks": [{ "type": "_cta" }],
+  "settings": [],
+  "presets": [
+    {
+      "name": "Mobile CTA Group"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,927 @@
+{%- comment -%}
+  Vertical sidebar filters (same filter markup as legacy `filters.liquid` vertical).
+  Mobile / tablet UI matches `filters-horizontal.liquid` (drawer, tokens, sort label).
+{%- endcomment -%}
+{%- liquid
+  assign template_name = template.name
+
+  if template_name == 'collection'
+    assign template_type = collection
+  elsif template_name == 'search'
+    assign template_type = search
+
+    assign product_count = 0
+    for item in search.results
+      if item.object_type == 'product'
+        assign product_count = product_count | plus: 1
+      endif
+    endfor
+  endif
+
+  assign selected_filters = 0
+-%}
+
+<div
+  class="vertical-filters filter-wrapper flex flex-col g-3 to-md-g-0 to-md-pb-0 to-md-pt-0 pb-3 w-100 sticky z-1"
+  style="top: calc(var(--header-height));"
+>
+  <filter-container class="filter-container-wrapper flex-col section-container secondary border-radius p-3 to-md-flex-col g-4 to-md-g-0 border-radius flex h-max to-md-pt-0 w-100 to-md-pb-0">
+    <h3 class="desktop-filter-heading heading-h3 m-0 to-md-hidden white-space-nowrap">
+      {{- 'collections.filter_sort' | t -}}
+    </h3>
+
+    <div class="mobile-filter-heading flex align-center flex-center g-2 pb-2 pt-2 cursor-pointer">
+      <h4 class="m-0 flex-center align-center pointer-events-none">{{- 'collections.filter_sort' | t -}}</h4>
+      {{ 'icon--chevron-down.svg' | inline_asset_content }}
+    </div>
+
+    <div class="custom-filter-wrapper flex align-center w-100">
+      <form class="filter-container flex-center flex-col to-md-flex-col to-md-pl-2 to-md-pr-2 to-md-pb-3 w-100 from-md-flex-between">
+        <div class="results-wrapper underline capitalize ml-auto mr-auto hidden to-md-block">
+          {% if collection %}
+            ({{ collection.products_count }}
+            {{ 'collections.results' | t }})
+          {% elsif search %}
+            ({{ product_count }}
+            {{ 'collections.results' | t }})
+          {% endif %}
+        </div>
+
+        {%- if template_name == 'search' -%}
+          <input type="hidden" name="q" value="{{- search.terms | escape -}}">
+          <input type="hidden" name="type" value="product">
+        {%- endif -%}
+
+        <div class="sort-container flex align-center g-2 cursor-pointer relative to-md-mb-2 to-md-ml-2 to-md-mr-2">
+          {%- assign sort_by = template_type.sort_by | default: template_type.default_sort_by -%}
+          <div class="sort-label w-max white-space-nowrap">
+            {{ 'collections.sort_by' | t }}
+          </div>
+          <select
+              name="sort_by"
+              class="facet-filters__sort select__select caption-large border-radius pt-1 pb-1 pr-6 pl-0 w-100"
+              id="SortBy"
+              aria-describedby="a11y-refresh-page-message"
+          >
+              {%- for option in template_type.sort_options -%}
+                  <option
+                      value="{{ option.value | escape }}"
+                      {% if option.value == sort_by %}
+                          selected="selected"
+                      {% endif %}
+                  >
+                      {{ option.name | escape }}
+                  </option>
+              {%- endfor -%}
+          </select>
+          {{ 'icon--chevron-down.svg' | inline_asset_content }}
+        </div>
+
+        {%- assign filter_count = 1 -%}
+
+        <div class="flex flex-col g-4 w-100">
+          {%- for filter in template_type.filters -%}
+            {%- assign filter_count = filter_count | plus: 1 -%}
+            {%- case filter.type -%}
+              {%- when 'boolean', 'list' -%}
+                <custom-filter class="custom-filter mb-2 p-1 pl-0">
+                  <div class="filter-heading m-0 relative cursor-pointer capitalize">
+                    {{ filter.label }}
+                    {{ 'icon--chevron-down.svg' | inline_asset_content }}
+                  </div>
+                  <div class="filter-body">
+                    {%- for filter_value in filter.values -%}
+                      <label
+                        for="Filter-{{ filter.param_name }}-{{ forloop.index }}"
+                        {% if filter_value.count == 0 and filter_value.active == false -%}
+                          style="opacity:0.5"
+                        {%- endif %}
+                        class="cursor-pointer block relative flex-start align-center mt-1 mb-1"
+                      >
+                        <input
+                          type="checkbox"
+                          name="{{ filter_value.param_name }}"
+                          class="visually-hidden w-0 h-0 absolute"
+                          value="{{ filter_value.value }}"
+                          id="Filter-{{ filter.param_name }}-{{ forloop.index }}"
+                          {% if filter_value.active -%}
+                            checked
+                          {%- endif %}
+                          {% if filter_value.count == 0 and filter_value.active == false -%}
+                            disabled
+                          {%- endif %}
+                        >
+                        <span class="custom-check"></span>
+                        {{ filter_value.label }}
+                        {%- if section.settings.show_filter_count -%}
+                          ({{ filter_value.count }})
+                        {%- endif -%}
+                      </label>
+                    {%- endfor -%}
+                  </div>
+                </custom-filter>
+              {%- when 'price_range' -%}
+                <custom-filter class="custom-filter mb-2 p-1 pl-0">
+                  <div class="filter-heading m-0 relative cursor-pointer capitalize">
+                    {{ 'collections.price_range' | t }}
+                    {{ 'icon--chevron-down.svg' | inline_asset_content }}
+                  </div>
+
+                  <div class="filter-body">
+                    <div class="price-wrapper mt-3 mr-0 mb-2 ml-0">
+                      <price-range-slider class="custom-range" id="price-container">
+                        <div class="slider" slider>
+                          <div class="progress" progress-bar></div>
+                        </div>
+
+                        <div class="range-input" range-input>
+                          <input
+                            type="range"
+                            class="range-min"
+                            min="0"
+                            max="{{ filter.range_max | money_without_currency | round | replace: ',', '' }}"
+                            value="0"
+                            step="1"
+                            style="border: unset;"
+                          >
+                          <input
+                            type="range"
+                            class="range-max"
+                            min="0"
+                            max="{{ filter.range_max | money_without_currency | round | replace: ',', '' }}"
+                            value="{{ filter.range_max | money_without_currency | round | replace: ',', '' }}"
+                            step="1"
+                            style="border: unset;"
+                          >
+                        </div>
+
+                        <div class="price-input w-100 flex-between mt-3">
+                          <div class="field left">
+                            <span>{{ money.currency }}</span>
+                            <div
+                              class="price-input-show input-min"
+                              price-input-show
+                              data-term="{{ filter.min_value.value | money_without_currency | replace: ',', '' | round }}"
+                            >
+                              {{
+                                filter.min_value.value
+                                | money_without_currency
+                                | round
+                                | times: 100
+                                | money_without_trailing_zeros
+                              }}
+                            </div>
+                          </div>
+                          <div class="field right">
+                            <span>{{ money.currency }}</span>
+                            <div
+                              class="price-input-show input-max"
+                              price-input-show
+                              data-term="{{ filter.range_max | money_without_currency | round }}"
+                            >
+                              {%- if filter.max_value.value != blank -%}
+                                {{
+                                  filter.max_value.value
+                                  | money_without_currency
+                                  | round
+                                  | times: 100
+                                  | money_without_trailing_zeros
+                                }}
+                              {%- else -%}
+                                {{
+                                  filter.range_max
+                                  | money_without_currency
+                                  | round
+                                  | times: 100
+                                  | money_without_trailing_zeros
+                                }}
+                              {%- endif -%}
+                            </div>
+                          </div>
+                          <div class="price-input-hidden w-0 h-0 overflow-hidden absolute no-pointer-events opacity-0">
+                            <label
+                              for="Filter-{{ filter.min_value.param_name }}"
+                              class="flex-start align-center mt-1 mb-1"
+                            >
+                              {{- 'collections.from' | t -}}
+                            </label>
+                            <input
+                              name="{{ filter.min_value.param_name }}"
+                              id="Filter-{{ filter.min_value.param_name }}"
+                              class="min-price-filter block relative uppercase"
+                              min-price-filter
+                              {% if filter.min_value.value -%}
+                                value="{{ filter.min_value.value | money_without_currency | round | replace: ',', '' }}"
+                              {%- endif %}
+                              type="number"
+                              placeholder="0"
+                              min="0"
+                              max="{{ filter.range_max | money_without_currency | round | replace: ',', '' }}"
+                            >
+                            <label
+                              for="Filter-{{ filter.max_value.param_name }}"
+                              class="block relative uppercase"
+                            >
+                              {{- 'collections.to' | t -}}
+                            </label>
+                            <input
+                              name="{{ filter.max_value.param_name }}"
+                              id="Filter-{{ filter.max_value.param_name }}"
+                              class="max-price-filter"
+                              max-price-filter
+                              {% if filter.max_value.value -%}
+                                value="{{ filter.max_value.value | money_without_currency | round | replace: ',', '' }}"
+                              {%- endif %}
+                              type="number"
+                              placeholder="{{ filter.range_max | money_without_currency | round | replace: ',', '' }}"
+                              min="0"
+                              max="{{ filter.range_max | money_without_currency | round | replace: ',', '' }}"
+                            >
+                          </div>
+                        </div>
+                      </price-range-slider>
+                    </div>
+                  </div>
+                </custom-filter>
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+
+        <div class="selected-filter-wrapper mb-3 g-3 to-md-ml-2 to-md-mr-2">
+          {%- for filter in template_type.filters -%}
+            {%- if filter.type == 'price_range' -%}
+              {%- if filter.min_value.value != null or filter.max_value.value != null -%}
+                {%- assign selected_filters = selected_filters | plus: 1 %}
+                <button
+                  type="button"
+                  selected-filter
+                  data-param-remove="filter.v.price.gte={{ filter.min_value.value | divided_by: 100 }}&filter.v.price.lte={{ filter.max_value.value | divided_by: 100 }}"
+                  class="selected-filter g-1 flex-center align-center caption-text"
+                  aria-label="Remove Filter"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20.723"
+                    height="20.723"
+                    viewBox="0 0 20.723 20.723"
+                  >
+                    <g id="Icon_feather-menu" data-name="Icon feather-menu" transform="translate(-4.239 -10.408)">
+                      <path id="Path_6" data-name="Path 6" d="M4.5,18H32.806" transform="translate(14.139 -5.149) rotate(45)" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1"/>
+                      <path id="Path_11736" data-name="Path 11736" d="M0,0H28.306" transform="translate(24.608 10.761) rotate(135)" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1"/>
+                    </g>
+                  </svg>
+                  {%- assign min_value = filter.min_value.value | default: 0 -%}
+                  {%- assign max_value = filter.max_value.value | default: filter.range_max -%}
+                  {{ min_value | money_without_trailing_zeros }} -
+                  {{ max_value | money_without_trailing_zeros }}
+                </button>
+              {%- endif -%}
+            {%- else -%}
+              {%- for filter_value in filter.active_values -%}
+                {%- assign selected_filters = selected_filters | plus: 1 %}
+                <button
+                  type="button"
+                  selected-filter
+                  data-param-remove="{{ filter.param_name }}={{ filter_value.value }}"
+                  class="selected-filter g-1 flex-center align-center caption-text"
+                  aria-label="Remove Filter"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20.723"
+                    height="20.723"
+                    viewBox="0 0 20.723 20.723"
+                  >
+                    <g id="Icon_feather-menu" data-name="Icon feather-menu" transform="translate(-4.239 -10.408)">
+                      <path id="Path_6" data-name="Path 6" d="M4.5,18H32.806" transform="translate(14.139 -5.149) rotate(45)" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1"/>
+                      <path id="Path_11736" data-name="Path 11736" d="M0,0H28.306" transform="translate(24.608 10.761) rotate(135)" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1"/>
+                    </g>
+                  </svg>
+                  {{ filter.label }}: {{ filter_value.label }}
+                </button>
+              {%- endfor -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+        <div class="reset-filter-wrapper to-md-flex-between to-md-align-center to-md-g-2">
+          {%- unless selected_filters == 0 -%}
+            <button
+              type="button"
+              data-reset-filters
+              class="block m-0 text-center underline capitalize white-space-nowrap to-md-p-2"
+              aria-label="Reset Filters"
+            >
+              {{- 'collections.reset_filters' | t -}}
+            </button>
+          {%- endunless -%}
+          <button type="submit" class="button-1 apply-filters-btn w-100 to-md-block hidden">
+            {{ 'collections.apply' | t }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </filter-container>
+</div>
+
+{%- stylesheet -%}
+
+  .filter-wrapper.vertical-filters .custom-filter.open .filter-body {
+    max-height: 40vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--brand-color-4) var(--brand-color-6);
+  }
+
+  .filter-wrapper.vertical-filters .custom-filter.open .filter-body::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .filter-wrapper.vertical-filters .custom-filter.open .filter-body::-webkit-scrollbar-track {
+    background: var(--brand-color-6);
+    border-radius: 999px;
+  }
+
+  .filter-wrapper.vertical-filters .custom-filter.open .filter-body::-webkit-scrollbar-thumb {
+    background: var(--brand-color-4);
+    border-radius: 999px;
+  }
+
+  .filter-wrapper.vertical-filters .custom-filter.open .filter-body::-webkit-scrollbar-thumb:hover {
+    background: var(--brand-color-2);
+  }
+
+  @media only screen and (max-width: 991.98px) {
+    .vertical-filters .filter-container-wrapper {
+      max-height: 80vh;
+      z-index: 10;
+      position: fixed;
+      inset: auto 0 0 0;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      padding-inline: 0;
+      transform: translateY(calc(100% - 38px));
+      transition: all 250ms ease;
+    }
+
+    .vertical-filters .filter-container-wrapper:has(.open) {
+      transform: translateY(0);
+    }
+
+    .vertical-filters .filter-container-wrapper .filter-container {
+      max-height: 70vh;
+      margin-inline: auto;
+    }
+
+    .vertical-filters .filter-container-wrapper.open .reset-filter-wrapper {
+      inset: auto 0 15px 0;
+    }
+
+    .vertical-filters .filter-container-wrapper .custom-filter-wrapper {
+      pointer-events: none;
+      display: block;
+    }
+
+    .vertical-filters .filter-container-wrapper .custom-filter-wrapper.open {
+      pointer-events: auto;
+    }
+
+    .vertical-filters .selected-filter-wrapper {
+      margin-top: 15px;
+    }
+
+    .vertical-filters .selected-filter-wrapper.desktop {
+      display: none;
+    }
+
+    .vertical-filters .custom-filter.open .filter-body {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .vertical-filters .sort-container {
+      margin-top: 0;
+    }
+
+    .vertical-filters .filter-container-wrapper .selected-filter-wrapper {
+      display: flex;
+    }
+
+    .vertical-filters .selected-filter-wrapper:not(.desktop) {
+      display: flex;
+    }
+
+    .vertical-filters .price-wrapper {
+      grid-column: span 2;
+    }
+
+    .vertical-filters .price-wrapper .custom-range .slider,
+    .vertical-filters .price-wrapper .custom-range .range-input {
+      margin-inline: 13px;
+      padding-inline: 0;
+    }
+
+    .vertical-filters .price-wrapper .custom-range input[type='range']::-webkit-slider-thumb {
+      height: 26px;
+      width: 26px;
+    }
+
+    .vertical-filters .price-wrapper .custom-range input[type='range']::-moz-range-thumb {
+      height: 26px;
+      width: 26px;
+    }
+  }
+
+  @media (max-width: 425px) {
+    .vertical-filters .custom-filter.open .filter-body {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+
+  .vertical-filters .filter-container-wrapper.open {
+    padding-bottom: 50px;
+  }
+
+  @media only screen and (min-width: 992px) {
+    .vertical-filters .filter-container-wrapper {
+      position: sticky;
+      top: 120px;
+    }
+
+    .vertical-filters .filter-container-wrapper .mobile-filter-heading {
+      display: none;
+      padding-bottom: 0;
+      color: #fff;
+      transition: all 250ms ease;
+    }
+
+    .vertical-filters .selected-filter-wrapper:empty {
+      display: none !important;
+    }
+  }
+
+  .vertical-filters .filter-container {
+    gap: 15px;
+  }
+
+  .vertical-filters .filter-container .sort-container,
+  .vertical-filters .filter-container .custom-filter {
+    margin: 0;
+  }
+
+  .vertical-filters .mobile-filter-heading > svg {
+    pointer-events: none;
+    transform: translateY(1px) rotate(180deg);
+  }
+
+  .vertical-filters .mobile-filter-heading > svg path {
+    stroke: var(--text-color-alternate);
+  }
+
+  .vertical-filters .mobile-filter-heading.open > svg {
+    transform: translateY(2px);
+  }
+
+  .vertical-filters .mobile-filter-heading h4 {
+    font-size: 18px;
+  }
+
+  .vertical-filters .mobile-filter-heading svg {
+    cursor: pointer;
+    transition: 0.3s ease;
+  }
+
+  .vertical-filters .selected-filter-wrapper:has(.selected-filter) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .vertical-filters .selected-filter-wrapper .selected-filter {
+    width: fit-content;
+    padding: 2px 15px 2px 10px;
+    border-radius: 500px;
+    text-decoration: none;
+    border: none;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  @media only screen and (max-width: 991.98px) {
+    .vertical-filters .selected-filter-wrapper .selected-filter {
+      color: var(--text-color);
+      background: var(--brand-color-4);
+      border-radius: var(--button-1-radius);
+    }
+
+    .vertical-filters .selected-filter-wrapper .selected-filter svg path {
+      stroke: var(--text-color);
+    }
+  }
+
+  @media only screen and (min-width: 992px) {
+    .vertical-filters .selected-filter-wrapper .selected-filter {
+      background: var(--brand-color-1);
+      color: var(--text-color-alternate);
+    }
+
+    .vertical-filters .selected-filter-wrapper .selected-filter svg path {
+      stroke: var(--text-color-alternate);
+    }
+  }
+
+  .vertical-filters .selected-filter-wrapper .selected-filter:hover svg {
+    rotate: 90deg;
+  }
+
+  .vertical-filters .selected-filter-wrapper .selected-filter svg {
+    margin-right: 5px;
+    width: 10px;
+    height: 10px;
+    transition: all 0.3s;
+  }
+
+  .vertical-filters .custom-filter[data-theme='sale'] {
+    display: none;
+    padding: 0;
+    border-radius: 0;
+    background-color: transparent;
+  }
+
+  .vertical-filters .custom-filter[data-theme='sale'] input {
+    position: absolute;
+  }
+
+  .vertical-filters .custom-filter .button {
+    width: unset;
+    text-align: center;
+  }
+
+  @media only screen and (max-width: 991.98px) {
+    .vertical-filters .custom-filter {
+      border-bottom: 2px solid var(--brand-color-4);
+    }
+
+    .vertical-filters .custom-filter .filter-heading {
+      color: var(--text-color-secondary);
+      white-space: nowrap;
+    }
+
+    .vertical-filters .custom-filter .filter-heading svg {
+      cursor: pointer;
+      transition: 0.3s ease;
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+    }
+
+    .vertical-filters .custom-filter .filter-body {
+      display: none;
+    }
+
+    .vertical-filters .custom-filter.open .filter-body label input,
+    .vertical-filters .custom-filter.open .filter-heading svg {
+      transform: rotate(180deg) translateY(6px);
+    }
+
+    .vertical-filters .custom-filter.open .filter-body {
+      display: flex;
+      flex-direction: column;
+      margin-top: 5px;
+    }
+
+    .vertical-filters .custom-filter.open .filter-body label input:focus {
+      outline: none;
+    }
+
+    .vertical-filters .custom-filter.open .filter-body label .custom-check {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 15px;
+      height: 15px;
+      aspect-ratio: 1;
+      padding: 2px;
+      margin-left: 3px;
+      margin-right: 5px;
+      background: var(--text-color-alternate);
+      border-radius: 50%;
+      border: 1px solid var(--brand-color-6);
+    }
+
+    .vertical-filters .custom-filter.open .filter-body label input:checked + .custom-check {
+      background: var(--brand-color-4);
+      border: unset;
+      outline: 1px solid var(--brand-color-4);
+      outline-offset: 1px;
+      width: 13px;
+      height: 13px;
+    }
+
+    .vertical-filters .custom-filter.open .filter-body label input:checked + .custom-check svg path {
+      fill: #fff;
+    }
+
+    .vertical-filters .sort-container {
+      border-bottom: 2px solid var(--brand-color-4);
+      min-width: 200px;
+    }
+
+    .vertical-filters .sort-container::before {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0 auto 0 0;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .vertical-filters .sort-container.vertical-filter::before {
+      inset: 0 auto 0 0;
+    }
+
+    .vertical-filters .sort-container select {
+      border: none;
+      text-decoration: none;
+    }
+
+    .vertical-filters .sort-container select:focus-visible {
+      outline: none;
+    }
+
+    .vertical-filters .sort-container svg {
+      position: absolute;
+      top: 50%;
+      right: 5px;
+      transform: translateY(-50%);
+      pointer-events: none;
+      transition: 0.3s ease;
+    }
+
+    .vertical-filters .sort-container select:focus-visible + svg {
+      transform: rotate(180deg) translateY(6px);
+    }
+
+    .vertical-filters .price-wrapper .custom-range .slider .progress {
+      background: var(--brand-color-4);
+    }
+
+    .vertical-filters .price-wrapper .custom-range input[type='range']::-webkit-slider-thumb {
+      background: var(--brand-color-4);
+    }
+  }
+
+  @media only screen and (min-width: 992px) {
+    .vertical-filters .custom-filter {
+      border-bottom: 1px solid var(--brand-color-1);
+    }
+
+    .vertical-filters .custom-filter .filter-heading {
+      color: var(--text-color-secondary);
+    }
+
+    .vertical-filters .custom-filter .filter-heading svg {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      cursor: pointer;
+      transform: translateY(-50%);
+      transition: 0.3s ease;
+    }
+
+    .vertical-filters .custom-filter .filter-heading svg path {
+      stroke: var(--brand-color-2);
+    }
+
+    .vertical-filters .custom-filter .filter-body {
+      display: none;
+    }
+
+    .vertical-filters .custom-filter.open .filter-body label input,
+    .vertical-filters .custom-filter.open .filter-heading svg {
+      transform: rotateX(180deg) translateY(8px);
+    }
+
+    .vertical-filters .custom-filter.open .filter-body {
+      display: flex;
+      flex-direction: column;
+      margin-top: 5px;
+    }
+
+    .vertical-filters .custom-filter.open .filter-body label {
+      color: var(--text-color);
+    }
+
+    .vertical-filters .custom-filter.open .filter-body label .custom-check {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 15px;
+      height: 15px;
+      margin-left: 3px;
+      margin-right: 5px;
+      padding: 2px;
+      border: 1px solid var(--brand-color-6);
+      border-radius: 50%;
+      background: var(--text-color-alternate);
+    }
+
+    .vertical-filters .custom-filter.open .filter-body label input:checked + .custom-check {
+      width: 13px;
+      height: 13px;
+      border: unset;
+      outline: 1px solid var(--brand-color-2);
+      background: var(--brand-color-2);
+      outline-offset: 1px;
+    }
+
+    .vertical-filters .custom-filter.open .filter-body label input:checked + .custom-check svg path {
+      fill: #fff;
+    }
+
+    .vertical-filters .sort-container {
+      border-bottom: 1px solid var(--brand-color-1);
+      color: var(--text-color);
+    }
+
+    .vertical-filters .sort-container::before {
+      position: absolute;
+      inset: 0 auto 0 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      font-size: 14px;
+      font-weight: 700;
+      content: attr(data-text);
+    }
+
+    .vertical-filters .sort-container.vertical-filter::before {
+      inset: 0 auto 0 0;
+    }
+
+    .vertical-filters .sort-container select {
+      border: none;
+      background-color: unset;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .vertical-filters .sort-container svg {
+      position: absolute;
+      top: 50%;
+      right: 8px;
+      pointer-events: none;
+      transform: translateY(-50%);
+      transition: 0.3s ease;
+      stroke: var(--brand-color-2);
+    }
+
+    .vertical-filters .price-wrapper .custom-range .slider .progress {
+      background: var(--brand-color-2);
+    }
+
+    .vertical-filters .price-wrapper .custom-range input[type='range']::-webkit-slider-thumb {
+      background: var(--brand-color-2);
+    }
+
+    .vertical-filters .price-wrapper .custom-range input[type='range']::-moz-range-thumb {
+      background: var(--brand-color-2);
+    }
+  }
+
+  .vertical-filters .sort-container select:focus-visible + svg {
+    transform: rotate(180deg) translateY(6px);
+  }
+
+  .vertical-filters .price-wrapper .filter-heading {
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
+
+  .vertical-filters .price-wrapper .custom-range ::selection {
+    color: #fafafa;
+    background: #000;
+  }
+
+  .vertical-filters .price-wrapper .custom-range .price-input .field {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .vertical-filters .price-wrapper .custom-range .price-input .field * {
+    font-size: 12px;
+    font-weight: 300;
+  }
+
+  .vertical-filters .price-wrapper .custom-range .price-input .field:first-of-type input {
+    padding-left: 5px;
+    text-align: left;
+  }
+
+  .vertical-filters .price-wrapper .custom-range .price-input .field:last-of-type input {
+    text-align: right;
+  }
+
+  .vertical-filters .price-wrapper .custom-range .field input {
+    width: max-content;
+    max-width: 37px;
+    height: 100%;
+    border: none;
+    outline: none;
+    background: #fafafa;
+    font-size: 12px;
+    -moz-appearance: textfield;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .vertical-filters .price-wrapper .custom-range input[type='number']::-webkit-outer-spin-button,
+  .vertical-filters .price-wrapper .custom-range input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+
+  .vertical-filters .price-wrapper .custom-range .slider {
+    position: relative;
+    height: 2px;
+    margin-inline: 5px;
+    border-radius: 5px;
+    background: #ddd;
+    translate: 0 -1px;
+  }
+
+  .vertical-filters .price-wrapper .custom-range .slider .progress {
+    position: absolute;
+    right: 0;
+    left: 0;
+    height: 3px;
+    border-radius: 5px;
+    translate: 0 -1.5px;
+  }
+
+  .vertical-filters .price-wrapper .custom-range .range-input {
+    position: relative;
+    overflow-x: clip;
+    padding-inline: 5px;
+  }
+
+  .vertical-filters .price-wrapper .custom-range .range-input input {
+    position: absolute;
+    top: -7px;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    padding: 0;
+    background: none;
+    pointer-events: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+
+  .vertical-filters .price-wrapper .custom-range input[type='range']::-webkit-slider-thumb {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgb(0 0 0 / 5%);
+    pointer-events: auto;
+    -webkit-appearance: none;
+  }
+
+  .vertical-filters .price-wrapper .custom-range input[type='range']::-moz-range-thumb {
+    width: 10px;
+    height: 10px;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgb(0 0 0 / 5%);
+    pointer-events: auto;
+    -moz-appearance: none;
+  }
+
+  .vertical-filters .price-wrapper button {
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .vertical-filters .selected-filter-wrapper .reset-filter-wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  .vertical-filters .selected-filter-wrapper .reset-filter-wrapper [data-reset-filters] {
+    margin-top: 0;
+  }
+
+  @media only screen and (max-width: 1150px) and (min-width: 992px) {
+    .vertical-filters .filter-container-wrapper {
+      flex-wrap: wrap;
+      gap: var(--content-spacing-2);
+    }
+  }
+{%- endstylesheet -%}

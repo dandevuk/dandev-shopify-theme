@@ -1,0 +1,77 @@
+{%- capture footer_list -%}
+  <ul class="footer-item-list to-sm-mt-3 list-none to-sm-pt-3 brrr">
+    {%- for link in block.settings.footer_links.links -%}
+      <li class="w-100 pb-1 to-sm-pb-2">
+        <a href="{{ link.url }}" class="no-decoration" aria-label="Link to {{ link.title }}">{{ link.title }}</a>
+      </li>
+    {%- endfor -%}
+  </ul>
+{%- endcapture -%}
+
+<div
+  class="footer-link-group flex flex-col g-3 to-sm-g-0 to-sm-w-100 to-sm-flex-1 to-md-flex-1"
+  {{ block.shopify_attributes }}
+>
+  {%- render 'accordion-item',
+    question: block.settings.title,
+    content: footer_list,
+    heading_tag: 'h3',
+    heading_size: 'heading-h4',
+    heading_color: '#ffffff'
+  -%}
+</div>
+
+{% stylesheet %}
+  .footer-link-group .footer-item-list a:hover {
+    color: inherit;
+    text-decoration: underline;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .footer-link-group .accordion__question {
+      font-size: var(--heading-h3-size-mobile);
+    }
+  }
+
+  @media only screen and (min-width: 767.98px) {
+    .footer-link-group button {
+      padding: 0;
+      border-bottom: none;
+    }
+    .footer-link-group button.accordion .chevron {
+      display: none;
+    }
+    .footer-link-group .panel {
+      max-height: 100%;
+      border: none;
+    }
+    .footer-link-group .content {
+      padding: 0;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Accordion Menu",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "info": "This will override the menu name"
+    },
+    {
+      "type": "link_list",
+      "id": "footer_links",
+      "label": "Footer Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Accordion Menu"
+    }
+  ]
+}
+{% endschema %}

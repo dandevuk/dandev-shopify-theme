@@ -1,0 +1,43 @@
+{%- liquid
+  if usp != blank
+    assign image = usp.image.value
+    assign heading = usp.heading.value
+    assign text = usp.text | metafield_tag
+    assign button_link = usp.product_link.value.url | default: usp.page_link.value.url | default: usp.collection_link.value.url | append: ''
+    assign button_label = usp.link_text.value
+    assign button_aria_label = usp.link_label
+
+    if button_link contains shop.domain
+      assign button_link = button_link | remove: 'https://' | remove: 'http://' | remove: shop.domain
+    endif
+  endif
+-%}
+
+{%- if image != blank or heading != blank -%}
+  <div class="flex-center h-100 flex-col align-center" {{ shopify_attributes }}>
+    {%- if image != blank -%}
+      <div
+        class="flex-center align-center {% if usp_size == "large" %}mb-2{% endif %}"
+        style="{%- if usp_size == "large" -%}max-height:24px;{%- else -%}max-height:17px;{%- endif -%}"
+      >
+        {%- render 'image', image: image, max_width: 100, use_placeholder: true, lazy: lazy, class: 'object-contain', context_text: heading -%}
+      </div>
+    {%- endif -%}
+
+    <div class="flex flex-col align-center text-center">
+      {%- if usp_size == "large" -%}
+        <h2 class="heading-h4 mt-2 mb-2">{{- heading -}}</h2>
+
+        {%- if text != blank -%}
+          <div class="mb-1" style="max-width: 220px;">{{- text -}}</div>
+        {%- endif -%}
+      {% else %}
+        <div class="mt-1 {% if usp_size == "small" %}caption-text{% endif %}" style="max-width: 220px;">{{- heading -}}</div>
+      {%- endif -%}
+    </div>
+
+    {%- if button_link != blank and button_label != blank and usp_size == "large" -%}
+      <a href="{{- button_link -}}" aria-label="{{- button_aria_label -}}" class="theme-link">{{- button_label -}}</a>
+    {%- endif -%}
+  </div>
+{%- endif -%}

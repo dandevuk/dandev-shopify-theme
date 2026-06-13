@@ -1,0 +1,10 @@
+# Run lint-staged for staged files
+npx lint-staged
+
+# Only run Theme Check if any .liquid files are staged
+if git diff --cached --name-only -- '*.liquid' | grep -q '.'; then
+  echo "Running Shopify Theme Check (Liquid files changed)..."
+  npm run theme:check
+else
+  echo "No Liquid changes detected, skipping Theme Check."
+fi

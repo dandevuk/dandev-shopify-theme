@@ -1,0 +1,51 @@
+{%- liquid
+  assign image = block.settings.payment_icons
+  assign add_border_bottom = block.settings.add_border_bottom
+-%}
+
+<div
+  payment-icons
+  class="payment-icons-container flex flex-center {% if add_border_bottom %}border-bottom pb-3{% endif %}"
+  {{ block.shopify_attributes }}
+>
+  {%- render 'payment-icons', image: image -%}
+</div>
+
+{% stylesheet %}
+  .product-form .payment-icons-container:empty {
+    display: none;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Payment Icons",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "image_picker",
+      "id": "payment_icons",
+      "label": "Payment Icons Image"
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "checkbox",
+      "id": "add_border_bottom",
+      "label": "Add Border Bottom",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Payment Icons"
+    }
+  ]
+}
+{% endschema %}

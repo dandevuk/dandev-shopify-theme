@@ -1,0 +1,35 @@
+<div
+  class="mega-menu-links-container mega-menu-cta-group flex flex-row align-stretch g-4 w-auto ml-auto flex-1 h-100"
+  {{ block.shopify_attributes }}
+>
+  {%- content_for 'blocks' -%}
+</div>
+
+{% stylesheet %}
+  .mega-menu-cta-group {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .mega-menu-cta-group > .cta {
+    flex: 1 1 0;
+    min-width: 0;
+    height: 100%;
+    grid-column: unset !important;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Drop Down CTA Group",
+  "tag": null,
+  "settings": [],
+  "blocks": [{ "type": "_cta" }],
+  "presets": [
+    {
+      "name": "Drop Down CTA Group"
+    }
+  ]
+}
+{% endschema %}
+

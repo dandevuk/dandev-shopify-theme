@@ -1,0 +1,43 @@
+{%- if block.settings.title != blank -%}
+  <h3 class="heading-h4" {{ block.shopify_attributes }}>{{ block.settings.title }}</h3>
+{%- endif -%}
+{%- for sublink in block.settings.menu.links -%}
+  <a class="sublink ml-2" href="{{ sublink.url }}" aria-label="Link to {{ sublink.title }}">
+    {{- sublink.title -}}
+  </a>
+{% endfor %}
+
+{% stylesheet %}
+  .mobile-menu-outer-wrapper .mobile-menu .mobile-menu-navigation .dropdown-title,
+  .mobile-menu-outer-wrapper .mobile-menu .mobile-menu-navigation .sublink {
+    text-decoration: none;
+  }
+  .mobile-menu-outer-wrapper .mobile-menu .mobile-menu-navigation .content h3:first-of-type {
+    margin-top: var(--content-spacing-2);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Mobile Link Group",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Group Title",
+      "default": "Menu"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu Links"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mobile Link Group"
+    }
+  ]
+}
+{% endschema %}

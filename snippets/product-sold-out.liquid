@@ -1,0 +1,137 @@
+{%- liquid
+  # Locales
+  assign bis_text = 'products.product.bis_text' | t
+  assign view_text = 'products.product.view_text' | t
+  assign no_longer_available_text = 'products.product.no_longer_available' | t
+
+  assign image = product.featured_image | image_url: width: 500 | image_tag: loading: 'eager', fetchpriority: 'high', class: 'object-cover'
+
+  if image == blank
+    if settings.product_fallback != blank
+      assign image = settings.product_fallback | image_url: width: 500 | image_tag: loading: 'eager', fetchpriority: 'high', class: 'object-cover'
+    else
+      assign image = 'product-1' | placeholder_svg_tag
+    endif
+  endif
+
+  assign discontinued = product.metafields.product_data.discontinued
+
+  # Klaviyo API Key
+-%}
+
+<div class="mobile-slider-overflow">
+  <section class="pdp-sold-out-form page-width pb-5 border-bottom">
+    <div
+      class="pdp-sold-out-form__wrapper {% unless discontinued or settings.klaviyo_api_key == blank %}has-bis-form{% endunless %} section-container {{ section_styling }} relative flex-center flex-row align-stretch flex-col from-lg-flex-row g-5 w-100 border-radius p-2 overflow-hidden"
+      style="{{ custom_style }}"
+    >
+      {%- if bg_image != blank -%}
+        <div class="image-wrapper absolute w-100 h-100 inset-0 z-0">
+          {%- render 'image',
+            image: bg_image,
+            max_width: 2000,
+            use_placeholder: false,
+            lazy: false,
+            class: 'object-cover'
+          -%}
+        </div>
+      {%- endif -%}
+
+      {% comment %} SOLD OUT CARD {% endcomment %}
+      <div class="pdp-sold-out-form__product-card no-text-margins relative flex-1 flex align-center g-5 from-lg-w-100 from-lg-align-center to-sm-flex-col">
+        <div class="product-image border-radius ar-1 overflow-hidden">{{- image -}}</div>
+
+        <div class="product-details flex-center g-1 flex-col">
+          {%- if discontinued -%}
+            <h2 class="product-title heading-h3 mb-0 to-sm-w-100 to-sm-text-center">
+              {{- no_longer_available_text -}}
+            </h2>
+            <a
+              href="#main-product"
+              class="view-details to-sm-w-100 to-sm-text-center cursor-pointer text-underline no-hover-color"
+            >
+              {{- view_text -}}
+            </a>
+          {%- else -%}
+            <h2 class="product-title heading-h3 mb-0 to-sm-w-100 to-sm-text-center">
+              {{- bis_text -}}
+            </h2>
+            {%- if product.metafields.product_data.expected_return_date != blank -%}
+              {%- assign date = product.metafields.product_data.expected_return_date
+                | date: '%d.%m.%Y'
+              -%}
+              <p class="mb-0 to-sm-w-100 to-sm-text-center bold">
+                {{ 'products.product.expected_date' | t: date: date }}
+              </p>
+            {%- endif -%}
+            <p class=" mt-0 to-sm-w-100 to-sm-text-center"></p>
+            <a
+              href="#main-product"
+              class="view-details to-sm-w-100 to-sm-text-center cursor-pointer text-underline no-hover-color"
+            >
+              {{- view_text -}}
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+      {% comment %} END OF:  SOLD OUT CARD {% endcomment %}
+
+      {%- render 'klaviyo-bis-form',
+        product: product,
+        form_input_bg_color: form_input_bg_color,
+        form_input_text_color: form_input_text_color,
+        form_submit_style: form_submit_style
+      -%}
+    </div>
+
+    {%- if show_recommendations_slider -%}
+      {%- render 'recommendations',
+        product: product,
+        heading: recommendations_heading,
+        classes: 'mt-5'
+      -%}
+    {%- endif -%}
+  </section>
+</div>
+
+{%- stylesheet -%}
+  .pdp-sold-out-form__wrapper.has-bis-form::after {
+    content: '';
+    order: 2;
+    width: 1px;
+    height: auto;
+    display: flex;
+    background: #ffffff;
+    position: relative;
+  }
+
+  @media (max-width: 1199.98px) {
+    .pdp-sold-out-form__wrapper.has-bis-form::after {
+      width: 100%;
+      height: 1px;
+    }
+  }
+
+  .pdp-sold-out-form__product-card {
+    order: 1;
+  }
+
+  .pdp-sold-out-form__product-card .product-image {
+    width: 104px;
+    min-width: 104px;
+    height: 104px;
+    background: #fff;
+  }
+
+  @media (max-width: 767.98px) {
+    .pdp-sold-out-form__product-card .product-image {
+      width: 100%;
+      min-width: 100%;
+      height: unset;
+    }
+  }
+
+  .pdp-sold-out-form__form {
+    order: 3;
+  }
+{%- endstylesheet -%}

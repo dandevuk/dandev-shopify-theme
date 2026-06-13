@@ -1,0 +1,18 @@
+{%- render 'product-gift-card-fields',
+  product: product,
+  price_format: block.settings.price_format,
+  shopify_attributes: block.shopify_attributes
+-%}
+
+{% schema %}
+{
+  "name": "Gift card fields",
+  "tag": null,
+  "settings": [],
+  "presets": [
+    {
+      "name": "Gift card fields"
+    }
+  ]
+}
+{% endschema %}

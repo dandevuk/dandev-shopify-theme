@@ -1,0 +1,107 @@
+{%- liquid
+  assign image = block.settings.image
+  assign mobile_image = block.settings.mobile_image
+  assign lazy_load = section.settings.lazy_load
+  assign preserve_dimensions = block.settings.preserve_image_dimensions
+  assign image_link = block.settings.image_link
+
+  assign image_fit = 'object-cover'
+  if preserve_dimensions
+    assign image_fit = 'object-contain'
+  endif
+-%}
+{% if image_link != blank %}
+  <a
+    href="{{ image_link }}"
+    class="flex image-block image-wrapper w-100 overflow-hidden span-12 border-radius set-height"
+    style="--height: {{ block.settings.image_height }}px"
+    {{ block.shopify_attributes }}
+  >
+    {%- render 'image',
+      image: image,
+      image_mobile: mobile_image,
+      mobile_width: 600,
+      max_width: 1920,
+      use_placeholder: true,
+      lazy: lazy_load,
+      class: image_fit
+    -%}
+  </a>
+{%- else -%}
+  <div
+    class="image-block image-wrapper w-100 overflow-hidden span-12 border-radius set-height"
+    style="--height: {{ block.settings.image_height }}px"
+    {{ block.shopify_attributes }}
+  >
+    {%- render 'image',
+      image: image,
+      image_mobile: mobile_image,
+      mobile_width: 600,
+      max_width: 1920,
+      use_placeholder: true,
+      lazy: lazy_load,
+      class: image_fit
+    -%}
+  </div>
+{% endif %}
+
+{%- stylesheet -%}
+  .image-block.image-wrapper.set-height {
+    position: relative;
+    height: var(--height);
+    width: auto;
+  }
+  a.image-block.image-wrapper img {
+    transition: all 0.3s ease;
+  }
+  a.image-block.image-wrapper:hover img {
+    scale: 1.05;
+  }
+{%- endstylesheet -%}
+
+{% schema %}
+{
+  "name": "Image",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile Image",
+      "info": "Optional mobile image"
+    },
+    {
+      "type": "checkbox",
+      "id": "preserve_image_dimensions",
+      "label": "Preserve Image Dimensions",
+      "default": false
+    },
+    {
+      "type": "number",
+      "id": "image_height",
+      "label": "Image Height (px)",
+      "default": 200
+    },
+    {
+      "type": "url",
+      "id": "image_link",
+      "label": "Link",
+      "info": "Optional link for the image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,376 @@
+{%- liquid
+  # STYLING
+  assign style_selector = section.settings.style_selector
+  assign section_styling = section.settings.section_styling
+  assign background_color = section.settings.background_color
+  assign text_color = section.settings.text_color
+
+  # LAYOUT
+  assign vertical_spacing = section.settings.vertical_spacing
+  assign page_width = section.settings.page_width
+  assign grid_items = section.settings.grid_size
+
+  # Result Counts
+  assign page_count = 0
+  assign article_count = 0
+  assign product_count = 0
+  assign searched_header = 'search.no_results_html' | t: terms: search.terms
+
+  if search.performed and search.results_count > 0
+    assign searched_header = 'search.results_html' | t: terms: search.terms
+
+    for result in search.results
+      case result.object_type
+        when 'product'
+          assign product_count = product_count | plus: 1
+        when 'article'
+          assign article_count = article_count | plus: 1
+        when 'page'
+          assign page_count = page_count | plus: 1
+      endcase
+    endfor
+  endif
+-%}
+
+<section
+  class="search-container section-container {{ vertical_spacing }} {{ section_styling }} {% if section.settings.filter_positioning == "vertical" %}{{ page_width }}{% endif %}"
+  {% if style_selector == 'custom' %}
+    style="background: {{ background_color }}; color: {{ text_color }};"
+  {% endif %}
+>
+  <div class="text-center flex flex-col gap-sm mb-5 {{ page_width }}">
+    {%- if search.performed -%}
+      <h1>{{- searched_header -}}</h1>
+    {%- else -%}
+      <h1>{{- 'search.title' | t -}}</h1>
+    {%- endif -%}
+
+    <form
+      action="{{ routes.search_url }}"
+      class="text-center relative m-in-auto max-w-max to-sm-w-100 flex g-3 to-sm-flex-wrap to-sm-flex-center"
+      method="get"
+      role="search"
+    >
+      <input
+        type="search"
+        class="m-in-auto w-100 max-w-max to-sm-w-100"
+        size="50"
+        name="q"
+        value="{{ search.terms | escape }}"
+        style="padding: 8px 16px;border-radius: 20px;"
+        placeholder="{{ 'search.placeholder' | t }}"
+      >
+      <button
+        id="search-submit"
+        type="submit"
+        class="cursor-pointer absolute flex-center align-center h-100 border-radius-circle"
+        style=" width:28px; height: 28px;background-color: var(--brand-color-2);color: #fff;"
+        aria-label="{{ 'sections.header.search' | t }}"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="15"
+          height="15"
+          viewBox="0 0 15 15"
+          fill="none"
+        >
+          <path d="M4.46736 11.0565L0.761718 14.4521M2.99405 7.14415C2.99405 10.2878 5.40448 12.8362 8.37789 12.8362C11.3513 12.8362 13.7617 10.2878 13.7617 7.14415C13.7617 4.00054 11.3513 1.45215 8.37789 1.45215C5.40448 1.45215 2.99405 4.00054 2.99405 7.14415Z" stroke="currentColor" stroke-linecap="round"/>
+        </svg>
+      </button>
+      {% comment %} <button type="submit" class="button-1">{{ 'search.submit' | t }}</button> {% endcomment %}
+    </form>
+  </div>
+
+  {%- if search.performed and search.results_count > 0 -%}
+    {%- if page_count > 0 or article_count > 0 -%}
+      <div class="grid-section g-5 {{ page_width }} ">
+        {%- if page_count > 0 -%}
+          <div class="span-6">
+            <h3>{{- 'search.pages_html' | t: count: page_count -}}</h3>
+
+            <ul class="list-none flex flex-row g-4 align-center">
+              {%- for result in search.results -%}
+                {%- if result.object_type == 'page' -%}
+                  <li>{{ result.title | link_to: result.url }}</li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+        {%- if article_count > 0 -%}
+          <div class="span-6">
+            <h3>{{- 'search.articles_html' | t: count: article_count -}}</h3>
+
+            <ul class="list-none flex flex-row g-4 align-center">
+              {%- for result in search.results -%}
+                {%- if result.object_type == 'article' -%}
+                  <li>{{ result.title | link_to: result.url }}</li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if product_count > 0 -%}
+      <div
+        class="search-results-container grid g-4 vertical-margin {% if section.settings.filter_positioning == "horizontal" %}horizontal-filters{% endif %}"
+        data-filter-grid
+      >
+        {%- render 'filters',
+          alignment: section.settings.filters_alignment,
+          page_width: page_width,
+          positioning: section.settings.filter_positioning
+        -%}
+
+        {%- paginate search.results by grid_items -%}
+          <grid-load-more
+            class="{% if section.settings.filter_positioning == "horizontal" %}{{ page_width }}{% endif %} w-100"
+            data-section="search"
+            data-selectors="product-card"
+            data-next-url="{{ paginate.next.url }}"
+          >
+            <div class="product-grid" grid>
+              {%- for result in search.results -%}
+                {%- if result.object_type == 'product' -%}
+                  {%- render 'product-card', product: result -%}
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+
+            {%- if paginate.pages > 1 -%}
+              <div class="margin-auto pt-5 w-max flex flex-center">
+                <button load-more-btn class="button-1 margin-auto text-center w-max">
+                  {{- 'general.load_more' | t -}}
+
+                  <div class="pagination-links visually-hidden">
+                    {%- if paginate.previous.url != blank -%}
+                      <a
+                        prev-link
+                        class="prev-link"
+                        href="{{- paginate.previous.url -}}"
+                        aria-label="Previous collection page"
+                      >
+                        {{- 'general.previous_page' | t -}}
+                      </a>
+                    {%- endif -%}
+
+                    {%- if paginate.next.url != blank -%}
+                      <a
+                        next-link
+                        class="next-link"
+                        href="{{- paginate.next.url -}}"
+                        aria-label="Next collection page"
+                      >
+                        {{- 'general.next_page' | t -}}
+                      </a>
+                    {%- endif -%}
+                  </div>
+                </button>
+              </div>
+            {%- endif -%}
+          </grid-load-more>
+        {%- endpaginate -%}
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+</section>
+
+{% stylesheet %}
+  .search-results-container {
+    grid-template-columns: 1fr 4fr;
+  }
+  .search-results-container.horizontal-filters {
+    grid-template-columns: 1fr;
+  }
+  .search-results-container .product-grid {
+    display: grid;
+    gap: clamp(
+      var(--listing-grid-gap-mobile),
+      calc(var(--listing-grid-intercept) + var(--listing-grid-slope) * 1vw),
+      var(--listing-grid-gap)
+    );
+    grid-template-columns: repeat(auto-fill, minmax(clamp(260px, 20vw, 340px), 1fr));
+  }
+
+  .search-container #search-submit {
+    top: 50%;
+    right: 4px;
+    width: 28px;
+    padding: 8px;
+    transform: translateY(-50%);
+  }
+
+  .search-container #search-submit svg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+  }
+
+  @media only screen and (max-width: 1040px) {
+    .search-results-container {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.search",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "filter_positioning",
+      "label": "Filter Positioning",
+      "options": [
+        {
+          "value": "horizontal",
+          "label": "Horizontal"
+        },
+        {
+          "value": "vertical",
+          "label": "Vertical"
+        }
+      ],
+      "default": "horizontal"
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "select",
+      "id": "style_selector",
+      "label": "Styling Type",
+      "options": [
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "theme"
+    },
+    {
+      "type": "select",
+      "id": "section_styling",
+      "label": "Section style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ section.settings.style_selector == 'theme' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "background_color",
+      "label": "Background Colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Colour",
+      "default": "#393939",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "grid_items",
+      "label": "Grid Items",
+      "min": 12,
+      "max": 50,
+      "step": 1,
+      "default": 15
+    },
+    {
+      "type": "select",
+      "id": "filters_alignment",
+      "label": "Filters Alignment",
+      "options": [
+        {
+          "value": "vertical",
+          "label": "Vertical"
+        },
+        {
+          "value": "horizontal",
+          "label": "Horizontal"
+        }
+      ],
+      "default": "horizontal"
+    },
+    {
+      "type": "select",
+      "id": "page_width",
+      "label": "Page Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Default"
+        },
+        {
+          "value": "page-width--narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "page-width--wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "select",
+      "id": "vertical_spacing",
+      "label": "Vertical Spacing",
+      "options": [
+        {
+          "value": "vertical-margin",
+          "label": "Margin"
+        },
+        {
+          "value": "vertical-padding",
+          "label": "Padding"
+        },
+        {
+          "value": "vertical-margin vertical-padding",
+          "label": "Margin and Padding"
+        },
+        {
+          "value": "",
+          "label": "None"
+        }
+      ],
+      "default": "vertical-margin"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Search",
+      "category": "Search"
+    }
+  ]
+}
+{% endschema %}

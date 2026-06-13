@@ -1,0 +1,117 @@
+{%- liquid
+  assign style_selector = block.settings.style_selector
+  assign section_styling = block.settings.section_styling
+  assign background_color = block.settings.background_color
+  assign text_color = block.settings.text_color
+  assign add_border_bottom = block.settings.add_border_bottom
+  assign image_size = block.settings.image_size
+  assign image_size_mobile = block.settings.image_size_mobile
+  assign remove_padding = block.settings.remove_padding
+-%}
+<div
+  class="text-icon-banner flex align-center border-radius g-4 {% unless remove_padding %}pt-3 pb-3 pl-5 pr-5{% endunless %} section-container {{ section_styling }} {% if add_border_bottom %}border-bottom pb-3{% endif %}"
+  {{ block.shopify_attributes }}
+  style="--image-size: {{ image_size }}px; --image-size-mobile: {{ image_size_mobile }}px; {% if style_selector == 'custom' -%} background: {{ background_color }}; color: {{ text_color }}; {% endif -%}"
+>
+  {%- content_for 'blocks' -%}
+</div>
+
+{% schema %}
+{
+  "name": "Text & Icon Banner",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "range",
+      "id": "image_size",
+      "label": "Image Size",
+      "min": 20,
+      "max": 300,
+      "step": 10,
+      "default": 150
+    },
+    {
+      "type": "range",
+      "id": "image_size_mobile",
+      "label": "Image Size Mobile",
+      "min": 20,
+      "max": 300,
+      "step": 10,
+      "default": 150
+    },
+    {
+      "type": "select",
+      "id": "style_selector",
+      "label": "Styling Type",
+      "options": [
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "theme"
+    },
+    {
+      "type": "select",
+      "id": "section_styling",
+      "label": "Section style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "third",
+          "label": "Third"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ block.settings.style_selector == 'theme' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "background_color",
+      "label": "Background Colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ block.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Colour",
+      "default": "#393939",
+      "visible_if": "{{ block.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_padding",
+      "label": "Remove Padding",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "add_border_bottom",
+      "label": "Add Border Bottom",
+      "default": false
+    }
+  ],
+  "blocks": [{"type": "inline_richtext"},{"type": "_image"}],
+  "presets": [
+    {
+      "name": "Text & Icon Banner"
+    }
+  ]
+}
+{% endschema %}

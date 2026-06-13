@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    {%- render 'fonts' -%}
+
+    {%- if shop.brand.square_logo -%}
+      <link
+        rel="icon"
+        type="image/png"
+        href="{{ shop.brand.square_logo | image_url: width: 32, height: 32 }}"
+      >
+    {%- endif -%}
+
+    {% # Inlined CSS Variables %}
+    {% render 'css-variables' %}
+    {% # Load and preload the critical CSS %}
+    {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'utilities.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'blaze.css' | asset_url | stylesheet_tag }}
+    {{ 'slider-overrides.css' | asset_url | stylesheet_tag }}
+
+    {% comment %} Preconnect to Shopify asset domains to speed up hero media fetches {% endcomment %}
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.shopify.com">
+    <link rel="preconnect" href="https://shopify-assets.shopifycdn.com" crossorigin>
+    <link rel="dns-prefetch" href="https://shopify-assets.shopifycdn.com">
+    <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    <link rel="dns-prefetch" href="https://fonts.shopifycdn.com">
+
+    {%- sections 'head-group' -%}
+
+    {%- liquid
+      render 'meta-tags'
+      render 'gtag-consent', position: 'top'
+      if settings.gtm_tracking != blank
+        render 'gtm', position: 'head'
+      endif
+      render 'theme-scripts'
+    -%}
+
+    {{ content_for_header }}
+
+    {%- render 'gtag-consent', position: 'bottom' -%}
+  </head>
+
+  <body class="page-width-{{ settings.page_width }}" style="  overscroll-behavior: none;">
+    {%- liquid
+      render 'skip-to-content-link', href: '#MainContent', text: 'accessibility.skip_to_text'
+      if settings.gtm_tracking != blank
+        render 'gtm', position: 'body'
+      endif
+    -%}
+
+    <div id="header-group">
+      {%- liquid
+        sections 'header-group'
+        if template contains 'product' and settings.size_guide_page != blank
+          render 'size-guide-modal'
+        endif
+        render 'location-selector'
+      -%}
+    </div>
+
+    <main
+      id="MainContent"
+      class="content-for-layout"
+      role="main"
+    >
+      {{ content_for_layout }}
+    </main>
+
+    {%- liquid
+      sections 'footer-group'
+      render 'structured-data'
+      render 'quickview-modal'
+    -%}
+  </body>
+</html>

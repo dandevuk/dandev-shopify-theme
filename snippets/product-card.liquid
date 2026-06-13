@@ -1,0 +1,308 @@
+{%- liquid
+  if product == blank and closest.product != blank
+    assign product = closest.product
+  endif
+
+  assign matched_variant_id = blank
+  assign featured_image = product.featured_image
+  assign product_url = product.selected_or_first_available_variant.url
+
+  for variant in product.variants
+    if variant.matched
+      assign matched_variant_id = variant.id
+      if variant.image != blank
+        assign featured_image = variant.image
+      endif
+      assign product_url = variant.url
+      break
+    endif
+  endfor
+
+
+  assign lazy = false
+  if section.index > 2
+    assign lazy = true
+  endif
+
+  assign primary_class = 'primary-image ' | append: settings.image_display
+  assign secondary_class = 'secondary-image ' | append: settings.image_display
+
+  assign has_color_options = blank
+  for option in product.options_with_values
+    assign option_name_downcase = option.name | downcase
+    if option_name_downcase == 'colour' or option_name_downcase == 'color'
+      assign has_color_options = option
+      break
+    endif
+  endfor
+-%}
+{%- if product.id -%}
+  <product-card
+    class="product-card w-100 h-100 flex-col flex-between g-1"
+    data-product-handle="{{- product.handle -}}"
+    data-variant-id="{{ matched_variant_id }}"
+    data-product-id="{{- product.id -}}"
+    {% if order != blank %}
+      style="order: {{ order }}"
+    {% endif %}
+  >
+    <a
+      class="product-image w-100 border-radius ar-1"
+      href="{{- product_url -}}"
+      aria-label="{{- product.title | prepend: "Link to " -}}"
+      style="background-color: {{ settings.background_color_product_card }};"
+    >
+      {%- if featured_image != blank -%}
+        {%- render 'image',
+          image: featured_image,
+          max_width: 400,
+          format: 'jpg',
+          use_placeholder: true,
+          lazy: lazy,
+          class: primary_class,
+          context_text: product.title
+        -%}
+
+        {%- if product.images.size > 1 and has_color_options == blank -%}
+          {%- render 'image',
+            image: product.images[1],
+            max_width: 400,
+            format: 'jpg',
+            use_placeholder: true,
+            lazy: true,
+            class: secondary_class,
+            context_text: product.title
+          -%}
+        {%- endif -%}
+
+      {%- else -%}
+        {%- if settings.product_fallback != blank -%}
+          {%- render 'image',
+            image: settings.product_fallback,
+            max_width: 400,
+            format: 'jpg',
+            use_placeholder: true,
+            lazy: lazy,
+            context_text: product.title
+          -%}
+        {%- else -%}
+          {{- 'product-1' | placeholder_svg_tag -}}
+        {%- endif -%}
+      {%- endif -%}
+
+      {%- render 'wishlist-button', product: product -%}
+      {%- render 'product-badges', product: product, limit: 2 -%}
+    </a>
+
+    <div class="flex flex-col g-1 flex-1">
+      <div class="product-details flex flex-col flex-between g-1 h-100">
+        <div class="flex flex-col flex-between g-1">
+          <a
+            class="product-title no-decoration"
+            href="{{- product_url -}}"
+            aria-label="{{- product.title | prepend: "Link to " -}}"
+            style="margin-top:4px;"
+          >
+            {{- product.title -}}
+          </a>
+          <div class="product-description vertical-clamp-two">
+            {{- product.description | strip_html -}}
+          </div>
+        </div>
+
+        <div class="flex flex-col flex-between g-1">
+          {%- if has_color_options -%}
+            <div class="variant-colour-options flex flex-start align-center g-1 mt-1 mb-1 overflow-hidden">
+              {%- for option in product.options_with_values -%}
+                {%- assign option_name_downcase = option.name | downcase -%}
+                {%- if option_name_downcase == 'colour' or option_name_downcase == 'color' -%}
+                  {%- for value in option.values -%}
+                    {%- liquid
+                      if product.selected_or_first_available_variant.id == value.variant.id
+                        assign selected_class = 'selected'
+                      else
+                        assign selected_class = ''
+                      endif
+                      assign swatch_img = blank
+                      if value.variant.image != blank
+                        assign swatch_img = value.variant.image | image_url: width: 400
+                      endif
+                      assign color_keyword = value | downcase | strip
+                      if color_keyword == 'grey'
+                        assign color_keyword = 'gray'
+                      endif
+                    -%}
+                    <div
+                      class="border-radius-circle cursor-pointer {{ selected_class }}"
+                      style="
+                        {%- if value.swatch.color != blank -%}
+                          background-color: {{ value.swatch.color }};
+                        {%- elsif value.swatch.image == blank -%}
+                          background-color: {{ color_keyword }};
+                        {%- endif -%}
+                        {%- if value.swatch.image != blank -%}
+                          background-image: url({{ value.swatch.image | image_url: width: 96 }});
+                          background-size: cover;
+                          background-position: center;
+                        {%- endif -%}
+                      "
+                      data-color-variant-id="{{ value.variant.id }}"
+                      data-price="{{ value.variant.price | money }}"
+                      data-img="{{ swatch_img }}"
+                    >
+                      <span class="visually-hidden">{{ value }}</span>
+                    </div>
+                  {%- endfor -%}
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          <div
+            class="product-price"
+            data-price="{{- product.price -}}"
+            data-product-id="{{- product.id -}}"
+          >
+            {%- render 'product-variant-prices',
+              product: product,
+              price_format: 'from',
+              card: true
+            -%}
+          </div>
+
+          {%- if show_quickview_button -%}
+            <div class="flex g-1 text-center">
+              {%- render 'quickview-button' -%}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </product-card>
+{%- endif -%}
+
+{%- stylesheet -%}
+  .product-card .product-image {
+    position: relative;
+    padding-bottom: 100%;
+    overflow: hidden;
+    background-color: #fff;
+    isolation: isolate;
+  }
+
+  .product-card .product-image .primary-image {
+    z-index: 1;
+    opacity: 1;
+    scale: 1;
+  }
+
+  .product-card .product-image .secondary-image {
+    z-index: -1;
+    opacity: 0;
+    scale: 1;
+  }
+
+  .product-card .product-image img,
+  .product-card .product-image > svg {
+    position: absolute;
+    inset: 0;
+    transition: 0.3s ease;
+  }
+
+  .product-card .product-image > svg {
+    width: 100%;
+    height: auto;
+  }
+
+  .product-card .product-image > svg:hover {
+    fill: unset;
+  }
+
+  .product-card .product-image .button-wishlist {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 27px;
+    height: 27px;
+  }
+
+  .product-card .product-image .button-wishlist svg {
+    cursor: pointer;
+  }
+
+  .product-card .product-title {
+    min-height: 55px;
+  }
+
+  .product-card .product-title {
+    font-family: var(--heading-font-family);
+    font-size: var(--heading-h4-size);
+    line-height: var(--heading-h4-line-height);
+  }
+
+  @media only screen and (max-width: 767.98px) {
+    .product-card .product-title {
+      min-height: auto;
+    }
+  }
+
+  .product-card .product-buttons .product-link .link-text,
+  .product-card .product-buttons .quick-view-btn .link-text {
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+
+  .product-card .product-buttons .quick-add-cart {
+    width: 35px;
+    min-width: 35px;
+    height: 35px;
+    min-height: 35px;
+    padding: 0 !important;
+    background-color: var(--primary-color);
+    color: var(--primary-text-color);
+  }
+
+  .product-card .product-buttons .quick-add-cart img {
+    padding-left: 3px;
+  }
+
+  .product-card .product-image:has(.secondary-image):hover .primary-image {
+    opacity: 0;
+    scale: 1.05;
+  }
+
+  .product-card .product-image:has(.secondary-image):hover .secondary-image {
+    opacity: 1;
+    scale: 1.05;
+  }
+
+  .product-card .product-image:not(:has(.secondary-image)):hover > svg,
+  .product-card .product-image:not(:has(.secondary-image)):hover .primary-image {
+    opacity: 1;
+    scale: 1.05;
+  }
+
+  .product-card .variant-colour-options {
+    padding: 3px;
+  }
+
+  .product-card .variant-colour-options div {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+    min-height: 22px;
+    box-sizing: border-box;
+    border: 2px solid var(--body-background-color);
+    transition: 0.3s all;
+  }
+
+  .product-card .variant-colour-options div:hover {
+    outline: 1px solid var(--brand-color-5);
+  }
+
+  .product-card .variant-colour-options div.selected {
+    outline: 1px solid var(--brand-color-2);
+  }
+{%- endstylesheet -%}

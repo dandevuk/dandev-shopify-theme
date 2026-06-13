@@ -1,0 +1,338 @@
+{%- liquid
+  assign image = section.settings.image
+  assign text_alignment = section.settings.text_alignment
+  assign truncate_text = section.settings.truncate_text
+  assign truncate_lines = section.settings.truncate_lines
+  assign style_selector = section.settings.style_selector
+  assign section_styling = section.settings.section_styling
+  assign overlay_type = section.settings.overlay_type
+  assign overlay_styling = section.settings.overlay_styling
+  assign overlay_background = section.settings.overlay_color
+  assign background_color = section.settings.background_color
+  assign text_color = section.settings.text_color
+-%}
+
+<div
+  class="blog-header-wrapper section-container {{ section_styling }} full-width"
+  {% if style_selector == 'custom' %}
+    style="background: {{ background_color }}; color: {{ text_color }};"
+  {% endif %}
+>
+  <div class="blog-header-container overflow-hidden margin-auto relative">
+    {%- if image != blank -%}
+      <div class="absolute inset-0 w-100 h-100 z-0">
+        {%- render 'image',
+          image: image,
+          max_width: 2000,
+          use_placeholder: false,
+          lazy: false,
+          class: 'object-cover'
+        -%}
+      </div>
+    {%- endif -%}
+    {%- if overlay_type != 'none' and image != blank -%}
+      <div
+        class="absolute inset-0 h-100 w-100 overlay {% if overlay_styling == 'primary' %}gradient-bg{% elsif overlay_styling == 'secondary' %}gradient-bg-alt{% endif %}"
+        {% if section.settings.overlay_type == 'custom' %}
+          style="background: {{ overlay_background }};"
+        {% endif %}
+      ></div>
+    {%- endif -%}
+    <div class="relative page-width blog-header-inner">
+      <div class="breadcrumbs relative z-1">
+        {%- render 'breadcrumbs' -%}
+      </div>
+      <div class="blog-header-grid grid-section">
+        <div
+          class="content no-text-margins z-3 span-6 relative {% if text_alignment == 'center' %}span-centre text-center{% endif %} {% if truncate_text %}truncate-text{% endif %}"
+          {% if truncate_text %}
+            style="--webkit-line-clamp: {{ truncate_lines }};"
+          {% endif %}
+        >
+          <div class="span-5 section-content flex flex-col g-5">
+            {%- content_for 'blocks' -%}
+          </div>
+        </div>
+        {%- if image != blank -%}
+          <div class="media absolute inset-0 h-100 w-100 z-0">
+            <div class="media-item">
+              <div class="media-wrapper relative w-100 h-100 overflow-hidden">
+                <div class="media-container absolute inset-0 h-100 w-100"></div>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .blog-header {
+    border-bottom: 1px solid #b2a89d40;
+  }
+  .blog-header .blog-header-inner {
+    padding-bottom: 72px;
+  }
+  .blog-header .blog-header-inner .content {
+    margin-top: 40px;
+  }
+  .blog-header .blog-header-container .blog-header-grid .media .media-item {
+    width: 100%;
+    height: 100%;
+  }
+
+  @media only screen and (max-width: 767.98px) {
+    .blog-header .blog-header-inner {
+      padding-bottom: 40px;
+    }
+    .blog-header .blog-header-inner .content {
+      margin-top: 55px;
+    }
+    .blog-header .blog-header-container .blog-header-grid .content {
+      order: 2;
+    }
+    .blog-header .blog-header-container .blog-header-grid .media {
+      order: 1;
+      aspect-ratio: 3/2;
+    }
+    .blog-header .blog-header-container .blog-header-grid .media .media-item {
+      position: relative;
+      left: calc(-1 * var(--page-width-padding));
+      width: calc(100% + (var(--page-width-padding) * 2));
+    }
+  }
+
+  .blog-header .blog-header-container .blog-header-grid .media .media-item .media-wrapper .media-container picture,
+  .blog-header .blog-header-container .blog-header-grid .media .media-item .media-wrapper .media-container img,
+  .blog-header .blog-header-container .blog-header-grid .media .media-item .media-wrapper .media-container svg,
+  .blog-header .blog-header-container .blog-header-grid .media .media-item .media-wrapper .media-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--object-position);
+  }
+
+  @media only screen and (max-width: 767.98px) {
+    .blog-header .blog-header-container .blog-header-grid .media .media-item .media-wrapper .media-container picture,
+    .blog-header .blog-header-container .blog-header-grid .media .media-item .media-wrapper .media-container img,
+    .blog-header .blog-header-container .blog-header-grid .media .media-item .media-wrapper .media-container svg,
+    .blog-header .blog-header-container .blog-header-grid .media .media-item .media-wrapper .media-container video {
+      left: 0;
+      width: 100%;
+      transform: unset;
+    }
+
+    .blog-header .full-width .content.span-centre .filter-by-text {
+      margin-inline: auto;
+    }
+  }
+
+  .blog-header .full-width .content {
+    z-index: 1;
+  }
+
+  .blog-header .full-width .content.truncate-text .rte {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--webkit-line-clamp);
+    line-clamp: var(--webkit-line-clamp);
+  }
+
+  .blog-header .full-width .content.span-centre {
+    text-align: center;
+  }
+  .blog-header .full-width .content.span-centre a:not(.blog-filter-button) {
+    display: block;
+    margin-inline: auto;
+  }
+
+  @media only screen and (min-width: 768px) {
+    .blog-header .full-width .content.span-centre {
+      grid-column: 4 / 10;
+      padding-inline: 0;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Blog Header",
+  "tag": "section",
+  "class": "blog-header overflow-hidden isolate",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "select",
+      "id": "style_selector",
+      "label": "Styling Type",
+      "options": [
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "theme"
+    },
+    {
+      "type": "select",
+      "id": "section_styling",
+      "label": "Section Style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "third",
+          "label": "Third"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ section.settings.style_selector == 'theme' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "background_color",
+      "label": "Background Colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Colour",
+      "default": "#393939",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "overlay_type",
+      "label": "Overlay Type",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "overlay_styling",
+      "label": "Overlay Style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ section.settings.overlay_type == 'theme' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "overlay_color",
+      "label": "Overlay Colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ section.settings.overlay_type == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "checkbox",
+      "id": "truncate_text",
+      "label": "Truncate Text",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "truncate_lines",
+      "label": "Truncate by number of lines",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 3,
+      "visible_if": "{{ section.settings.truncate_text == true }}"
+    }
+  ],
+  "blocks": [
+    { "type": "heading" },
+    { "type": "richtext" },
+    { "type": "_blog-filters" }
+  ],
+  "enabled_on": {
+    "templates": ["blog"]
+  },
+  "presets": [
+    {
+      "name": "Blog Header",
+      "category": "Blogs",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "heading": "{{ closest.blog.title }}",
+            "heading_type": "h1",
+            "heading_size": "heading-h1"
+          }
+        },
+        {
+          "type": "richtext"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

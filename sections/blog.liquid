@@ -1,0 +1,205 @@
+{%- liquid
+  # STYLING
+  assign style_selector = section.settings.style_selector
+  assign section_styling = section.settings.section_styling
+  assign background_color = section.settings.background_color
+  assign text_color = section.settings.text_color
+
+  # LAYOUT
+  assign grid_items = section.settings.grid_items
+  assign vertical_spacing = section.settings.vertical_spacing
+  assign page_width = section.settings.page_width
+-%}
+
+<div
+  class="section-container {{ vertical_spacing }} {{ section_styling }}"
+  {% if style_selector == 'custom' %}
+    style="background: {{ background_color }}; color: {{ text_color }};"
+  {% endif %}
+>
+  <div class="{{ page_width }}">
+    {%- paginate blog.articles by grid_items -%}
+      <grid-load-more
+        data-section="blog"
+        data-selectors="article"
+        data-next-url="{{ paginate.next.url }}"
+      >
+        <div grid class="blog-grid grid">
+          {%- for article in blog.articles -%}
+            {%- render 'article-card', article: article -%}
+          {%- endfor -%}
+        </div>
+        {%- if paginate.pages > 1 -%}
+          <div class="margin-auto pt-5 w-max flex flex-center">
+            <button load-more-btn class="button-1 margin-auto text-center w-max">
+              {{- 'general.load_more' | t -}}
+              <div class="pagination-links visually-hidden">
+                {%- if paginate.previous.url != blank -%}
+                  <a
+                    prev-link
+                    class="prev-link"
+                    href="{{- paginate.previous.url -}}"
+                    aria-label="Previous collection page"
+                  >
+                    {{- 'general.previous_page' | t -}}
+                  </a>
+                {%- endif -%}
+                {%- if paginate.next.url != blank -%}
+                  <a
+                    next-link
+                    class="next-link"
+                    href="{{- paginate.next.url -}}"
+                    aria-label="Next collection page"
+                  >
+                    {{- 'general.next_page' | t -}}
+                  </a>
+                {%- endif -%}
+              </div>
+            </button>
+          </div>
+        {%- endif -%}
+      </grid-load-more>
+    {%- endpaginate -%}
+  </div>
+</div>
+
+{%- stylesheet -%}
+  .blog-listing .blog-grid {
+    gap: clamp(
+      var(--grid-gap-mobile),
+      calc(var(--grid-intercept) + var(--grid-slope) * 1vw),
+      var(--grid-gap)
+    );
+    grid-template-columns: repeat(auto-fill, minmax(clamp(260px, 26vw, 340px), 1fr));
+  }
+{%- endstylesheet -%}
+
+{% schema %}
+{
+  "name": "Blog Listing",
+  "tag": "section",
+  "class": "blog-listing",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "select",
+      "id": "style_selector",
+      "label": "Styling Type",
+      "options": [
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "theme"
+    },
+    {
+      "type": "select",
+      "id": "section_styling",
+      "label": "Section style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "third",
+          "label": "Third"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ section.settings.style_selector == 'theme' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "background_color",
+      "label": "Background Colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Colour",
+      "default": "#393939",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "grid_items",
+      "label": "Grid Items",
+      "min": 12,
+      "max": 50,
+      "step": 1,
+      "default": 15
+    },
+    {
+      "type": "select",
+      "id": "page_width",
+      "label": "Page Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Default"
+        },
+        {
+          "value": "page-width--narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "page-width--wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "select",
+      "id": "vertical_spacing",
+      "label": "Vertical Spacing",
+      "options": [
+        {
+          "value": "vertical-margin",
+          "label": "Margin"
+        },
+        {
+          "value": "vertical-padding",
+          "label": "Padding"
+        },
+        {
+          "value": "vertical-margin vertical-padding",
+          "label": "Margin and Padding"
+        },
+        {
+          "value": "",
+          "label": "None"
+        }
+      ],
+      "default": "vertical-margin"
+    }
+  ],
+  "enabled_on": {
+    "templates": ["blog"]
+  },
+  "presets": [
+    {
+      "name": "Blog Listing"
+    }
+  ]
+}
+{% endschema %}

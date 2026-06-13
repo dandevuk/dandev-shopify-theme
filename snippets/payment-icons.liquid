@@ -1,0 +1,19 @@
+{%- if image != blank or shop.enabled_payment_types != empty -%}
+  <div class="payment-icons max-w-max to-sm-w-100">
+    {%- if image != blank -%}
+      {%- render 'image', image: image, max_width: 400, lazy: true, class: 'object-contain' -%}
+    {%- else -%}
+      {%- unless shop.enabled_payment_types == empty -%}
+        <span class="visually-hidden">Supported payment methods</span>
+        <ul class="no-list-style flex flex-wrap g-1 payment-icons-list">
+          {%- comment -%} Loop through all enabled payment types and display their icons {%- endcomment -%}
+          {%- for type in shop.enabled_payment_types -%}
+            <li>
+              {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endunless -%}
+    {%- endif -%}
+  </div>
+{%- endif -%}

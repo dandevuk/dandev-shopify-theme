@@ -1,0 +1,270 @@
+{% doc %}
+  Renders purchase options (one-time and selling plans) for the selected variant.
+  @param {product} product - The product object
+  @param {string} section_id - Section id for unique input names
+  @param {string} [option_type] - 'radio' or 'select'
+  @param {string} [block_shopify_attributes] - Theme editor attributes
+  @param {boolean} [add_border_bottom] - Add bottom border to wrapper
+  @example
+  {% render 'selling-plan-selector', product: product, section_id: section.id %}
+{% enddoc %}
+
+{%- liquid
+  assign option_type = option_type | default: 'radio'
+  assign selected_variant = product.selected_or_first_available_variant
+  if product.selected_variant != blank
+    assign selected_variant = product.selected_variant
+  endif
+
+  assign wrapper_classes = ''
+  if add_border_bottom
+    assign wrapper_classes = 'border-bottom pb-3'
+  endif
+
+  assign active_selling_plan_allocation = nil
+  if product.selected_selling_plan != blank
+    for allocation in selected_variant.selling_plan_allocations
+      if allocation.selling_plan.id == product.selected_selling_plan.id
+        assign active_selling_plan_allocation = allocation
+        break
+      endif
+    endfor
+  endif
+
+  assign one_time_selected = true
+  if active_selling_plan_allocation != blank
+    assign one_time_selected = false
+  endif
+
+  assign variant_price = selected_variant.price | money
+  assign group_ids = selected_variant.selling_plan_allocations | map: 'selling_plan_group_id' | uniq
+-%}
+{%- capture pre_order_state -%}
+  {%- render 'variant-pre-order-state', variant: selected_variant -%}
+{%- endcapture -%}
+{%- assign pre_order_active = pre_order_state | strip | split: '|' | first -%}
+{%- if product.selling_plan_groups.size > 0 -%}
+  <div
+    class="{{ wrapper_classes }}"
+    data-variant-update="selling-plan-selector"
+    data-variant-update-replace
+    {{ block_shopify_attributes }}
+  >
+    {%- if pre_order_active != 'true' -%}
+    <selling-plan-picker
+      class="selling-plan-selectors flex flex-col g-3{% if option_type == 'select' %} selling-plan-selectors--dropdown{% endif %}"
+      data-section-id="{{ section_id }}"
+      data-product-id="{{ product.id }}"
+      data-product-url="{{ product.url }}"
+    >
+      {%- if option_type == 'select' -%}
+        <fieldset class="selling-plan-selector option flex flex-col g-1 dropdown-style flex-1">
+          <legend class="bold">{{ 'products.product.selling_plan.purchase_options' | t }}</legend>
+          <select
+            class="selling-plan-select w-100"
+            name="selling-plan-{{ section_id }}"
+            aria-label="{{ 'products.product.selling_plan.purchase_options' | t }}"
+          >
+            {%- unless product.requires_selling_plan -%}
+              <option
+                value=""
+                data-selling-plan-id=""
+                {% if one_time_selected %}
+                  selected
+                {% endif %}
+              >
+                {{ 'products.product.selling_plan.one_time' | t }} — {{ variant_price }}
+              </option>
+            {%- endunless -%}
+            {%- for group_id in group_ids -%}
+              {%- liquid
+                assign group = product.selling_plan_groups | where: 'id', group_id | first
+                assign allocations = selected_variant.selling_plan_allocations | where: 'selling_plan_group_id', group_id
+              -%}
+              {%- if group != blank -%}
+                {%- for allocation in allocations -%}
+                  {%- liquid
+                    assign plan = allocation.selling_plan
+                    assign plan_selected = false
+                    if active_selling_plan_allocation.selling_plan.id == plan.id
+                      assign plan_selected = true
+                    endif
+                    assign plan_price = allocation.price | money
+                    assign plan_savings = allocation.compare_at_price | minus: allocation.price
+                    if plan_savings <= 0
+                      assign plan_savings = selected_variant.price | minus: allocation.price
+                    endif
+                    assign plan_savings_money = plan_savings | money
+                    assign plan_percent_off = 0
+                    if plan.price_adjustments.size > 0
+                      assign first_adjustment = plan.price_adjustments.first
+                      if first_adjustment.value_type == 'percentage' and first_adjustment.value > 0
+                        assign plan_percent_off = first_adjustment.value
+                      endif
+                    endif
+                  -%}
+                  <option
+                    value="{{ plan.id }}"
+                    data-selling-plan-id="{{ plan.id }}"
+                    {% if plan_selected %}
+                      selected
+                    {% endif %}
+                  >
+                    {{ group.name }}: {{ plan.name }} — {{ plan_price -}}
+                    {%- if plan_savings > 0 -%}
+                      ({{ 'products.product.selling_plan.save' | t: amount: plan_savings_money }})
+                    {%- elsif plan_percent_off > 0 -%}
+                      ({{ 'products.product.selling_plan.save_percent' | t: percent: plan_percent_off }})
+                    {%- endif -%}
+                  </option>
+                {%- endfor -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </select>
+        </fieldset>
+      {%- else -%}
+        <fieldset class="selling-plan-selector option flex flex-col g-2 p-0 pt-1 h-max border-none">
+          <legend class="bold">{{ 'products.product.selling_plan.purchase_options' | t }}</legend>
+          {%- unless product.requires_selling_plan -%}
+            {%- capture one_time_input_id -%}
+              {{ section_id }}-selling-plan-one-time
+            {%- endcapture -%}
+            <div class="selling-plan-wrapper relative">
+              <input
+                id="{{ one_time_input_id }}"
+                class="visually-hidden"
+                type="radio"
+                name="selling-plan-{{ section_id }}"
+                value=""
+                data-selling-plan-id=""
+                {% if one_time_selected %}
+                  checked
+                {% endif %}
+              >
+              <label
+                class="relative p-2 border-radius cursor-pointer flex flex-between align-center border-1{% if one_time_selected %} is-selected{% endif %}"
+                for="{{ one_time_input_id }}"
+              >
+                <span>{{ 'products.product.selling_plan.one_time' | t }}</span>
+                <span class="caption-text">{{ variant_price }}</span>
+              </label>
+            </div>
+          {%- endunless -%}
+          {%- for group_id in group_ids -%}
+            {%- liquid
+              assign group = product.selling_plan_groups | where: 'id', group_id | first
+              assign allocations = selected_variant.selling_plan_allocations | where: 'selling_plan_group_id', group_id
+            -%}
+            {%- if group != blank -%}
+              <div class="selling-plan-group flex flex-col g-1">
+                <p class="bold m-0">{{ group.name }}</p>
+                {%- for allocation in allocations -%}
+                  {%- liquid
+                    assign plan = allocation.selling_plan
+                    assign plan_selected = false
+                    if active_selling_plan_allocation.selling_plan.id == plan.id
+                      assign plan_selected = true
+                    endif
+                    assign plan_price = allocation.price | money
+                    assign plan_savings = allocation.compare_at_price | minus: allocation.price
+                    if plan_savings <= 0
+                      assign plan_savings = selected_variant.price | minus: allocation.price
+                    endif
+                    assign plan_savings_money = plan_savings | money
+                    assign plan_percent_off = 0
+                    if plan.price_adjustments.size > 0
+                      assign first_adjustment = plan.price_adjustments.first
+                      if first_adjustment.value_type == 'percentage' and first_adjustment.value > 0
+                        assign plan_percent_off = first_adjustment.value
+                      endif
+                    endif
+                  -%}
+                  {%- capture plan_input_id -%}
+                    {{ section_id }}-selling-plan-{{ plan.id }}
+                  {%- endcapture -%}
+                  <div class="selling-plan-wrapper relative">
+                    <input
+                      id="{{ plan_input_id }}"
+                      class="visually-hidden"
+                      type="radio"
+                      name="selling-plan-{{ section_id }}"
+                      value="{{ plan.id }}"
+                      data-selling-plan-id="{{ plan.id }}"
+                      {% if plan_selected %}
+                        checked
+                      {% endif %}
+                    >
+                    <label
+                      class="relative p-2 border-radius cursor-pointer flex flex-between align-center border-1{% if plan_selected %} is-selected{% endif %}"
+                      for="{{ plan_input_id }}"
+                    >
+                      <span>{{ plan.name }}</span>
+                      <span class="caption-text flex align-center g-1 flex-wrap justify-end">
+                        {%- if plan_savings > 0 -%}
+                          <span class="money-savings-badge badge-1">
+                            {{- 'products.product.selling_plan.save' | t: amount: plan_savings_money -}}
+                          </span>
+                        {%- elsif plan_percent_off > 0 -%}
+                          <span class="money-savings-badge badge-1">
+                            {{- 'products.product.selling_plan.save_percent' | t: percent: plan_percent_off -}}
+                          </span>
+                        {%- endif -%}
+                        <span>{{ plan_price }}</span>
+                      </span>
+                    </label>
+                  </div>
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </fieldset>
+      {%- endif -%}
+    </selling-plan-picker>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .selling-plan-selectors .selling-plan-wrapper label {
+    width: 100%;
+  }
+
+  .selling-plan-selectors .selling-plan-wrapper:hover label {
+    background-color: var(--brand-color-5, #f5f5f5);
+  }
+
+  .selling-plan-selectors .selling-plan-wrapper label.is-selected,
+  .selling-plan-selectors .selling-plan-wrapper:has(input:checked) label {
+    background-color: var(--brand-color-2);
+    color: var(--text-color-alternate);
+  }
+
+  .selling-plan-selectors--dropdown fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+  }
+
+  .selling-plan-selectors--dropdown legend {
+    margin-bottom: var(--spacing-1, 0.5rem);
+  }
+
+  selling-plan-picker.is-updating,
+  .selling-plan-selectors.is-updating {
+    opacity: 0.5;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .selling-plan-selectors .money-savings-badge {
+    padding: 2px 6px;
+    white-space: nowrap;
+  }
+
+  .selling-plan-selectors .selling-plan-wrapper label.is-selected .money-savings-badge,
+  .selling-plan-selectors .selling-plan-wrapper:has(input:checked) label .money-savings-badge {
+    background-color: var(--badge-background-color-2);
+    color: var(--badge-text-color-2);
+  }
+{% endstylesheet %}

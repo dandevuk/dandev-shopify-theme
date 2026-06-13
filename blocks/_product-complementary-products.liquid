@@ -1,0 +1,129 @@
+{%- liquid
+  assign heading = block.settings.heading
+  assign products = block.settings.product_list
+  assign add_border_bottom = block.settings.add_border_bottom
+  assign slider_id = 'complementary-' | append: section.id
+
+  assign all_products_unavailable = true
+  for prod in products
+    if prod.available
+      assign all_products_unavailable = false
+    endif
+  endfor
+-%}
+{%- if products != blank and all_products_unavailable == false -%}
+  <div
+    class="complementary-products-container w-100 desktop-slider-overflow mobile-slider-overflow {% if add_border_bottom %}border-bottom pb-4{% endif %}"
+    {{ block.shopify_attributes }}
+  >
+    {%- if heading != blank -%}
+      <h2 class="heading-h2 mb-2">{{ heading }}</h2>
+    {%- endif -%}
+    <div
+      id="slider-{{ slider_id }}"
+      class="blaze-slider mt-3"
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Complementary products"
+      data-blaze-slider
+      data-slider-mobile="1.2"
+      data-slider-tablet="2"
+      data-slider-desktop="2"
+      data-slider-wide="2"
+      data-slider-gap-mobile="20"
+      data-slider-gap-tablet="20"
+      data-slider-gap-desktop="20"
+      data-slider-gap-wide="20"
+      data-slider-loop="false"
+      data-slider-pagination="true"
+    >
+      <div class="blaze-track-container">
+        <div class="blaze-track">
+      {%- for prod in products -%}
+        {%- if prod.available -%}
+          <div class="h-auto">
+            {%- render 'product-card-quick-add', prod: prod, section_id: section.id -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+        </div>
+      </div>
+      <div class="blaze-pagination relative mt-4 hidden to-sm-block"></div>
+    </div>
+  </div>
+{%- endif -%}
+
+{%- stylesheet -%}
+  @media only screen and (max-width: 768px) {
+    .complementary-products-container {
+      width: calc(
+        100% +
+          (
+            2 *
+              clamp(
+                var(--page-width-padding-mobile),
+                calc(var(--padding-intercept) + var(--padding-slope) * 1vw),
+                var(--page-width-padding)
+              )
+          )
+      );
+      margin-inline: calc(-1 * var(--page-width-padding-mobile));
+      padding-inline: var(--page-width-padding-mobile);
+    }
+  }
+
+  @media only screen and (min-width: 768px) {
+    .complementary-products-container {
+      clip-path: inset(0 -100vw 0 0);
+    }
+  }
+
+  .complementary-products-container product-card product-form {
+    justify-items: stretch;
+    height: 100%;
+  }
+
+  .complementary-products-container product-card product-form .variant-prices-container {
+    margin-top: auto;
+  }
+{%- endstylesheet -%}
+
+{% schema %}
+{
+  "name": "Complementary Products",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Why Not Add"
+    },
+    {
+      "type": "product_list",
+      "id": "product_list",
+      "label": "Product List",
+      "limit": 3
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "checkbox",
+      "id": "add_border_bottom",
+      "label": "Add Border Bottom",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Complementary Products"
+    }
+  ]
+}
+{% endschema %}

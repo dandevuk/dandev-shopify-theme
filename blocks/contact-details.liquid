@@ -1,0 +1,53 @@
+<div
+  class="contact-block"
+  style="--svg-color: {% if block.settings.svg_colors %}{{ block.settings.svg_color }}{% else %}currentColor{% endif %};"
+  {{ block.shopify_attributes }}
+>
+  <ul class="list-none flex flex-col g-2">
+    {%- content_for 'blocks' -%}
+  </ul>
+</div>
+
+{% stylesheet %}
+  .contact-block svg path {
+    stroke: var(--svg-color);
+  }
+  .contact-block p {
+    margin-top: 0;
+  }
+  .contact-block {
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Contact Details",
+  "tag": null,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "svg_colors",
+      "label": "Change SVG Colours",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "svg_color",
+      "label": "SVG Colour",
+      "visible_if": "{{ block.settings.svg_colors == true }}"
+    }
+  ],
+  "blocks": [
+    { "type": "_contact-phone" },
+    { "type": "_contact-email" },
+    { "type": "_contact-address" },
+    { "type": "richtext" },
+    { "type": "spacer" }
+  ],
+  "presets": [{ "name": "Contact Details" }]
+}
+{% endschema %}

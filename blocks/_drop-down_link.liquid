@@ -1,0 +1,32 @@
+<a
+  class="mega-menu-link animated-underline relative bold cursor-pointer w-max"
+  href="{{ block.settings.link_url }}"
+  aria-label="Link to {{ block.settings.link_title }}"
+  {{ block.shopify_attributes }}
+>
+  <span>{{ block.settings.link_title }}</span>
+</a>
+
+{% schema %}
+{
+  "name": "Drop Down Link",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "link_title",
+      "label": "Link title"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Link URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Drop Down Link"
+    }
+  ]
+}
+{% endschema %}

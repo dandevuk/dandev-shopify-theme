@@ -1,0 +1,86 @@
+<div
+  class="top-level-links-wrapper w-100 {% if section.settings.mega_menu_position == "inside_header" %}in-header h-100 flex-center align-center{% else %}under-header page-width{% endif %}"
+  {{ block.shopify_attributes }}
+>
+  <div class="top-level-links flex-center align-center h-100 w-100">
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+{% stylesheet %}
+  /* -----------------------
+    TOP-LEVEL LINKS WRAPPER
+    ----------------------- */
+  .header .top-level-links-wrapper:not(.in-header) {
+    border-top: 1px solid var(--brand-color-1);
+    border-bottom: 1px solid var(--brand-color-1);
+  }
+
+  .header .top-level-links-wrapper:not(.in-header) .top-level-links {
+    justify-content: space-between;
+    height: 40px;
+  }
+
+  .header .top-level-links-wrapper:not(.in-header) .link-group {
+    width: unset;
+    padding: 0 var(--content-spacing-4) !important;
+  }
+
+  .header .top-level-links-wrapper:not(.in-header) .link-group:first-of-type {
+    padding-left: 0 !important;
+  }
+
+  .header .top-level-links-wrapper:not(.in-header) .link-group:last-of-type {
+    padding-right: 0 !important;
+  }
+
+  @media screen and (max-width: 991.98px) {
+    .header .top-level-links-wrapper .top-level-links {
+      display: none;
+    }
+  }
+
+  .top-level-links-wrapper.in-header .top-level-links .link-group {
+    width: auto;
+    flex-shrink: 0;
+  }
+
+  .top-level-links .top-level-link,
+  .top-level-links .top-level-link a span {
+    white-space: nowrap;
+  }
+
+  .header .top-level-links-wrapper .top-level-links .link-group .top-level-link a .menu-link-bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 30px;
+    transform: translate(-50%, calc(-50% - 1px));
+  }
+
+  .header
+    .top-level-links-wrapper
+    .top-level-links
+    .link-group
+    .top-level-link
+    a
+    .menu-link-bg.highlight {
+    height: calc(100% + 14px);
+    transform: translate(-50%, calc(-50% - 2px));
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Mega Menu",
+  "tag": null,
+  "blocks": [{ "type": "_top-level_drop-down" }, { "type": "_top-level_link" }],
+  "settings": [],
+  "presets": [
+    {
+      "name": "Mega Menu"
+    }
+  ]
+}
+{% endschema %}

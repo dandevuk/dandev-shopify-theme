@@ -1,0 +1,139 @@
+{%- liquid
+  assign image_size = image_size | default: '1000x'
+  assign controls = false
+  assign custom_controls = false
+  assign controls_type = controls_type
+
+  if controls_type == 'none'
+    assign controls = false
+    assign custom_controls = 'auto'
+  endif
+
+  if controls_type == 'default'
+    assign controls = true
+  endif
+
+  if controls_type == 'custom'
+    assign controls = false
+    assign custom_controls = true
+  endif
+
+  assign loop = loop | default: true
+  assign muted = muted | default: true
+  assign autoplay = autoplay | default: false
+
+  if preload == true
+    assign preload = 'auto'
+  else
+    assign preload = 'none'
+  endif
+
+  unless class
+    assign classes = 'video'
+  else
+    assign classes = class | append: ' video'
+  endunless
+-%}
+
+{%- unless video == blank -%}
+  <div
+    js-video-controls
+    data-autoplay="{{ autoplay }}"
+    data-custom-controls="{{ custom_controls }}"
+    class="cursor-pointer relative {% if display == 'object-cover' %}h-100{% endif %}"
+  >
+    {%- if preload == 'auto' -%}
+      {{-
+        video
+        | video_tag:
+          loop: loop,
+          muted: muted,
+          preload: preload,
+          autoplay: autoplay,
+          image_size: image_size,
+          class: classes,
+          controls: controls
+      -}}
+
+    {%- else -%}
+      <video
+        playsinline="playsinline"
+        loop="{{ loop }}"
+        muted="{{ muted }}"
+        preload="none"
+        autoplay="{{ autoplay }}"
+        class="{{ classes }}"
+        poster="{{ video.preview_image.url }}"
+        {%- if controls == true -%}
+          controls
+        {%- endif -%}
+      >
+        {%- for source in video.sources -%}
+          <source data-src="{{ source.url }}" type="{{ source.type }}">
+        {%- endfor -%}
+
+        {{
+          'video.preview_image'
+          | image_url: width: image_size
+          | image_tag: loading: 'lazy', decoding: 'async'
+        }}
+        {%- render 'image',
+          image: video.preview_image,
+          max_width: 1800,
+          use_placeholder: false,
+          lazy: lazy_load
+        -%}
+
+        {% comment %} <img src="{{ video.preview_image }}" width="{{ video.preview_image.width }}" height="{{ video.preview_image.height }}" alt="{{ video.preview_image.alt }}" loading="lazy" decoding="async"> {% endcomment %}
+      </video>
+    {%- endif -%}
+
+    {%- if custom_controls == true -%}
+      <div class="video-control-icon absolute ar-1 play-icon" style="color: #fff;">
+        {{ 'icon--play-icon.svg' | inline_asset_content }}
+      </div>
+
+      <div class="video-control-icon absolute ar-1 pause-icon" style="color: #fff;">
+        {{ 'icon--pause.svg' | inline_asset_content }}
+      </div>
+    {%- endif -%}
+  </div>
+{%- endunless -%}
+
+{%- stylesheet -%}
+  div[js-video-controls] .video-control-icon,
+  div[js-video-controls].video-playing .play-icon {
+    display: none;
+  }
+
+  div[js-video-controls].video-playing .pause-icon,
+  div[js-video-controls].video-paused .play-icon {
+    display: block;
+  }
+
+  div[js-video-controls][data-autoplay='true'] .video-control-icon {
+    opacity: 0;
+  }
+
+  div[js-video-controls][data-autoplay='true']:hover .video-control-icon {
+    opacity: 1;
+  }
+
+  div[js-video-controls] .video-control-icon {
+    bottom: 21px;
+    left: 21px;
+    transition: opacity 250ms ease;
+  }
+
+  @media only screen and (max-width: 767.98px) {
+    div[js-video-controls]:has(video.to-sm-hidden) .video-control-icon {
+      display: none;
+    }
+  }
+
+  @media only screen and (min-width: 768px) {
+    div[js-video-controls]:has(video.to-sm-block) .video-control-icon {
+      display: none;
+    }
+  }
+{%- endstylesheet -%}

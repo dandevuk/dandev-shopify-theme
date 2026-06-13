@@ -1,0 +1,200 @@
+{%- liquid
+  # STYLING
+  assign style_selector = section.settings.style_selector
+  assign section_styling = section.settings.section_styling
+  assign background_color = section.settings.background_color
+  assign text_color = section.settings.text_color
+
+  # LAYOUT
+  assign text_alignment = section.settings.text_alignment
+  assign vertical_spacing = section.settings.vertical_spacing
+  assign page_width = section.settings.page_width
+
+  # ID Attribute
+  assign id_text = section.settings.id_text | strip
+-%}
+
+<div
+  class="newsletter__container {{ vertical_spacing }} w-100 section-container pt-3 pb-3 {{ section_styling }}"
+  {% if style_selector == 'custom' %}
+    style="background: {{ background_color }}; color: {{ text_color }};"
+  {% endif %}
+  {% if id_text != blank %}
+    id="{{ id_text }}"
+  {% endif %}
+>
+  <div class="{{ page_width }} flex-center flex-wrap g-3 align-center to-md-flex-col to-md-align-center {{ text_alignment }}">
+    <div class="newsletter__content to-md-text-center flex-shrink">
+      {% content_for 'blocks' %}
+    </div>
+
+    {%- if section.settings.custom_form != blank -%}
+      {{ section.settings.custom_form }}
+    {%- else -%}
+      {%- render 'newsletter-form' -%}
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .newsletter__container .newsletter__content h1,
+  .newsletter__container .newsletter__content h2,
+  .newsletter__container .newsletter__content h3 {
+    position: relative;
+    top: -4px;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Newsletter Sign Up",
+  "tag": "section",
+  "class": "newsletter",
+  "blocks": [{ "type": "heading" }, { "type": "richtext" }],
+  "settings": [
+    {
+      "type": "html",
+      "id": "custom_form",
+      "label": "Klaviyo form",
+      "info": "This will overrride the default sign up form"
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "select",
+      "id": "style_selector",
+      "label": "Styling Type",
+      "options": [
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "theme"
+    },
+    {
+      "type": "select",
+      "id": "section_styling",
+      "label": "Section style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "third",
+          "label": "Third"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ section.settings.style_selector == 'theme' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "background_color",
+      "label": "Background Colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Colour",
+      "default": "#393939",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Mobile Text Alignment",
+      "options": [
+        {
+          "value": "to-md-text-left",
+          "label": "Left"
+        },
+        {
+          "value": "to-md-text-center",
+          "label": "Center"
+        }
+      ],
+      "default": "to-md-text-center"
+    },
+    {
+      "type": "select",
+      "id": "page_width",
+      "label": "Page Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Default"
+        },
+        {
+          "value": "page-width--narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "page-width--wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "select",
+      "id": "vertical_spacing",
+      "label": "Vertical Spacing",
+      "options": [
+        {
+          "value": "vertical-margin",
+          "label": "Margin"
+        },
+        {
+          "value": "vertical-padding",
+          "label": "Padding"
+        },
+        {
+          "value": "vertical-margin vertical-padding",
+          "label": "Margin and Padding"
+        },
+        {
+          "value": "",
+          "label": "None"
+        }
+      ],
+      "default": "vertical-margin"
+    },
+    {
+      "type": "header",
+      "content": "Targeting"
+    },
+    {
+      "type": "text",
+      "id": "id_text",
+      "label": "ID Attribute",
+      "info": "Add an optional ID to the section for advanced targeting with anchor links and CSS."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter Sign Up"
+    }
+  ],
+  "enabled_on": {
+    "groups": ["footer"]
+  }
+}
+{% endschema %}

@@ -1,0 +1,254 @@
+name: Theme V5 PR Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+    paths-ignore:
+      - "config/**"
+      - "locales/**"
+      - "templates/**"
+
+jobs:
+  last-commit-author:
+    name: Check latest commit author
+    runs-on: ubuntu-latest
+    outputs:
+      is_shopify_bot: ${{ steps.author.outputs.is_shopify_bot }}
+      author_login: ${{ steps.author.outputs.author_login }}
+    steps:
+      - name: Fetch latest PR commit author
+        id: author
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const pull_number = context.payload.pull_request.number;
+            const commits = await github.paginate(github.rest.pulls.listCommits, {
+              owner,
+              repo,
+              pull_number,
+              per_page: 100,
+            });
+
+            const latest = commits[commits.length - 1];
+            const authorLogin = latest?.author?.login || "";
+            core.info(`Latest commit author: ${authorLogin || "(unknown)"}`);
+
+            core.setOutput("author_login", authorLogin);
+            core.setOutput("is_shopify_bot", authorLogin === "shopify[bot]" ? "true" : "false");
+
+  warn-on-core-theme-edits:
+    name: Warn if core theme files changed
+    runs-on: ubuntu-latest
+    needs: [last-commit-author]
+    if: needs.last-commit-author.outputs.is_shopify_bot != 'true'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine changed files (base..head)
+        id: diff
+        run: |
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+          echo "Base: $BASE_SHA"
+          echo "Head: $HEAD_SHA"
+
+          CHANGED_FILES="$(git diff --name-only "$BASE_SHA" "$HEAD_SHA" || true)"
+          echo "changed<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGED_FILES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Check for core theme file changes
+        id: check
+        run: |
+          CORE_FILES=(
+            "assets/utilities.css"
+            "assets/critical.css"
+            "snippets/css-variables.liquid"
+          )
+
+          echo "${{ steps.diff.outputs.changed }}" > /tmp/changed.txt
+
+          HIT_LIST=()
+          while IFS= read -r f; do
+            for s in "${CORE_FILES[@]}"; do
+              if [ "$f" = "$s" ]; then
+                HIT_LIST+=("$f")
+              fi
+            done
+          done < /tmp/changed.txt
+
+          if [ ${#HIT_LIST[@]} -gt 0 ]; then
+            echo "found=true" >> $GITHUB_OUTPUT
+            printf "%s\n" "${HIT_LIST[@]}" > /tmp/hits.txt
+            echo "hits<<EOF" >> $GITHUB_OUTPUT
+            cat /tmp/hits.txt >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+
+            # Emit GitHub warning annotations (non-blocking)
+            while IFS= read -r h; do
+              echo "::warning file=$h::This file is a core theme file and should not be edited without prior discussion with a Senior/Lead developer. Please discuss this change before merging the PR."
+            done < /tmp/hits.txt
+          else
+            echo "found=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Add Comment If Core Theme V5 Files Have Changed
+        if: steps.check.outputs.found == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const marker = "<!-- qf-core-theme-warning -->";
+            const hits = `\n${{ toJSON(steps.check.outputs.hits) }}`
+              .trim()
+              .split("\\n")
+              .map(s => s.trim())
+              .filter(Boolean);
+
+            const body = `${marker}
+            ### ⚠️ Core theme files changed
+            The following **core theme files** were modified in this PR:
+            ${hits.map(h => `- \`${h}\``).join("\n")}
+
+            These files are critical to the site’s styling and load performance, and should not be edited without prior discussion with a **Senior/Lead Developer**.
+            Editing these files goes against Quickfire Theme V5 best practise.
+
+            Please:
+            - Discuss this change with a Senior/Lead developer before merging.
+            - Understand that these files have **site-wide impact** (CSS cascade, global variables, critical path styles).
+            - Sanity check across key templates (Home, Collection, PDP, Cart, Cart functionality).
+            - Confirm there are no regressions to layout or performance (CLS/LCP).
+
+            _This is a warning only; merging is allowed._`;
+
+            const { owner, repo } = context.repo;
+            const issue_number = context.payload.pull_request.number;
+
+            const existing = await github.paginate(github.rest.issues.listComments, {
+              owner, repo, issue_number, per_page: 100
+            });
+
+            const prev = existing.find(c => c.body && c.body.includes(marker));
+
+            if (prev) {
+              await github.rest.issues.updateComment({
+                owner, repo,
+                comment_id: prev.id,
+                body
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner, repo, issue_number, body
+              });
+            }
+
+      # Optional: soft fail (visual nudge only)
+      - name: Soft fail (visual nudge only)
+        if: steps.check.outputs.found == 'true'
+        run: |
+          echo "Core theme files changed."
+          exit 1
+
+  block-preview-theme-link:
+    name: Block preview theme links
+    runs-on: ubuntu-latest
+    needs: [last-commit-author]
+    if: needs.last-commit-author.outputs.is_shopify_bot != 'true'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Scan diff for preview theme link
+        id: scan
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PATTERN: "preview_theme_id=[0-9]+"
+        run: |
+          set -euo pipefail
+          git diff --name-only -z "$BASE_SHA" "$HEAD_SHA" > /tmp/files.bin || true
+
+          if [ ! -s /tmp/files.bin ]; then
+            echo "found=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          declare -a HITS=()
+          while IFS= read -r -d '' file; do
+            if git diff "$BASE_SHA" "$HEAD_SHA" -- "$file" | grep -E '^\+[^+].*'"$PATTERN" > /dev/null; then
+              HITS+=("$file")
+            fi
+          done < /tmp/files.bin
+
+          if [ ${#HITS[@]} -gt 0 ]; then
+            {
+              echo "matches<<EOF"
+              printf "%s\n" "${HITS[@]}"
+              echo "EOF"
+            } >> $GITHUB_OUTPUT
+            echo "found=true" >> $GITHUB_OUTPUT
+          else
+            echo "found=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Comment on PR when preview link detected
+        if: steps.scan.outputs.found == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const marker = "<!-- qf-preview-theme-link-warning -->";
+            const files = `\n${{ toJSON(steps.scan.outputs.matches) }}`
+              .trim()
+              .split("\n")
+              .map(s => s.trim())
+              .filter(Boolean);
+
+            const list = files.map((file) => `- \`${file}\``).join("\n");
+            const body = `${marker}
+            ### Preview theme link detected
+            The diff for this PR adds a \`preview_theme_id=<id>\` parameter, which forces customers onto a development theme.
+
+            Files flagged:
+            ${list}
+
+            Please remove the preview link before merging to keep production traffic on the live theme.`;
+
+            const { owner, repo } = context.repo;
+            const issue_number = context.payload.pull_request.number;
+
+            const existing = await github.paginate(github.rest.issues.listComments, {
+              owner,
+              repo,
+              issue_number,
+              per_page: 100,
+            });
+
+            const prev = existing.find((comment) => comment.body && comment.body.includes(marker));
+            if (prev) {
+              await github.rest.issues.updateComment({
+                owner,
+                repo,
+                comment_id: prev.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number,
+                body,
+              });
+            }
+
+      - name: Fail when preview theme link is present
+        if: steps.scan.outputs.found == 'true'
+        run: |
+          echo "A preview_theme_id URL parameter was detected in the diff. Remove it before merging."
+          exit 1

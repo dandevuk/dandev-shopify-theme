@@ -1,0 +1,53 @@
+{%- liquid
+  if product == blank
+    assign product = closest.product
+  endif
+
+  if product == blank and section.settings.product != blank
+    assign product = section.settings.product
+  endif
+
+  if product != blank and product.variants.size == 0 and product.handle != blank
+    assign product = all_products[product.handle]
+  endif
+-%}
+<div class="product-price" {{ block.shopify_attributes }}>
+  {%- render 'product-variant-prices',
+    product: product,
+    price_format: block.settings.price_format
+  -%}
+</div>
+
+{% schema %}
+{
+  "name": "Price",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "price_format",
+      "label": "Price Format",
+      "options": [
+        {
+          "value": "variant_price",
+          "label": "Variant Price"
+        },
+        {
+          "value": "from",
+          "label": "From Price"
+        },
+        {
+          "value": "range",
+          "label": "Price Range"
+        }
+      ],
+      "default": "variant_price"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Price"
+    }
+  ]
+}
+{% endschema %}

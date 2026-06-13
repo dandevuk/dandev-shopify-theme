@@ -1,0 +1,179 @@
+{%- unless block.settings.store == blank -%}
+  {%- assign images = block.settings.store.store_images -%}
+
+  <div
+    class="store-card span-6"
+    data-store-card="{{ block.settings.store.name | handleize }}"
+    {{ block.shopify_attributes }}
+  >
+    <div
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Store images"
+      class="blaze-slider slider store-card-slider-{{ block.settings.store.name | handleize }} overflow-hidden to-sm-mb-2"
+      data-store-card-slider
+      data-blaze-slider
+      data-slider-mobile="1"
+      data-slider-tablet="1"
+      data-slider-desktop="1"
+      data-slider-wide="1"
+      data-slider-gap-mobile="8"
+      data-slider-gap-tablet="8"
+      data-slider-gap-desktop="8"
+      data-slider-gap-wide="8"
+      data-slider-loop="false"
+      data-slider-pagination="false"
+    >
+      <div class="blaze-track-container">
+        <div class="blaze-track">
+          {%- for image in images.value -%}
+            <div class="h-auto border-radius-large overflow-hidden" style="aspect-ratio:2/1;">
+              {%- render 'image', image: image, max_width: 1000, class: 'object-cover w-100 h-100' -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+
+    <div
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Store thumbnails"
+      class="blaze-slider slider store-card-thumbnails-slider-{{ block.settings.store.name | handleize }} mt-2 mb-2 to-sm-hidden"
+      data-store-card-thumbnails-slider
+      data-blaze-slider
+      data-slider-mobile="4"
+      data-slider-tablet="4"
+      data-slider-desktop="5"
+      data-slider-wide="5"
+      data-slider-gap-mobile="8"
+      data-slider-gap-tablet="8"
+      data-slider-gap-desktop="8"
+      data-slider-gap-wide="8"
+      data-slider-loop="false"
+      data-slider-pagination="false"
+    >
+      <div class="blaze-track-container">
+        <div class="blaze-track">
+          {%- for image in images.value -%}
+            <button
+              type="button"
+              class="store-card-thumb border-radius overflow-hidden cursor-pointer"
+              style="width:auto;height:80px;aspect-ratio:2/1;"
+              data-store-thumb-index="{{ forloop.index0 }}"
+              aria-label="Store image {{ forloop.index }}"
+            >
+              {%- render 'image', image: image, max_width: 1000, class: 'object-cover w-100 h-100' -%}
+            </button>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col g-3 align-start">
+      {%- content_for 'blocks' -%}
+    </div>
+  </div>
+{%- endunless -%}
+
+<style>
+  .store-card .contact-block ul {
+      padding-left: 0;
+      margin-block: 0;
+  }
+  .store-card h1, .store-card h2, .store-card h3 {
+      margin-bottom: 0;
+  }
+  .store-card .store-card-thumbnails-slider-{{ block.settings.store.name | handleize }} .store-card-thumb img {
+      transition: transform 200ms ease-in-out;
+  }
+  .store-card .store-card-thumbnails-slider-{{ block.settings.store.name | handleize }} .store-card-thumb {
+      border: 2px solid transparent;
+      transition: all 200ms ease;
+      background: transparent;
+      padding: 0;
+  }
+  .store-card .store-card-thumbnails-slider-{{ block.settings.store.name | handleize }} .store-card-thumb:hover,
+  .store-card .store-card-thumbnails-slider-{{ block.settings.store.name | handleize }} .store-card-thumb.blaze-thumb-active {
+      border-color: var(--brand-color-1);
+  }
+  .store-card .store-card-thumbnails-slider-{{ block.settings.store.name | handleize }} .store-card-thumb:hover img {
+      transform: scale(1.025);
+  }
+</style>
+
+<script>
+  (function () {
+    const storeCard = document.querySelector(
+      '[data-store-card="{{ block.settings.store.name | handleize }}"]',
+    );
+    if (!storeCard) return;
+
+    const mainSlider = storeCard.querySelector('[data-store-card-slider]');
+    const thumbs = storeCard.querySelectorAll('[data-store-thumb-index]');
+    if (!mainSlider || !thumbs.length) return;
+
+    const setActiveThumb = (index) => {
+      thumbs.forEach((thumb) => {
+        thumb.classList.toggle('blaze-thumb-active', Number(thumb.dataset.storeThumbIndex) === index);
+      });
+    };
+
+    thumbs.forEach((thumb) => {
+      thumb.addEventListener('click', function () {
+        const index = Number(this.dataset.storeThumbIndex || 0);
+        if (mainSlider.slider && typeof mainSlider.slider.slideTo === 'function') {
+          mainSlider.slider.slideTo(index, 0);
+        }
+        setActiveThumb(index);
+      });
+    });
+
+    mainSlider.addEventListener('slidechange', function (event) {
+      const index = Number(event?.detail?.activeIndex || 0);
+      setActiveThumb(index);
+    });
+
+    setActiveThumb(0);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Store Card",
+  "tag": null,
+  "settings": [
+    {
+      "type": "metaobject",
+      "id": "store",
+      "metaobject_type": "store",
+      "label": "Store"
+    }
+  ],
+  "blocks": [
+    { "type": "heading" },
+    { "type": "richtext" },
+    { "type": "contact-details" },
+    { "type": "spacer" }
+  ],
+  "presets": [
+    {
+      "name": "Store Card",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "richtext"
+        },
+        {
+          "type": "contact-details"
+        },
+        {
+          "type": "spacer"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

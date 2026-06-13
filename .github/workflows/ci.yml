@@ -1,0 +1,45 @@
+name: CI
+on:
+  push:
+    paths-ignore:
+      - "config/**"
+      - "locales/**"
+      - "templates/**"
+jobs:
+  last-commit-author:
+    name: Check latest commit author
+    runs-on: ubuntu-latest
+    outputs:
+      is_shopify_bot: ${{ steps.author.outputs.is_shopify_bot }}
+      author_login: ${{ steps.author.outputs.author_login }}
+    steps:
+      - name: Fetch latest commit author
+        id: author
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const sha = context.payload.after;
+            const commit = await github.rest.repos.getCommit({
+              owner,
+              repo,
+              ref: sha,
+            });
+
+            const authorLogin = commit.data?.author?.login || "";
+            core.info(`Latest commit author: ${authorLogin || "(unknown)"}`);
+
+            core.setOutput("author_login", authorLogin);
+            core.setOutput("is_shopify_bot", authorLogin === "shopify[bot]" ? "true" : "false");
+
+  theme-check:
+    name: Theme Check
+    runs-on: ubuntu-latest
+    needs: [last-commit-author]
+    if: needs.last-commit-author.outputs.is_shopify_bot != 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Theme Check
+        uses: shopify/theme-check-action@v2
+        with:
+          token: ${{ github.token }}

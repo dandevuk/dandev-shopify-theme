@@ -1,0 +1,199 @@
+{%- comment -%}
+  Accordion item (general) - accepts:
+   - question: text for the accordion button
+   - content_html: HTML/Liquid string (rendered as HTML inside panel)
+   - open_default: boolean - when true renders the accordion opened by default
+  This snippet is for non-richtext/html content such as sliders, components, or arbitrary markup.
+{%- endcomment -%}
+
+{%- assign btn_classes = 'button-accordion accordion flex-between align-center pl-3 pr-3 g-3 pt-1 pb-1 pl-0 pr-0 w-100 cursor-pointer' -%}
+{%- if open_default -%}
+  {%- assign btn_classes = btn_classes | append: ' active' -%}
+  {%- assign aria_state = 'true' -%}
+  {%- assign panel_inline = 'max-height: max-content' -%}
+  {%- assign panel_open_class = 'panel-open-default' -%}
+{%- else -%}
+  {%- assign aria_state = 'false' -%}
+  {%- assign panel_inline = '' -%}
+  {%- assign panel_open_class = '' -%}
+{%- endif -%}
+
+<button type="button" class="{{ btn_classes }}" aria-expanded="{{ aria_state }}">
+  <span class="accordion__question">{{ question }}</span>
+
+  <span class="chevron" aria-hidden="true">
+    {{ 'icon--caret.svg' | inline_asset_content }}
+  </span>
+</button>
+
+<div
+  class="panel max-h-0 overflow-hidden {{ panel_open_class }} {{ panel_inline }}"
+  {%- if panel_inline != blank -%}
+    style="{{ panel_inline }}"
+  {%- endif -%}
+>
+  <div class="content">
+    {%- if content_html != blank -%}
+      {{ content_html }}
+    {%- elsif content != blank -%}
+      {{ content }}
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .panel {
+    height: 100%;
+  }
+{% endstylesheet %}
+
+<script>
+  (function () {
+    // Utility: debounce
+    function debounce(fn, wait) {
+      var t;
+      return function () {
+        var ctx = this,
+          args = arguments;
+        clearTimeout(t);
+        t = setTimeout(function () {
+          fn.apply(ctx, args);
+        }, wait);
+      };
+    }
+
+    // Compute available vertical space inside the side-cart (if present)
+    function computeAvailableHeight(panel) {
+      try {
+        if (!panel) return null;
+        // Prefer cart container markers used in theme snippets
+        var cartContainer = panel.closest('[cart-items-container],[data-cart-items]');
+        if (!cartContainer) return null;
+
+        var cartRect = cartContainer.getBoundingClientRect();
+        var panelRect = panel.getBoundingClientRect();
+
+        // Find cart footer (subtotal/checkout area) inside the cart container
+        var footer = cartContainer.querySelector('.cart-details, .cart__ctas, [data-cart-details]');
+        var footerHeight = footer ? footer.getBoundingClientRect().height : 0;
+
+        // simple padding
+        var padding = 16;
+
+        // available space = distance from panel top to cart bottom minus footer and padding
+        var available = cartRect.bottom - panelRect.top - footerHeight - padding;
+
+        // Safety floor
+        if (available < 120) available = 120;
+
+        return Math.max(0, Math.floor(available));
+      } catch (err) {
+        return null;
+      }
+    }
+
+    function applySizing(panel) {
+      try {
+        if (!panel) return;
+        var available = computeAvailableHeight(panel);
+        // If we couldn't compute available space, clear inline constraints and let CSS handle it.
+        if (available === null) {
+          panel.style.maxHeight = '';
+          panel.style.overflowY = '';
+          return;
+        }
+
+        // Make panel scroll internally when content exceeds available space
+        panel.style.maxHeight = available + 'px';
+        panel.style.overflowY = 'auto';
+
+        // Try to constrain slider inside the panel so slides don't overflow panel bounds.
+        var slider = panel.querySelector('.cart-recommendations-slider, slider-container, .slider');
+        if (slider) {
+          // leave a small gap for paddings
+          var sliderMax = Math.max(80, available - 32);
+          slider.style.maxHeight = sliderMax + 'px';
+          slider.style.overflowY = 'auto';
+        }
+      } catch (err) {
+        // ignore
+        // console.warn('accordion-item-general sizing', err);
+      }
+    }
+
+    function initPanelIfOpen(panel) {
+      try {
+        if (!panel) return;
+        // if panel is visible/open (either has panel-open-default or has inline max-height style > 0 or accordion has active)
+        var btn = panel.previousElementSibling;
+        var isOpen =
+          (btn && btn.classList && btn.classList.contains('active')) ||
+          panel.classList.contains('panel-open-default') ||
+          (panel.style.maxHeight && panel.style.maxHeight !== '0px');
+        if (!isOpen) return;
+
+        // Apply sizing for currently open panels
+        applySizing(panel);
+      } catch (err) {}
+    }
+
+    var handleResize = debounce(function (e) {
+      try {
+        // Recompute for any open panels inside the document
+        var panels = document.querySelectorAll('.panel');
+        panels.forEach(function (p) {
+          var btn = p.previousElementSibling;
+          var isActive = btn && btn.classList && btn.classList.contains('active');
+          if (isActive || p.classList.contains('panel-open-default')) applySizing(p);
+        });
+      } catch (err) {}
+    }, 120);
+
+    function onAccordionChange(e) {
+      try {
+        if (!e || !e.detail) return;
+        var acc = e.detail.accordion || null;
+        if (!acc) return;
+        var panel = acc.nextElementSibling;
+        if (!panel) return;
+
+        if (e.detail.expanded) {
+          // allow small timeout so CSS transitions complete before measuring
+          setTimeout(function () {
+            applySizing(panel);
+          }, 70);
+        } else {
+          // when collapsed remove inline slider maxHeight (so when reopened it recalculates)
+          var slider = panel.querySelector(
+            '.cart-recommendations-slider, slider-container, .slider',
+          );
+          if (slider) {
+            slider.style.maxHeight = '';
+            slider.style.overflowY = '';
+          }
+          panel.style.maxHeight = '';
+          panel.style.overflowY = '';
+        }
+      } catch (err) {}
+    }
+
+    // Watch for accordion toggles (accordion.js dispatches on window)
+    window.addEventListener('accordion:change', onAccordionChange);
+
+    // Recompute on resize/orientation change
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
+
+    // Initialise any panels rendered open on page load
+    document.addEventListener('DOMContentLoaded', function () {
+      try {
+        var els = document.querySelectorAll(
+          '.panel.panel-open-default, .panel[style*="max-height"]',
+        );
+        els.forEach(function (p) {
+          initPanelIfOpen(p);
+        });
+      } catch (err) {}
+    });
+  })();
+</script>

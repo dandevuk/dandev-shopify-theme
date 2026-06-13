@@ -1,0 +1,64 @@
+<div
+  class="link-group h-100 w-100 flex align-center relative pl-1 pr-1 pb-3 pt-3"
+  {{ block.shopify_attributes }}
+>
+  <div class="top-level-link h-100 w-100 flex-center align-center inline-flex relative m-0 cursor-pointer g-3 no-decoration">
+    <a
+      href="{{ block.settings.link_url }}"
+      aria-label="Link to {{ block.settings.link_title }}"
+      class="{% if block.settings.animate_underline == true %}flex-center align-center h-100 w-100 g-3 {% endif %} no-decoration {% if block.settings.button == true %}{{ block.settings.button_style }}{% endif %}"
+    >
+      <span class="cursor-pointer g-3 no-decoration white-space-nowrap">{{ block.settings.link_title }}</span>
+    </a>
+  </div>
+</div>
+
+{% stylesheet %}
+  .mobile-menu-outer-wrapper .mobile-menu .mobile-menu-navigation .link-group {
+    border-bottom: 1px solid var(--brand-color-2);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Top Level Link",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "link_title",
+      "label": "Link title"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Link URL"
+    },
+    {
+      "type": "checkbox",
+      "id": "button",
+      "label": "Style as button",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "default": "button-2",
+      "options": [
+        { "value": "button-1", "label": "Button 1" },
+        { "value": "button-2", "label": "Button 2" },
+        { "value": "button-3", "label": "Button 3" },
+        { "value": "button-4", "label": "Button 4" },
+        { "value": "button-5", "label": "Button 5" },
+        { "value": "button-6", "label": "Button 6" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Top Level Link"
+    }
+  ]
+}
+{% endschema %}

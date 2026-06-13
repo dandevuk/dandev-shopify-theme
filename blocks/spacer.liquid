@@ -1,0 +1,47 @@
+<div class="{{ block.settings.spacer_size }} w-100" {{ block.shopify_attributes }}></div>
+
+{% schema %}
+{
+  "name": "Spacer",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "spacer_size",
+      "label": "Spacer Size",
+      "options": [
+        {
+          "value": "mt-1",
+          "label": "XXS"
+        },
+        {
+          "value": "mt-2",
+          "label": "XS"
+        },
+        {
+          "value": "mt-3",
+          "label": "SM"
+        },
+        {
+          "value": "mt-4",
+          "label": "MD"
+        },
+        {
+          "value": "mt-5",
+          "label": "LG"
+        },
+        {
+          "value": "mt-6",
+          "label": "XL"
+        },
+        {
+          "value": "mt-7",
+          "label": "XXL"
+        }
+      ],
+      "default": "mt-3"
+    }
+  ],
+  "presets": [{ "name": "Spacer" }]
+}
+{% endschema %}

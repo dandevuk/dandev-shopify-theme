@@ -1,0 +1,186 @@
+{%- liquid
+  assign has_media = false
+  if product.media != blank
+    assign has_media = true
+  endif
+  assign has_multiple_media = false
+  if product.images.size > 1 and has_media
+    assign has_multiple_media = true
+  endif
+  assign slider_class = 'main-slider-slide'
+  assign slider_id = 'quick-main-slider-' | append: section.id
+
+  assign initial_slide_index = 0
+  assign selected_variant = product.selected_or_first_available_variant
+  assign variant_image = selected_variant.featured_image
+  if variant_image == blank and selected_variant.featured_media != blank and selected_variant.featured_media.media_type == 'image'
+    assign variant_image = selected_variant.featured_media.preview_image
+  endif
+  if variant_image != blank and variant_image.position != blank
+    for media in product.media
+      if media.position == variant_image.position
+        assign initial_slide_index = forloop.index0
+        break
+      endif
+    endfor
+  endif
+-%}
+
+<div class="main-gallery to-md-w-100 relative w-100 overflow-hidden" main-gallery>
+  {%- render 'product-badges', product: product, limit: 2 -%}
+
+  {%- if has_media -%}
+    {%- if has_multiple_media -%}
+      {%- capture main_slides -%}
+          {%- for media in product.media -%}
+            {%- liquid
+              assign lazy_load = false
+              if forloop.index > 1
+                assign lazy_load = true
+              endif
+            -%}
+            {%- case media.media_type -%}
+              {%- when 'image' -%}
+                <div class="{{ slider_class }}" data-index="{{ forloop.index0 }}" data-id="
+                  {%- liquid
+                    for variant in product.variants
+                      if variant.featured_media.id == media.id
+                        echo variant.id | append: ','
+                      endif
+                    endfor
+                  -%}
+                ">
+                  <div class="gallery-image-holder w-100 overflow-hidden relative pb-100">
+                    {%- if media != blank -%}
+                      {%- render 'image',
+                          image: media,
+                          max_width: 1000,
+                          class: 'absolute w-100 h-100 object-cover',
+                          use_placeholder: false,
+                          lazy: lazy_load
+                      -%}
+                      {% comment %} {%- render 'qf-lightbox-trigger', image: media, group: product.id -%} {% endcomment %}
+                    {%- else -%}dfff
+                      {{ 'product-1' | placeholder_svg_tag }}
+                    {%- endif -%}
+                  </div>
+                </div>
+              {%- when 'model' -%}
+                <div class="{{ slider_class }}">
+                  <div class="gallery-image-holder w-100 h-100 overflow-hidden relative">
+                    {{ media | model_viewer_tag: image_size: '600x' }}
+                  </div>
+                </div>
+              {%- when 'video' -%}
+                <div class="{{ slider_class }}">
+                  <div class="gallery-image-holder w-100 h-100 overflow-hidden relative">
+                    {{ media | video_tag: image_size: 600, autoplay: true, loop: true, muted: true, controls: true }}
+                  </div>
+                </div>
+              {%- when 'external_video' -%}
+                <div class="{{ slider_class }}">
+                  <div class="gallery-image-holder w-100 h-100 overflow-hidden relative">
+                    {%- if media.host == 'youtube' -%}
+                      {{ media | external_video_url: color: 'white' | external_video_tag }}
+                    {%- elsif media.host == 'vimeo' -%}
+                      {{ media | external_video_url: loop: '1', muted: '1' | external_video_tag }}
+                    {%- endif -%}
+                  </div>
+                </div>
+            {%- endcase -%}
+          {%- endfor -%}
+        {%- endcapture -%}
+
+      <div
+        id="{{ slider_id }}"
+        data-product-id="{{ product.id }}"
+        class="blaze-slider slider main-slider w-100 h-auto"
+        data-blaze-slider
+        data-slider-initial="{{ initial_slide_index }}"
+        data-slider-mobile="1.1"
+        data-slider-tablet="1"
+        data-slider-desktop="1"
+        data-slider-wide="1"
+        data-slider-gap-mobile="{{ settings.content_spacing }}"
+        data-slider-gap-tablet="{{ settings.content_spacing }}"
+        data-slider-gap-desktop="{{ settings.content_spacing }}"
+        data-slider-gap-wide="{{ settings.content_spacing }}"
+        data-slider-loop="false"
+        data-slider-pagination="true"
+      >
+        <div class="blaze-track-container">
+          <div class="blaze-track">
+            {{ main_slides }}
+          </div>
+        </div>
+        <div class="blaze-pagination slider-pagination relative mt-3 mb-2 g-1"></div>
+      </div>
+    {%- else -%}
+      {%- comment -%} Single media item - no slider needed {%- endcomment -%}
+      {%- for media in product.media limit: 1 -%}
+        {%- case media.media_type -%}
+          {%- when 'image' -%}
+            <div class="gallery-image-holder w-100 overflow-hidden relative pb-100 mb-3">
+              {%- if media != blank -%}
+                {%- render 'image',
+                  image: media,
+                  max_width: 1000,
+                  class: 'absolute w-100 h-100 object-cover',
+                  use_placeholder: false,
+                  lazy: false
+                -%}
+              {%- else -%}
+                {{ 'product-1' | placeholder_svg_tag }}
+              {%- endif -%}
+            </div>
+          {%- when 'model' -%}
+            <div class="gallery-image-holder w-100 h-100 overflow-hidden relative mb-3">
+              {{ media | model_viewer_tag: image_size: '600x' }}
+            </div>
+          {%- when 'video' -%}
+            <div class="gallery-image-holder w-100 h-100 overflow-hidden relative mb-3">
+              {{
+                media
+                | video_tag:
+                  image_size: 600,
+                  autoplay: true,
+                  loop: true,
+                  muted: true,
+                  controls: true
+              }}
+            </div>
+          {%- when 'external_video' -%}
+            <div class="gallery-image-holder w-100 h-100 overflow-hidden relative mb-3">
+              {%- if media.host == 'youtube' -%}
+                {{ media | external_video_url: color: 'white' | external_video_tag }}
+              {%- elsif media.host == 'vimeo' -%}
+                {{ media | external_video_url: loop: '1', muted: '1' | external_video_tag }}
+              {%- endif -%}
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    {%- endif -%}
+  {%- else -%}
+    {%- if settings.product_fallback != blank -%}
+      <div class="gallery-image-holder w-100 overflow-hidden relative pb-100 mb-3">
+        {%- render 'image',
+          image: settings.product_fallback,
+          max_width: 1000,
+          use_placeholder: true,
+          lazy: false,
+          class: 'absolute inset-0 object-cover'
+        -%}
+      </div>
+    {%- else -%}
+      <div class="gallery-image-holder w-100 overflow-hidden relative pb-100 mb-3">
+        {{ 'product-1' | placeholder_svg_tag }}
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  quick-view-inner .main-slider .main-slider-slide .gallery-image-holder {
+    border: none;
+  }
+{% endstylesheet %}

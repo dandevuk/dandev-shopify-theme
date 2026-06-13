@@ -1,0 +1,65 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "faq_grid_GUJVPz": {
+      "type": "faq-grid",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "static": true,
+          "settings": {
+            "heading": "FAQs",
+            "heading_type": "h1",
+            "heading_size": "heading-h1"
+          },
+          "blocks": {}
+        },
+        "text": {
+          "type": "richtext",
+          "static": true,
+          "settings": {
+            "richtext": "<p>Find quick answers to common questions about orders, shipping, and returns.</p>"
+          },
+          "blocks": {}
+        }
+      },
+      "name": "FAQ Grid",
+      "settings": {
+        "faq_groups": [
+          "group-name",
+          "test-1",
+          "lorem-group"
+        ],
+        "placeholder_text": "Search FAQs...",
+        "style_selector": "theme",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "faq_style_selector": "custom",
+        "faq_section_styling": "primary",
+        "faq_background_color": "linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)",
+        "faq_text_color": "#1d1d1d",
+        "text_alignment": "text-left",
+        "page_width": "page-width",
+        "vertical_spacing": "vertical-padding",
+        "custom_spacing": false,
+        "top_spacing": 120,
+        "bottom_spacing": 120,
+        "top_spacing_mobile": 60,
+        "bottom_spacing_mobile": 60,
+        "id_text": ""
+      }
+    }
+  },
+  "order": [
+    "faq_grid_GUJVPz"
+  ]
+}

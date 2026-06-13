@@ -1,0 +1,105 @@
+{%- comment -%}
+  Template-only injection to avoid any visible content at page load.
+  assets/cart-recommendations-modal.js will clone this into the DOM on demand.
+{%- endcomment -%}
+<template id="cart-recs-modal-template">
+  <div
+    class="modal-overlay cart-recommendations-modal"
+    data-modal="cart-recommendations"
+    aria-hidden="true"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="cart-recs-title"
+    style="display: none;"
+  >
+    <div
+      class="modal-content section-container pr-3 pl-3 pt-4 pb-4 relative slide-in"
+      style="max-width: 1800px; margin: 0 auto;"
+    >
+      <header
+        class="modal-header"
+        style="display:flex; justify-content: space-between; align-items:center; gap: 1rem;"
+      >
+        <h2 id="cart-recs-title" class="heading heading-sm" style="margin: 0;">
+          {{ 'general.side_cart.side_cart_buttons_and_tabs.recommended_products' | t }}
+        </h2>
+        <div class="blaze-navigation-arrows">
+          <button type="button" class="blaze-button-prev cart-rec" aria-label="Previous">
+            {{ 'icon--slider-prev.svg' | inline_asset_content }}
+          </button>
+          <button type="button" class="blaze-button-next cart-rec" aria-label="Next">
+            {{ 'icon--slider-next.svg' | inline_asset_content }}
+          </button>
+        </div>
+      </header>
+
+      <div class="modal-body" style="padding-top: 1rem;">
+        <div
+          class="cart-recommendations"
+          cart-recommendations
+          data-cart-recommendations
+          data-cart-recommendations-container
+          data-limit="8"
+        >
+          {%-
+            render 'recommendations-slider',
+            use_fallback: true,
+            show_quickview_button: true,
+            slider_attributes: 'data-cart-recommendations-slider',
+            slider_aria_label: 'general.side_cart.side_cart_buttons_and_tabs.recommended_products' | t,
+            slider_mobile: 3,
+            slider_tablet: 3,
+            slider_desktop: 3,
+            slider_wide: 4,
+            slider_gap_mobile: 16,
+            slider_gap_tablet: 16,
+            slider_gap_desktop: 24,
+            slider_gap_wide: 30,
+            slider_loop: false,
+            slider_pagination: false,
+            css_mobile_slides: 3,
+            css_tablet_slides: 3,
+            css_desktop_slides: 3,
+            css_wide_slides: 4,
+            css_mobile_gap: 16,
+            css_tablet_gap: 16,
+            css_desktop_gap: 24,
+            css_wide_gap: 30,
+            slider_id: 'cart-recs-modal-slider',
+            slider_class: 'blaze-loading cart-recommendations-slider',
+            ensure_structure: true
+          -%}
+        </div>
+      </div>
+
+      <style>
+        /* Modal-specific blaze nav */
+
+        /* Hide navigation on small viewports where modal isn't used */
+        @media (max-width: 1199px) {
+          .cart-recommendations-modal .blaze-button-prev.cart-rec,
+          .cart-recommendations-modal .blaze-button-next.cart-rec {
+            display: none;
+          }
+        }
+
+        .cart-recommendations-modal.modal-overlay {
+          width: calc( 100vw - min(340px,90vw) );
+          padding-left: 35px;
+          padding-right: 35px;
+        }
+        .cart-recommendations-modal.modal-overlay .modal-content.modal-panel.section-container {
+          margin: 0 auto;
+        }
+
+
+        /* Fullwidth modal helper (JS toggles modal-fullwidth class) */
+        .cart-recommendations-modal .modal-content.modal-fullwidth {
+          width: calc(100% - 468px) !important;
+          max-width: none !important;
+          margin: 24px !important;
+        }
+      </style>
+    </div>
+  </div>
+</template>

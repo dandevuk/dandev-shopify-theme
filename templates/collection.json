@@ -1,0 +1,246 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "collection_header_3FQCEM": {
+      "type": "collection-header",
+      "blocks": {
+        "section_content_MhnUNV": {
+          "type": "section-content",
+          "settings": {
+            "content_spacing": "g-3"
+          },
+          "blocks": {
+            "heading_aL7j7q": {
+              "type": "heading",
+              "name": "Heading",
+              "settings": {
+                "heading": "{{ closest.collection.title }}",
+                "heading_type": "h2",
+                "heading_size": "heading-h1"
+              },
+              "blocks": {}
+            },
+            "richtext_E9VHPH": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "richtext": "{{ closest.collection.description }}"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "heading_aL7j7q",
+            "richtext_E9VHPH"
+          ]
+        }
+      },
+      "block_order": [
+        "section_content_MhnUNV"
+      ],
+      "name": "Collection Header",
+      "settings": {
+        "image": "{{ collection.image }}",
+        "style_selector": "theme",
+        "section_styling": "third",
+        "background_color": "linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)",
+        "text_color": "#ffffff",
+        "overlay_type": "theme",
+        "overlay_styling": "secondary",
+        "overlay_color": "linear-gradient(#ffffff, #ffffff)",
+        "layout_style": "full-width",
+        "text_alignment": "center",
+        "truncate_text": true,
+        "truncate_lines": 2,
+        "read_more": true,
+        "anchor_id": "read-more",
+        "anchor_text": "Read more"
+      }
+    },
+    "main": {
+      "type": "collection",
+      "settings": {
+        "filter_positioning": "vertical",
+        "grid_items": 16,
+        "page_width": "page-width",
+        "vertical_spacing": "vertical-margin",
+        "custom_spacing": false,
+        "top_spacing": 120,
+        "bottom_spacing": 120,
+        "top_spacing_mobile": 60,
+        "bottom_spacing_mobile": 60,
+        "cta_1": "2025-kits",
+        "cta_2": ""
+      }
+    },
+    "text_media_r438Wg": {
+      "type": "text-media",
+      "blocks": {
+        "section_content_Bb8dGd": {
+          "type": "section-content",
+          "settings": {
+            "content_spacing": "g-3"
+          },
+          "blocks": {
+            "heading_caKPxc": {
+              "type": "heading",
+              "name": "Heading",
+              "settings": {
+                "heading": "More About {{ closest.collection.title }}",
+                "heading_type": "h2",
+                "heading_size": "heading-h0"
+              },
+              "blocks": {}
+            },
+            "richtext_C6Uqzq": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "richtext": "<p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p><p><br/>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p><p><br/>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p>"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "heading_caKPxc",
+            "richtext_C6Uqzq"
+          ]
+        }
+      },
+      "block_order": [
+        "section_content_Bb8dGd"
+      ],
+      "name": "Text Media",
+      "settings": {
+        "content_type": "image",
+        "html_embed_content": "",
+        "image": "shopify://shop_images/woman-cross-legged-with-her-eyes-closed.jpg",
+        "image_display": "contain",
+        "lazy_load": true,
+        "video_type": "shopify",
+        "video_url": "https://www.youtube.com/watch?v=XXXXXXXX",
+        "video_display": "object-contain",
+        "controls_type": "default",
+        "autoplay": false,
+        "muted": true,
+        "loop": true,
+        "preload": true,
+        "style_selector": "theme",
+        "section_styling": "secondary",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "background_image_type": "none",
+        "background_image_theme": "1",
+        "container_style_selector": "theme",
+        "container_section_styling": "third",
+        "container_background_color": "linear-gradient(#ffffff, #ffffff)",
+        "container_text_color": "#393939",
+        "container_background_image_type": "none",
+        "container_background_image_theme": "1",
+        "remove_text_padding": false,
+        "vertical_text_alignment": "align-end",
+        "horizontal_layout": "section-text-left",
+        "vertical_layout": "text-bottom",
+        "page_width": "page-width",
+        "vertical_spacing": "",
+        "custom_spacing": false,
+        "top_spacing": 120,
+        "bottom_spacing": 120,
+        "top_spacing_mobile": 60,
+        "bottom_spacing_mobile": 60,
+        "id_text": ""
+      }
+    },
+    "faq_group_Arwa3g": {
+      "type": "faq-group",
+      "blocks": {
+        "section-content": {
+          "type": "section-content",
+          "static": true,
+          "settings": {
+            "content_spacing": "g-1"
+          },
+          "blocks": {
+            "heading_R9WtJi": {
+              "type": "heading",
+              "name": "Heading",
+              "settings": {
+                "heading": "FAQs",
+                "heading_type": "h2",
+                "heading_size": "heading-h1"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "heading_R9WtJi"
+          ]
+        },
+        "section-navigation": {
+          "type": "section-navigation",
+          "static": true,
+          "settings": {},
+          "blocks": {
+            "links_container_VPgCEJ": {
+              "type": "links-container",
+              "name": "Links Container",
+              "settings": {
+                "content_spacing": "g-1"
+              },
+              "blocks": {
+                "link_BfVUeb": {
+                  "type": "link",
+                  "settings": {
+                    "link_text": "View All FAQs",
+                    "link": "shopify://pages/faqs",
+                    "link_title": "View All FAQs",
+                    "link_style": "button-1",
+                    "external_link": false
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "link_BfVUeb"
+              ]
+            }
+          },
+          "block_order": [
+            "links_container_VPgCEJ"
+          ]
+        }
+      },
+      "name": "FAQ Group",
+      "settings": {
+        "faq_group_metaobject": "test-1",
+        "style_selector": "theme",
+        "section_styling": "secondary",
+        "background_color": "linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)",
+        "text_color": "#ca1414",
+        "heading_color": "#000000",
+        "page_width": "page-width--narrow",
+        "vertical_spacing": "",
+        "custom_spacing": false,
+        "top_spacing": 120,
+        "bottom_spacing": 120,
+        "top_spacing_mobile": 60,
+        "bottom_spacing_mobile": 60,
+        "id_text": ""
+      }
+    }
+  },
+  "order": [
+    "collection_header_3FQCEM",
+    "main",
+    "text_media_r438Wg",
+    "faq_group_Arwa3g"
+  ]
+}

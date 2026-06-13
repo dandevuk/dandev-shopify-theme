@@ -1,0 +1,173 @@
+{%- liquid
+  # STYLING SETTINGS
+  assign desktop_height = section.settings.desktop_height
+  assign mobile_height = section.settings.mobile_height
+
+  # SLIDER SETTINGS
+  assign loop_setting = section.settings.loop
+  assign show_pagination = section.settings.show_pagination
+  assign effect = section.settings.effect
+  assign autoplay = section.settings.autoplay
+  assign autoplay_delay = section.settings.autoplay_delay | times: 1000
+-%}
+
+<div
+  class="hero-wrapper section-container relative isolate"
+  style="--height: {{ desktop_height }}px;--mobile-height: {{ mobile_height }}px;"
+>
+  <div
+    id="hero-slider-{{ section.id }}"
+    class="blaze-slider hero-slider__blaze"
+    role="region"
+    aria-roledescription="carousel"
+    aria-label="Hero slider"
+    data-blaze-slider
+    data-slider-mobile="1"
+    data-slider-tablet="1"
+    data-slider-desktop="1"
+    data-slider-wide="1"
+    data-slider-gap-mobile="0"
+    data-slider-gap-tablet="0"
+    data-slider-gap-desktop="0"
+    data-slider-gap-wide="0"
+    data-slider-loop="{{ loop_setting }}"
+    data-slider-pagination="{{ show_pagination }}"
+    data-slider-autoplay="{{ autoplay }}"
+    data-slider-autoplay-interval="{{ autoplay_delay }}"
+    data-slider-effect="{{ effect }}"
+  >
+    <div class="blaze-track-container">
+      <div class="blaze-track">
+        {% content_for 'blocks' %}
+      </div>
+    </div>
+    {% if show_pagination %}
+      <div
+        class="blaze-pagination hero-slider__pagination absolute z-1 w-max flex flex-center g-1"
+        style="bottom: var(--content-spacing-4); left: 50%; transform: translateX(-50%);"
+      ></div>
+    {% endif %}
+  </div>
+</div>
+
+{%- stylesheet -%}
+  .hero-slider .hero-slider {
+    min-height: var(--height);
+    max-height: var(--height);
+  }
+
+  @media only screen and (max-width: 767.98px) {
+    .hero-slider .hero-slider {
+      min-height: var(--mobile-height);
+      max-height: var(--mobile-height);
+    }
+
+    .hero-slider .hero-slider__pagination {
+      bottom: 15px !important;
+    }
+  }
+
+  .hero-slider .hero-slider__pagination button {
+    display: flex;
+  }
+
+  /* Picture with image
+.hero-slider .hero-container .hero-grid .media .media-item .media-wrapper .media-container picture:has(img) img {
+  position: unset;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: unset;
+  object-position: var(--object-position);
+} */
+{%- endstylesheet -%}
+
+{% schema %}
+{
+  "name": "Hero Slider",
+  "tag": "section",
+  "class": "hero-slider overflow-hidden isolate",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Slider Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Loop",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pagination",
+      "label": "Show Pagination",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Autoplay",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_delay",
+      "label": "Autoplay Delay (s)",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 3,
+      "info": "Only used when autoplay is enabled.",
+      "visible_if": "{{ section.settings.autoplay == true }}"
+    },
+    {
+      "type": "select",
+      "id": "effect",
+      "label": "Slider Effect",
+      "options": [
+        {
+          "value": "slide",
+          "label": "Slide"
+        },
+        {
+          "value": "fade",
+          "label": "Fade"
+        }
+      ],
+      "default": "slide"
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "range",
+      "id": "desktop_height",
+      "label": "Desktop Height",
+      "min": 200,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "default": 300
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "label": "Mobile Height",
+      "min": 200,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "default": 300
+    }
+  ],
+  "blocks": [{ "type": "_hero-slide" }],
+  "presets": [
+    {
+      "name": "Hero Slider",
+      "category": "Hero"
+    }
+  ]
+}
+{% endschema %}

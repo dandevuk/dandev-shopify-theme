@@ -1,0 +1,7 @@
+{%- assign quick_shop_t = 'products.product.quick_shop' | t | default: 'Quick shop' -%}
+<product-quick-view class="button-2 cursor-pointer g-1 {{ class }}">
+  <div icon>
+    {%- render 'icon-cart' -%}
+  </div>
+  <span class="link-text relative">{{ quick_shop_t }}</span>
+</product-quick-view>

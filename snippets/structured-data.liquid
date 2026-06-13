@@ -1,0 +1,254 @@
+{% comment %}
+  Structured data for all pages
+{% endcomment %}
+
+{%- if request.page_type == 'index' or template contains 'about' or template contains 'contact' -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": {{ shop.name | json }},
+      {% if shop.brand.logo != blank %}
+        "logo": {{ shop.brand.logo | image_url: width: 500 | json }},
+      {% endif %}
+      "sameAs": [
+          {%- for social in shop.brand.metafields.social_links -%}
+            "{{ social[1] }}"{%- unless forloop.last -%},{%- endunless -%}
+          {%- endfor -%}
+        ],
+      "url": {{ request.origin | append: page.url | json }}
+    }
+  </script>
+{%- endif -%}
+
+{%- if template.name == 'search' -%}
+  {%- assign search_term = request.origin
+    | append: '/search?q='
+    | append: '{search_term_string}'
+  -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": {{ shop.name | json }},
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "{{ search_term }}",
+        "query-input": "required name=search_term_string"
+      },
+      "url": "{{ request.origin }}"
+    }
+  </script>
+{%- endif -%}
+
+{%- if template.name == 'product' -%}
+  <script type="application/ld+json">
+    [
+      {
+        "@context": "https://schema.org/",
+        "@type": "ProductGroup",
+        "name": {{ product.title | json }},
+        "description": {{ product.description | strip_html | json }},
+        "image": [
+          {{ product.featured_image | image_url: width: 1920 | json }}
+        ],
+        {% if product.selected_or_first_available_variant.sku != blank -%}
+          "sku": {{ product.selected_or_first_available_variant.sku | json }},
+        {%- endif %}
+        "url": {{ request.origin | append: product.url | json }},
+        "brand": {
+          "@type": "Brand",
+          "name": {{ product.vendor | json }}
+        },
+        "productGroupID": {{ product.id }},
+        "variesBy": [
+        {% for product_option in product.options_with_values -%}
+          {%- liquid
+            assign product_option_name = product_option.name | downcase
+            assign option_meta_var = product_option.position | prepend: 'webdropdown' | append: 'label'
+            assign option_metafield_name = product.metafields.product_data[option_meta_var].value
+            if option_metafield_name != blank
+                assign product_option_name = option_metafield_name | downcase
+            endif
+          -%}
+          {%- case product_option_name -%}
+            {%- when 'colour' -%}
+              {{ product_option_name | replace: 'colour', 'color' | prepend: '"https://schema.org/' | append: '"' -}}
+            {%- when 'size' -%}
+              {{ product_option_name | prepend: '"https://schema.org/' | append: '"' -}}
+            {%- when 'leg length' -%}
+              {{ 'hasMeasurement' | prepend: '"https://schema.org/' | append: '"' -}}
+            {%- when 'additional visor' -%}
+              {{ 'isAccessoryOrSparePartFor' | prepend: '"https://schema.org/' | append: '"' -}}
+          {%- endcase -%}
+          {%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor %}
+        ],
+        {% if product.variants != blank and product.variants.size > 0 -%}
+          "hasVariant": [
+            {%- for variant in product.variants -%}
+              {%- assign variant_image = variant.featured_image.src | default: product.featured_image | image_url: width: 1920 -%}
+              {
+                "@type": "Product",
+                "name": "{{- product.title | append: " (" | append: variant.title | append: ")" -}}",
+                "description": {{- product.description | strip_html | json }},
+                "image": "{{- request.origin | append: variant_image -}}",
+                {%- if variant.sku != blank -%}
+                  "sku": {{ variant.sku | json }},
+                {%- endif -%}
+                {%- if variant.barcode.size == 12 -%}
+                  "gtin12": "{{ variant.barcode }}",
+                {%- endif -%}
+                {%- if variant.barcode.size == 13 -%}
+                  "gtin13": "{{ variant.barcode }}",
+                {%- endif -%}
+                {%- if variant.barcode.size == 14 -%}
+                  "gtin14": "{{ variant.barcode }}",
+                {%- endif -%}
+                "offers": {
+                  "@type": "Offer",
+                  "url": {{ request.origin | append: variant.url | json }},
+                  "priceCurrency" : {{ cart.currency.iso_code | json }},
+                  "price": {{ variant.price | divided_by: 100.00 | json }},
+                  "availability": "{{- variant.available | replace: 'true', 'InStock' | replace: 'false', 'OutOfStock' | prepend: 'https://schema.org/' -}}"
+                  {%- if settings.returns_amount != blank or settings.returns_period != blank %}
+                  , "hasMerchantReturnPolicy": { "@id": "#return_poli1cy" }
+                  {% endif -%}
+                }
+              }{%- unless forloop.last -%},{%- endunless -%}
+            {%- endfor -%}
+          ]
+        {%- endif -%}
+      }
+      {%- if settings.returns_amount != blank or settings.returns_period != blank %}
+      ,
+      {
+        "@context": "https://schema.org/",
+        "@type": "MerchantReturnPolicy",
+        "@id": "#return_policy",
+        "applicableCountry": "{{ localization.country.iso_code }}",
+        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+        "merchantReturnDays": {{ settings.returns_period }},
+        "returnMethod": "https://schema.org/ReturnByMail",
+        "returnFees": "https://schema.org/ReturnShippingFees",
+        "returnShippingFeesAmount": {
+          "currency": "{{ localization.country.currency.iso_code }}",
+          "value": "{{ settings.returns_amount }}"
+        }
+      }
+      {%- endif -%}
+    ]
+  </script>
+
+{%- elsif template.name == 'collection' -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": {{ collection.title | json }},
+      "url": {{ request.origin | append: collection.url | json }},
+      "description": {{ collection.description | strip_html | json }},
+      "mainEntity": [
+        {%- for product in collection.products -%}
+          {
+            "@type": "Product",
+            "name": {{ product.title | json }},
+            "url": {{ request.origin | append: product.url | json }},
+            {%- if product.featured_image != blank -%}
+            "image": [
+              {{ product.featured_image | image_url: width: 1920 | json }}
+            ],
+            {%- endif -%}
+            {%- if product.description != blank -%}
+            "description": {{ product.description | strip_html | json }},
+            {%- endif -%}
+            {% if product.selected_or_first_available_variant.sku != blank -%}
+              "sku": {{ product.selected_or_first_available_variant.sku | json }},
+            {%- endif %}
+            "brand": {
+              "@type": "Brand",
+              "name": {{ product.vendor | json }}
+            },
+            "offers": [
+              {%- for variant in product.variants -%}
+                {
+                  "@type" : "Offer",
+                  {%- if variant.sku != blank -%}
+                    "sku": {{ variant.sku | json }},
+                  {%- endif -%}
+                  {%- if variant.barcode.size == 12 -%}
+                    "gtin12": {{ variant.barcode }},
+                  {%- endif -%}
+                  {%- if variant.barcode.size == 13 -%}
+                    "gtin13": {{ variant.barcode }},
+                  {%- endif -%}
+                  {%- if variant.barcode.size == 14 -%}
+                    "gtin14": {{ variant.barcode }},
+                  {%- endif -%}
+                  "availability" : "https://schema.org/{% if variant.available %}InStock{% else %}OutOfStock{% endif %}",
+                  "price" : {{ variant.price | divided_by: 100.00 | json }},
+                  "priceCurrency" : {{ cart.currency.iso_code | json }},
+                  "url" : {{ request.origin | append: variant.url | json }}
+                }{% unless forloop.last %},{% endunless %}
+              {%- endfor -%}
+            ]
+          }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+
+{%- elsif template.name == 'page' -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": {{ page.title | json }},
+      "url": {{ request.origin | append: page.url | json }},
+      "description": {{ page.content | strip_html | truncatewords: 50 | json }},
+      "datePublished": {{ page.published_at | date: "%Y-%m-%d" | json }},
+      "dateModified": {{ page.updated_at | date: "%Y-%m-%d" | json }},
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": {{ request.origin | append: page.url | json }}
+      }
+    }
+  </script>
+
+{%- elsif template.name == 'article' -%}
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": {{ article.title | json }},
+      {%- if article.featured_image != blank -%}
+        "image": [
+          {{ article.featured_image | image_url: width: 1920 | json }}
+        ],
+      {%- endif -%}
+      "datePublished": {{ article.published_at | date: "%Y-%m-%d" | json }},
+      "dateModified": {{ article.updated_at | date: "%Y-%m-%d" | json }},
+      "author": {
+        "@type": "Person",
+        "name": {{ article.author | json }}
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": {{ shop.name | json }}{%- if shop.brand.logo != blank %},{%- endif -%}
+        {%- if shop.brand.logo != blank -%}
+          "logo": {
+            "@type": "ImageObject",
+            "url": {{ shop.brand.logo | image_url: width: 500 | json }},
+            "width": {{ shop.brand.logo.width }},
+            "height": {{ shop.brand.logo.height }}
+          }
+        {%- endif -%}
+      },
+      "description": {{ article.excerpt | strip_html | json }},
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": {{ request.origin | append: article.url | json }}
+      }
+    }
+  </script>
+{%- endif -%}

@@ -1,0 +1,62 @@
+<div
+  class="links-container flex flex-wrap align-center {{ block.settings.content_spacing }} {% if section.settings.section_content_alignment_mobile == 'centre' %}to-sm-flex-col{% endif %}"
+  {{ block.shopify_attributes }}
+>
+  {%- content_for 'blocks' -%}
+</div>
+
+{%- stylesheet -%}
+  .links-container:empty {
+    display: none;
+  }
+  .text-center .links-container {
+    justify-content: center;
+  }
+  .text-right .links-container {
+    justify-content: flex-end;
+  }
+{%- endstylesheet -%}
+
+{% schema %}
+{
+  "name": "Links Container",
+  "tag": null,
+  "blocks": [{ "type": "link" }],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "content_spacing",
+      "label": "Content Spacing",
+      "options": [
+        {
+          "value": "g-1",
+          "label": "Small"
+        },
+        {
+          "value": "g-2",
+          "label": "Medium"
+        },
+        {
+          "value": "g-3",
+          "label": "Large"
+        }
+      ],
+      "default": "g-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Links Container",
+      "blocks": [
+        {
+          "type": "link"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

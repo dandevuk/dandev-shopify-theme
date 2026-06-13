@@ -1,0 +1,25 @@
+<div class="rte relative" {{ block.shopify_attributes }}>
+  {%- if block.settings.richtext != blank -%}
+    {{ block.settings.richtext }}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Richtext",
+  "tag": null,
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "richtext",
+      "label": "Richtext",
+      "default": "<p>Add text here</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Richtext"
+    }
+  ]
+}
+{% endschema %}

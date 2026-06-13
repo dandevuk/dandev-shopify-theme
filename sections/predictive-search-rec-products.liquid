@@ -1,0 +1,21 @@
+{%- liquid
+  # - - - - - - - - - - - - - - - - - - - - - - -
+  #   Recommended Products [Theme Settings]
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  assign search_recommended_products = settings.search_recommended_products
+  assign search_recommended_collection = settings.search_recommended_collection
+  assign no_results_general_t = 'general.search.no_results.general' | t
+  assign product_results = search_recommended_products | default: search_recommended_collection.products
+  assign product_results_count = product_results.count
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-%}
+
+{%- if product_results_count > 0 -%}
+  {%- for product in product_results limit: 10 -%}
+    {%- render 'product-card', product: product, lazy: true -%}
+  {%- endfor -%}
+
+{%- else -%}
+  <div class="heading-h3 no-results span-3">{{- no_results_general_t -}}</div>
+{%- endif -%}

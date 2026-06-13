@@ -1,0 +1,67 @@
+{%- liquid
+  assign section_id = section.id
+  assign id = section_id | default: 'recommendations'
+  assign products_to_show = limit | default: 10
+
+  assign product_id = product.id | default: null
+  assign recommendations_heading = heading | default: section.settings.recommendations_heading
+
+  # Recommendations URL
+  assign recommendations_url = routes.product_recommendations_url | append: '?section_id=' | append: section_id | append: '&product_id=' | append: product_id | append: '&limit=' | append: products_to_show
+-%}
+
+<section class="recommended-products-section {{ classes }}">
+  <div class="product-recommendations recommended-snippet" id="{{ id }}">
+    <div class="recommended-products-wrapper" data-url="{{- recommendations_url -}}">
+      {%- if recommendations.performed and recommendations.products_count > 0 -%}
+        {%- if recommendations_heading != blank -%}
+          <div class="section-header grid-section">
+            <div class="span-5">
+              <h2 class="heading-h2">
+                {{ recommendations_heading }}
+              </h2>
+            </div>
+
+            <div class="section-navigation span-7 flex-end">
+              {%- render 'slider-navigation' -%}
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%-
+          render 'recommendations-slider',
+          slider_id: 'blaze-recently-viewed-' | append: section_id,
+          recommendations: recommendations,
+          limit: products_to_show,
+          slider_class: 'blaze-loading recently-viewed-slider mt-5',
+          slide_class: 'product h-auto',
+          slider_aria_label: 'Recently viewed products',
+          slider_nav_scope: '#shopify-section-' | append: section_id,
+          slider_nav_next: '.blaze-button-next',
+          slider_nav_prev: '.blaze-button-prev',
+          slider_mobile: settings.slides_per_view_mobile | default: 1.25,
+          slider_tablet: settings.slides_per_view_tablet | default: 2,
+          slider_desktop: settings.slides_per_view_desktop | default: 3,
+          slider_wide: settings.slides_per_view_large_desktop | default: 4,
+          slider_gap_mobile: settings.slider_spacing_mobile | default: 16,
+          slider_gap_tablet: settings.slider_spacing_tablet | default: 20,
+          slider_gap_desktop: settings.slider_spacing_desktop | default: 24,
+          slider_gap_wide: settings.slider_spacing_large_desktop | default: 24,
+          slider_pagination: section.settings.show_pagination | default: false,
+          css_mobile_slides: settings.slides_per_view_mobile | default: 1.25,
+          css_tablet_slides: settings.slides_per_view_tablet | default: 2,
+          css_desktop_slides: settings.slides_per_view_desktop | default: 3,
+          css_wide_slides: settings.slides_per_view_large_desktop | default: 4,
+          css_mobile_gap: settings.slider_spacing_mobile | default: 16,
+          css_tablet_gap: settings.slider_spacing_tablet | default: 20,
+          css_desktop_gap: settings.slider_spacing_desktop | default: 24,
+          css_wide_gap: settings.slider_spacing_large_desktop | default: 24,
+          show_pagination: section.settings.show_pagination | default: false,
+          pagination_class: 'blaze-pagination relative top-0 left-0 bottom-0 mt-5 hidden to-sm-block',
+          pagination_attributes: 'slot="container-end"',
+          use_fallback: false
+        -%}
+      {%- endif -%}
+    </div>
+  </div>
+</section>

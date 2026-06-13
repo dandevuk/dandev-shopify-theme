@@ -1,0 +1,88 @@
+{%- if localization.available_languages.size > 1 -%}
+  <localization-form>
+    {%- form 'localization', return_to: request.path -%}
+      <div class="relative">
+        <button
+          class="relative align-center flex g-2 w-100 p-2"
+          type="button"
+          aria-expanded="false"
+          aria-controls="language-list"
+          style="border: 1px solid var(--brand-color-6);border-radius:8px;"
+        >
+          {{ localization.language.endonym_name | capitalize }}
+
+          <div style="margin-left:auto;">
+            {{- 'icon--chevron-down.svg' | inline_asset_content -}}
+          </div>
+        </button>
+
+        <ul
+          id="language-list"
+          role="list"
+          class="list-none w-100 absolute fit-content overflow-auto border-radius-lg z-1"
+          hidden
+          style="top:50px;max-height: 250px;background: var(--body-background-color);"
+        >
+          {%- for language in localization.available_languages -%}
+            <li tabindex="-1" class="pt-1 pb-1 pl-2 pr-2 flex g-2 align-center">
+              <a
+                class="align-center g-1 flex{% if language.iso_code == localization.language.iso_code %} active{% endif %} w-100 h-100"
+                href="#"
+                hreflang="{{ language.iso_code }}"
+                lang="{{ language.iso_code }}"
+                {% if language.iso_code == localization.language.iso_code %}
+                  aria-current="true"
+                {% endif %}
+                data-value="{{ language.iso_code }}"
+                style="text-decoration: none;"
+              >
+                <span>
+                  {{- language.endonym_name | capitalize -}}
+                </span>
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      <input type="hidden" name="language_code" value="{{ localization.language.iso_code }}">
+      <input type="hidden" name="return_to" value="{{request.path}}">
+      <button type="submit" class="visually-hidden">Submit</button>
+    {%- endform -%}
+  </localization-form>
+{%- endif -%}
+
+{%- stylesheet -%}
+  localization-form button,
+  localization-form li {
+    cursor: pointer;
+    transition: background-color 150ms ease;
+  }
+  localization-form button:hover,
+  localization-form li:hover {
+    background-color: #e9e7e7;
+  }
+  localization-form button svg {
+    transition: transform 150ms ease;
+  }
+  localization-form button[aria-expanded='true'] {
+    border-bottom: none !important;
+    border-bottom-right-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+  }
+  localization-form button[aria-expanded='true'] svg {
+    transform: rotate(180deg);
+  }
+  localization-form ul:not([hidden]) {
+    border-right: 1px solid var(--brand-color-6);
+    border-bottom: 1px solid var(--brand-color-6);
+    border-left: 1px solid var(--brand-color-6);
+    border-radius: 8px;
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+  }
+  localization-form li:has(a.active) {
+    color: var(--text-color-highlight);
+    font-weight: 600;
+  }
+{%- endstylesheet -%}

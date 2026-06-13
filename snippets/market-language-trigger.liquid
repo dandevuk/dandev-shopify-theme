@@ -1,0 +1,26 @@
+<button
+  type="button"
+  class="localization"
+  aria-label="Open Market Select Modal"
+  {%- if header == true -%}
+    data-header="true"
+  {%- endif -%}
+  data-modal-trigger="market-language-select"
+>
+  <div class="button-contents">
+    <img
+      src="{{ 'icon-globe-small.svg' |  asset_url }}"
+      width="23"
+      height="23"
+      alt="Globe icon"
+      loading="lazy"
+      decoding="async"
+    >
+
+    {%- if header != true -%}
+      <span>
+        {{ localization.country }}
+      </span>
+    {%- endif -%}
+  </div>
+</button>

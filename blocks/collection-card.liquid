@@ -1,0 +1,56 @@
+{%- liquid
+  echo '<div class="' | append: block.settings.grid_span | append: '"' | append: ' ' | append: block.shopify_attributes | append: '>'
+  render 'collection-card', collection: block.settings.collection_setting, size: block.settings.card_size
+  echo '</div>'
+-%}
+
+{% schema %}
+{
+  "name": "Collection Card",
+  "tag": null,
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection_setting",
+      "label": "Collection"
+    },
+    {
+      "type": "select",
+      "id": "grid_span",
+      "label": "Select",
+      "options": [
+        {
+          "value": "span-6",
+          "label": "Half Width"
+        },
+        {
+          "value": "span-4",
+          "label": "Third Width"
+        }
+      ],
+      "default": "span-6"
+    },
+    {
+      "type": "select",
+      "id": "card_size",
+      "label": "Card size",
+      "options": [
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "rectangle",
+          "label": "Rectangle"
+        }
+      ],
+      "default": "rectangle"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Card"
+    }
+  ]
+}
+{% endschema %}

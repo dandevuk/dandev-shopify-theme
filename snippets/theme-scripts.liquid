@@ -1,0 +1,152 @@
+{% comment %}
+  Any file available in the importmap can be used in other js files for example for Fuse, you can write
+    import Fuse from '@theme/fuse';
+
+    const fuse = new Fuse(myList, { keys: ['title', 'tags'] });
+    const results = fuse.search('lavender');
+{% endcomment %}
+<script type="importmap">
+  {
+    "imports": {
+      "@theme/cart": "{{ 'cart.js' | asset_url }}",
+      "@theme/cart-constants": "{{ 'cart-constants.js' | asset_url }}",
+      "@theme/fuse": "{{ 'fuse.js' | asset_url }}",
+      "@theme/toasty": "{{ 'toasty.js' | asset_url }}",
+      "@theme/klaviyo-back-in-stock": "{{ 'klaviyo-back-in-stock.js' | asset_url }}",
+      "@theme/gift-card": "{{ 'gift-card.js' | asset_url }}",
+      "@theme/lightbox": "{{ 'lightbox.js' | asset_url }}",
+      "@theme/product": "{{ 'product.js' | asset_url }}",
+      "@theme/product-card": "{{ 'product-card.js' | asset_url }}",
+      "@theme/product-quantity": "{{ 'product-quantity.js' | asset_url }}",
+      "@theme/product-gallery": "{{ 'product-gallery.js' | asset_url }}",
+      "@theme/product-gallery-slider": "{{ 'product-gallery-slider.js' | asset_url }}",
+      "@theme/modal-controller": "{{ 'modal-controller.js' | asset_url }}",
+      "@theme/wishlist": "{{ 'wishlist.js' | asset_url }}",
+      "@theme/helpers": "{{ 'helper.js' | asset_url }}",
+      "@theme/critical": "{{ 'critical.js' | asset_url }}",
+      "@theme/video-controls": "{{ 'video-controls.js' | asset_url }}",
+      "@theme/localization-form": "{{ 'localization-form.js' | asset_url }}",
+      "@theme/viewed-product": "{{ 'viewed-product.js' | asset_url }}",
+      "@theme/recommendations": "{{ 'recommendations.js' | asset_url }}",
+      "@theme/cart-ui": "{{ 'cart-ui.js' | asset_url }}",
+      "@theme/cart-render": "{{ 'cart-render.js' | asset_url }}",
+      "@theme/cart-recommendations": "{{ 'cart-recommendations.js' | asset_url }}",
+      "@theme/cart-recommendations-modal": "{{ 'cart-recommendations-modal.js' | asset_url }}",
+      "@theme/product-quick-add": "{{ 'product-quick-add.js' | asset_url }}",
+      "@theme/quickview": "{{ 'quickview.js' | asset_url }}",
+      "@theme/scroll-lock": "{{ 'scroll-lock.js' | asset_url }}",
+      "@theme/search": "{{ 'search.js' | asset_url }}",
+      "@theme/menu": "{{ 'menu.js' | asset_url }}",
+      "@theme/accordion": "{{ 'accordion.js' | asset_url }}",
+      "@theme/blaze-slider": "{{ 'blaze-slider.esm.js' | asset_url }}",
+      "@theme/blaze-slider-controller": "{{ 'blaze-slider-controller.js' | asset_url }}",
+      "@theme/slider-config": "{{ 'slider-config.js' | asset_url }}",
+      "@theme/filters": "{{ 'filters.js' | asset_url }}",
+      "@theme/load-more": "{{ 'load-more.js' | asset_url }}",
+      {% comment %} "@theme/option-selectors": "{{ 'option-selectors.js' | asset_url }}", {% endcomment %}
+      "@theme/custom-option-dropdown": "{{ 'custom-option-dropdown.js' | asset_url }}",
+      "@theme/main-product": "{{ 'main-product.js' | asset_url }}",
+      "@theme/morph": "{{ 'morph.js' | asset_url }}",
+      "@theme/events": "{{ 'events.js' | asset_url }}",
+      "@theme/faq-search": "{{ 'faq-search.js' | asset_url }}",
+      "@theme/cart-messages": "{{ 'cart-messages.js' | asset_url }}",
+      "@theme/cart-prefetch": "{{ 'cart-prefetch.js' | asset_url }}",
+      "@theme/tabs": "{{ 'tabs.js' |  asset_url }}",
+      "@theme/shopify-chat-toggle": "{{ 'shopify-chat-toggle.js' |  asset_url }}",
+      "@theme/header-scroll": "{{ 'header-scroll.js' | asset_url }}",
+      "@theme/header-layout": "{{ 'header-layout.js' | asset_url }}"
+    }
+  }
+</script>
+
+{% comment %}Critical JS (runs on every page, for helpers / site-wide logic){% endcomment %}
+<script
+  src="{{ 'critical.js' | asset_url }}"
+  type="module"
+></script>
+
+{%- if template.name == 'product' -%}
+  <script
+    src="{{ 'product.js' | asset_url }}"
+    type="module"
+  ></script>
+{%- endif -%}
+
+{%- if template.name == 'collection' or template.name == 'search' %}
+  <script
+    src="{{ 'filters.js' | asset_url }}"
+    type="module"
+  ></script>
+{%- endif %}
+
+{%- if template.name == 'collection' or template.name == 'search' or template.name == 'blog' %}
+  <script
+    src="{{ 'load-more.js' | asset_url }}"
+    type="module"
+  ></script>
+{%- endif %}
+
+{%- if localization.available_countries.size > 1 or localization.available_languages.size > 1 -%}
+  <script
+    src="{{ 'localization-form.js' | asset_url }}"
+    type="module"
+  ></script>
+{%- endif -%}
+
+<script src="{{ 'option_selection.js' | shopify_asset_url }}" defer></script>
+
+<script>
+  const Theme = {
+    translations: {
+        cartStrings:  {
+            error: `{{- 'general.cart.error' | t -}}`,
+            quantityError: `{{- 'general.cart.cart_quantity_error_html' | t: quantity: '[quantity]' -}}`
+        },
+        variantStrings: {
+            addToCart: `{{ 'products.product.add_to_cart' | t }}`,
+            soldOut: `{{ 'products.product.sold_out' | t }}`,
+            unavailable: `{{ 'products.product.unavailable' | t }}`,
+            unavailable_with_option: `{{ 'products.product.value_unavailable' | t: option_value: '[value]' }}`,
+            each: `{{- 'products.product.each' | t: money: '[money]' }}`,
+        },
+        accessibilityStrings: {
+            imageAvailable: `{{- 'products.product.media.image_available' | t: index: '[index]' -}}`,
+            shareSuccess: `{{- 'general.share.success_message' | t -}}`
+        },
+        errorStrings: {
+            error: `{{ 'general.cart.error' | t }}`,
+            quantityError: `{{ 'general.cart.cart_quantity_error_html' | t: quantity: '[quantity]' }}`,
+            min_error: `{{- 'general.cart.min_error' | t: min: '[min]' }}`,
+            max_error: `{{- 'general.cart.max_error' | t: max: '[max]' }}`,
+            step_error: `{{- 'general.cart.step_error' | t: step: '[step]' }}`,
+        },
+        {% comment %} wishlist: {{- wishlist_translations | replace: '&quot;', '"' | replace: '=&gt;', ':' -}} {% endcomment %}
+    },
+    routes: {
+        cart_add_url: '{{ routes.cart_add_url | append: '.js' }}',
+        cart_change_url: '{{ routes.cart_change_url }}',
+        cart_update_url: '{{ routes.cart_update_url }}',
+        cart_url: '{{ routes.cart_url }}',
+        predictive_search_url: '{{ routes.predictive_search_url }}',
+        search_url: '{{ routes.search_url }}',
+        root_url: '{{ routes.root_url }}',
+    },
+    template: {
+        name: '{{ template }}',
+    },
+    localization: {
+        currency: {
+            symbol: '{{ localization.country.currency.symbol }}',
+            money_format: '{{ shop.money_format }}',
+            money_with_currency_format: '{{ shop.money_with_currency_format }}'
+        },
+        country: {
+            iso_code: '{{ localization.country.iso_code }}',
+            name: '{{ localization.country.name }}'
+        },
+        market: {
+            handle: '{{ localization.market.handle }}',
+        }
+    }
+  };
+</script>

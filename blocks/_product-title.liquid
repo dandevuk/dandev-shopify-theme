@@ -1,0 +1,27 @@
+{%- liquid
+  if product == blank
+    assign product = closest.product
+  endif
+
+  if product == blank and section.settings.product != blank
+    assign product = section.settings.product
+  endif
+
+  if product != blank and product.variants.size == 0 and product.handle != blank
+    assign product = all_products[product.handle]
+  endif
+-%}
+{%- render 'product-title', product: product, shopify_attributes: block.shopify_attributes -%}
+
+{% schema %}
+{
+  "name": "Title",
+  "tag": null,
+  "settings": [],
+  "presets": [
+    {
+      "name": "Title"
+    }
+  ]
+}
+{% endschema %}

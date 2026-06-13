@@ -1,0 +1,74 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "blog_header_bT99Py": {
+      "type": "blog-header",
+      "blocks": {
+        "heading_HUCcKU": {
+          "type": "heading",
+          "settings": {
+            "heading": "{{ closest.blog.title }}",
+            "heading_type": "h1",
+            "heading_size": "heading-h1"
+          },
+          "blocks": {}
+        },
+        "richtext_pDkwg6": {
+          "type": "richtext",
+          "settings": {
+            "richtext": "<p>Lorem ipsum dolor sit amet consectetur. Suspendisse massa egestas urna massa. Fringilla congue auctor tortor egestas at pretium malesuada.</p>"
+          },
+          "blocks": {}
+        },
+        "blog_filters_g8Q7rb": {
+          "type": "_blog-filters",
+          "name": "Blog Filters",
+          "settings": {},
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "heading_HUCcKU",
+        "richtext_pDkwg6",
+        "blog_filters_g8Q7rb"
+      ],
+      "name": "Blog Header",
+      "settings": {
+        "style_selector": "theme",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "overlay_type": "none",
+        "overlay_styling": "primary",
+        "overlay_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_alignment": "center",
+        "truncate_text": true,
+        "truncate_lines": 3
+      }
+    },
+    "main": {
+      "type": "blog",
+      "settings": {
+        "style_selector": "theme",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "grid_items": 12,
+        "page_width": "page-width",
+        "vertical_spacing": "vertical-padding"
+      }
+    }
+  },
+  "order": [
+    "blog_header_bT99Py",
+    "main"
+  ]
+}

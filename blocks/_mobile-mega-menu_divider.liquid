@@ -1,0 +1,25 @@
+<div
+  class="divider w-100 mt-1 mb-1"
+  style=" height: 1px;background-color: {{ block.settings.color }};"
+  {{ block.shopify_attributes }}
+></div>
+
+{% schema %}
+{
+  "name": "Mobile Mega Menu Divider",
+  "tag": null,
+  "settings": [
+    {
+      "type": "color",
+      "id": "color",
+      "label": "Divider Color",
+      "default": "#000000"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mobile Mega Menu Divider"
+    }
+  ]
+}
+{% endschema %}

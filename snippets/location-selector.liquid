@@ -1,0 +1,62 @@
+{%- liquid
+  assign title = 'location_selector.title' | t
+  assign title_with_language = 'location_selector.title_with_language' | t
+  assign text = 'location_selector.text' | t
+
+  if localization.available_languages.size > 1
+    assign title = title_with_language
+  endif
+%}
+
+<div data-modal="location-selector-id" class="modal-overlay" hidden aria-hidden="true" inert>
+  <div class="modal-panel relative" style="max-height: 90vh;overflow:visible;">
+    <header class="modal-header flex flex-end absolute" style="top:10px;right:10px;">
+      <button
+        type="button"
+        data-modal-close="location-selector-id"
+        class="modal-close border-radius-circle flex-center align-center"
+        aria-label="Close modal"
+        style="width:30px;height:30px;background-color: var(--brand-color-2);color:#fff;"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="12px"
+          height="12px"
+          viewBox="0 0 20.723 20.723"
+        >
+          <g id="Icon_feather-menu" data-name="Icon feather-menu" transform="translate(-4.239 -10.408)">
+            <path id="Path_6" data-name="Path 6" d="M4.5,18H32.806" transform="translate(14.139 -5.149) rotate(45)" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1"/>
+            <path id="Path_11736" data-name="Path 11736" d="M0,0H28.306" transform="translate(24.608 10.761) rotate(135)" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1"/>
+          </g>
+        </svg>
+      </button>
+    </header>
+
+    <div class="modal-content flex-center align-center g-3 to-sm-flex-col-reverse">
+      <div class="flex-1 w-100 h-100 flex flex-col justify-center pl-4 pb-4 {% if settings.location_selector_image != blank %}pr-0{% else %}pr-4{% endif %} pt-4 to-sm-pr-4">
+        <h3 class="heading-h3">{{ title }}</h3>
+        <p class="body-text mt-0">{{ text }}</p>
+
+        <div class="flex flex-col g-2">
+          {%- render 'country-select' -%}
+          {%- render 'language-select-modal' -%}
+        </div>
+      </div>
+
+      {%- if settings.location_selector_image != blank %}
+        <div class="h-100 w-50 to-sm-w-100 image-container to-sm-hidden">
+          <div
+            class="w-100 h-100 overflow-hidden"
+            style="max-height: 400px;border-radius: 8px;border-top-left-radius: 0 !important;border-bottom-left-radius: 0 !important;"
+          >
+            {{
+              settings.location_selector_image
+              | image_url: width: 1000
+              | image_tag: class: 'w-100 h-100 object-cover'
+            }}
+          </div>
+        </div>
+      {%- endif %}
+    </div>
+  </div>
+</div>

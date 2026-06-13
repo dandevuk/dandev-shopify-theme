@@ -1,0 +1,146 @@
+{%- liquid
+  assign lazy_enabled = false
+  if section.index > 2
+    assign lazy_enabled = true
+  endif
+
+  capture slider_content
+    content_for 'blocks'
+  endcapture
+
+  assign nav_scope = '#shopify-section-' | append: section.id
+  assign total_slides = block.blocks.size
+
+  render 'slider-container', block: block, slides: slider_content, total_slides: total_slides, nav_scope: nav_scope, lazy_enabled: lazy_enabled, custom_layout: block.settings.custom_layout, show_pagination: block.settings.show_pagination, slides_per_view_mobile: block.settings.slides_per_view_mobile, slides_per_view_desktop: block.settings.slides_per_view_desktop, slides_per_view_large_desktop: block.settings.slides_per_view_large_desktop, slides_per_view_tablet: block.settings.slides_per_view_tablet, centered_slides: block.settings.centered_slides, navigation_style: block.settings.navigation_style, shopify_attributes: block.shopify_attributes
+-%}
+
+{% schema %}
+{
+  "name": "Slider Content",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Slider Behaviour"
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Enable Loop",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Enable Autoplay",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "centered_slides",
+      "label": "Centered Slides",
+      "options": [
+        {
+          "value": "none",
+          "label": "No"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "range",
+      "id": "autoplay_delay",
+      "label": "Autoplay Delay (s)",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 3,
+      "info": "Only used when autoplay is enabled."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pagination",
+      "label": "Show Pagination Dots",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "navigation_style",
+      "label": "Navigation Arrows Style",
+      "options": [
+        {
+          "value": "default",
+          "label": "Default"
+        },
+        {
+          "value": "inline",
+          "label": "Inline"
+        }
+      ],
+      "info": "Default will display arrows outside of the slider if the Navigation Arrows block is present, inline will display arrows on top of the slider content."
+    },
+    {
+      "type": "header",
+      "content": "Custom Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_layout",
+      "label": "Custom layout",
+      "info": "If enabled, you can set custom slides per view for different screen sizes. If disabled, the theme defaults will be used.",
+      "default": false
+    },
+    {
+      "type": "number",
+      "id": "slides_per_view_mobile",
+      "label": "Slides per view (mobile)",
+      "info": "Leave blank to use the theme default.",
+      "visible_if": "{{ block.settings.custom_layout == true }}"
+    },
+    {
+      "type": "number",
+      "id": "slides_per_view_tablet",
+      "label": "Slides per view (tablet)",
+      "info": "Leave blank to use the theme default.",
+      "visible_if": "{{ block.settings.custom_layout == true }}"
+    },
+    {
+      "type": "number",
+      "id": "slides_per_view_desktop",
+      "label": "Slides per view (desktop)",
+      "info": "Leave blank to use the theme default.",
+      "visible_if": "{{ block.settings.custom_layout == true }}"
+    },
+    {
+      "type": "number",
+      "id": "slides_per_view_large_desktop",
+      "label": "Slides per view (large desktop)",
+      "info": "Leave blank to use the theme default.",
+      "visible_if": "{{ block.settings.custom_layout == true }}"
+    }
+  ],
+  "blocks": [
+    { "type": "_slider-products" },
+    { "type": "_slider-collections" },
+    { "type": "_slider-articles" },
+    { "type": "_slider-usps" }
+  ],
+  "presets": [
+    {
+      "name": "Slider Content"
+    }
+  ]
+}
+{% endschema %}

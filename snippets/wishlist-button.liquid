@@ -1,0 +1,108 @@
+{%- liquid
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  #
+  #   -== Overview ==-
+  #       This is used to render a V3-Wishlist Button. This is how it is used:
+  #
+  #   -== Parameters ==-
+  #     * product - Shopify Product, required.
+  #     * variant - Shopify Variant, optional.
+  #
+  #   -== Usage ==-
+  #         render 'wishlist-button' product: product
+  #
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-%}
+{%- if product.handle != blank -%}
+  <button
+    type="button"
+    aria-label="{{- 'wishlist.button.add' | t -}}"
+    class="button-wishlist {{ wishlist_icon }}"
+    data-product-handle="{{- product.handle -}}"
+    data-product-id="{{ product.id }}"
+    data-variant-id="{%-if variant != blank -%}{{- variant.id -}}{%- else -%}{{- product.selected_or_first_available_variant.id -}}{%- endif -%}"
+    data-variant-price="{%- if variant != blank -%}{{- variant.price -}}{%- else -%}{{- product.selected_or_first_available_variant.price -}}{%- endif -%}"
+    wishlist-button
+    loading
+  >
+    {%- if wishlist_icon == 'outline' -%}
+      {{ 'icon--wishlist-heart-outline.svg' | inline_asset_content }}
+    {%- else -%}
+      {{ 'icon--wishlist-heart.svg' | inline_asset_content }}
+    {%- endif -%}
+
+    {% comment %}
+      <img class="active-heart" src="{{ 'v3-wishlist-heart-active.svg' | asset_url }}" alt="Active Wishlist Button" width="20px" height="20px"  loading="lazy" decoding="async"/>
+      <img class="inactive-heart" src="{{ 'v3-wishlist-heart-inactive.svg' | asset_url }}" alt="Inactive Wishlist Button" width="20px" height="20px" loading="lazy" decoding="async"/>
+    {% endcomment %}
+  </button>
+{%- endif -%}
+
+{% stylesheet %}
+  [wishlist-button] {
+    z-index: 10;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    border: none;
+    outline: none;
+    background: none;
+    color: #fff;
+    cursor: pointer;
+    transition: opacity 0.15s ease-in;
+    appearance: none;
+  }
+
+  [wishlist-button].outline {
+    z-index: 10;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    border: none;
+    outline: none;
+    background: none;
+    color: var(--brand-color-2);
+    cursor: pointer;
+    transition: opacity 0.15s ease-in;
+    appearance: none;
+  }
+
+  [wishlist-button] svg,
+  [wishlist-button] img.active-heart,
+  [wishlist-button] img.inactive-heart {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    color: currentcolor;
+    pointer-events: none;
+  }
+  [wishlist-button] img.active-heart {
+    display: none;
+  }
+
+  [wishlist-button] img.inactive-heart {
+    display: block;
+  }
+
+  /* Active State */
+  [wishlist-button].active-wishlist svg path {
+    fill: currentcolor;
+  }
+
+  [wishlist-button].active-wishlist img.active-heart {
+    display: block;
+  }
+
+  [wishlist-button].active-wishlist img.inactive-heart {
+    display: none;
+  }
+
+  [wishlist-button][loading] {
+    opacity: 0;
+  }
+
+  [wishlist-button]:not(.outline).active-wishlist circle {
+    fill: var(--brand-color-2);
+    stroke: transparent;
+  }
+{% endstylesheet %}

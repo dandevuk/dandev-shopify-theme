@@ -1,0 +1,29 @@
+<div data-modal="size-guide-id" class="modal-overlay" hidden aria-hidden="true" inert>
+  <div class="modal-panel p-4 relative" style="max-height: 90vh; overflow-y: auto;">
+    <header class="modal-header flex flex-end absolute top-0 right-0 mt-3 mr-3">
+      <button
+        type="button"
+        data-modal-close="size-guide-id"
+        class="modal-close border-radius-circle"
+        aria-label="Close modal"
+        style="display: flex;justify-content: center;align-items: center;width: 30px;height: 30px;background-color: var(--brand-color-2);color:#fff;"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="12px"
+          height="12px"
+          viewBox="0 0 20.723 20.723"
+        >
+          <g id="Icon_feather-menu" data-name="Icon feather-menu" transform="translate(-4.239 -10.408)">
+            <path id="Path_6" data-name="Path 6" d="M4.5,18H32.806" transform="translate(14.139 -5.149) rotate(45)" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1"/>
+            <path id="Path_11736" data-name="Path 11736" d="M0,0H28.306" transform="translate(24.608 10.761) rotate(135)" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1"/>
+          </g>
+        </svg>
+      </button>
+    </header>
+
+    <div class="modal-content">
+      {{ settings.size_guide_page.content }}
+    </div>
+  </div>
+</div>

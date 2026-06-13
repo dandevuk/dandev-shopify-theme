@@ -1,0 +1,56 @@
+{%- liquid
+  if product == blank
+    assign product = closest.product
+  endif
+
+  if product == blank and section.settings.product != blank
+    assign product = section.settings.product
+  endif
+
+  if product != blank and product.variants.size == 0 and product.handle != blank
+    assign product = all_products[product.handle]
+  endif
+-%}
+{%- render 'selling-plan-selector',
+  product: product,
+  section_id: section.id,
+  option_type: block.settings.option_select_type,
+  block_shopify_attributes: block.shopify_attributes,
+  add_border_bottom: block.settings.add_border_bottom
+-%}
+
+{% schema %}
+{
+  "name": "Selling Plan Selector",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "option_select_type",
+      "label": "Option Select Type",
+      "options": [
+        {
+          "value": "radio",
+          "label": "Radio"
+        },
+        {
+          "value": "select",
+          "label": "Select"
+        }
+      ],
+      "default": "radio"
+    },
+    {
+      "type": "checkbox",
+      "id": "add_border_bottom",
+      "label": "Add Border Bottom",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Selling Plan Selector"
+    }
+  ]
+}
+{% endschema %}

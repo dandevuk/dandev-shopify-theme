@@ -1,0 +1,48 @@
+{%- liquid
+  assign usp_group = block.settings.usp_group
+  assign usps = usp_group.usps.value
+-%}
+
+<div class="product-usp-group grid-section g-2 p-2 hide-if-empty">
+  {%- if usps != blank -%}
+    {%- for usp in usps limit: 3 -%}
+      <div class="span-4 span-sm-2 h-auto" {{ block.shopify_attributes }}>
+        {%- content_for 'block', type: '_usp', id: 'usp', closest.metaobject.usp: usp, loop_usp: usp -%}
+      </div>
+    {%- endfor -%}
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .product-usp-group {
+    border: 1px solid color-mix(in srgb, var(--brand-color-1) 35%, transparent);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "USP Group",
+  "tag": null,
+  "settings": [
+    {
+      "type": "metaobject",
+      "id": "usp_group",
+      "label": "USP Group",
+      "metaobject_type": "usp_group"
+    }
+  ],
+  "blocks": [{ "type": "_usp" }],
+  "presets": [
+    {
+      "name": "USP Group",
+      "blocks": [
+        {
+          "type": "_usp",
+          "id": "usp",
+          "static": true
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,299 @@
+{%- liquid
+  assign lazy_enabled = false
+  if section.index > 2
+    assign lazy_enabled = true
+  endif
+
+  assign page_width = section.settings.page_width
+  assign nav_scope = '#shopify-section-' | append: section.id
+
+  assign slider_overflow_class = block.settings.slider_overflow
+
+  assign usps = block.settings.usps | default: metaobjects.usp_group[block.settings.usp_group].usps.value
+  assign total_slides = usps.size
+
+  capture slider_content
+    if usps != blank
+      for usp in usps
+        echo '<div class="h-auto" {{ block.shopify_attributes }}>'
+          content_for 'block', type: '_usp', id: 'usp', closest.metaobject.usp: usp, loop_usp: usp, lazy: lazy_enabled
+        echo '</div>'
+      endfor
+    endif
+  endcapture
+-%}
+
+<div class="{{ page_width }} {{ slider_overflow_class }} {{ block.settings.navigation_display }} {{ block.settings.navigation_style }}">
+  {%- render 'slider-container', block: block, slides: slider_content, total_slides: total_slides, nav_scope: nav_scope, lazy_enabled: lazy_enabled, custom_layout: block.settings.custom_layout, show_pagination: block.settings.show_pagination, show_scrollbar: block.settings.scrollbar_display, slides_per_view_mobile: block.settings.slides_per_view_mobile, slides_per_view_desktop: block.settings.slides_per_view_desktop, slides_per_view_large_desktop: block.settings.slides_per_view_large_desktop, slides_per_view_tablet: block.settings.slides_per_view_tablet, centered_slides: block.settings.centered_slides, initial_slide: block.settings.initial_slide, shopify_attributes: block.shopify_attributes -%}
+</div>
+
+{% schema %}
+{
+  "name": "USP Slider",
+  "tag": null,
+  "settings": [
+    {
+      "type": "metaobject",
+      "id": "usp_group",
+      "label": "USP Group",
+      "metaobject_type": "usp_group"
+    },
+    {
+      "type": "metaobject_list",
+      "id": "usps",
+      "label": "USP",
+      "metaobject_type": "usp"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_advanced_settings",
+      "label": "Show Advanced Settings",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Layout",
+      "visible_if": "{{ block.settings.show_advanced_settings == true }}"
+    },
+    {
+      "type": "select",
+      "id": "slider_overflow",
+      "label": "Slider Overflow",
+      "options": [
+        {
+          "value": "no-overflow",
+          "label": "None"
+        },
+        {
+          "value": "desktop-slider-overflow",
+          "label": "Desktop"
+        },
+        {
+          "value": "mobile-slider-overflow",
+          "label": "Mobile"
+        },
+        {
+          "value": "desktop-slider-overflow mobile-slider-overflow",
+          "label": "Desktop and Mobile"
+        }
+      ],
+      "default": "mobile-slider-overflow",
+      "info": "Set the slider page width overflow behaviour for different screen sizes.",
+      "visible_if": "{{ block.settings.show_advanced_settings == true }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_layout",
+      "label": "Custom Slides Per View",
+      "info": "If enabled, you can set custom slides per view for different screen sizes. If disabled, the theme defaults will be used.",
+      "default": false,
+      "visible_if": "{{ block.settings.show_advanced_settings == true }}"
+    },
+    {
+      "type": "number",
+      "id": "slides_per_view_mobile",
+      "label": "Slides per view (mobile)",
+      "info": "Leave blank to use the theme default.",
+      "visible_if": "{{ block.settings.custom_layout == true and block.settings.show_advanced_settings == true }}"
+    },
+    {
+      "type": "number",
+      "id": "slides_per_view_tablet",
+      "label": "Slides per view (tablet)",
+      "info": "Leave blank to use the theme default.",
+      "visible_if": "{{ block.settings.custom_layout == true and block.settings.show_advanced_settings == true }}"
+    },
+    {
+      "type": "number",
+      "id": "slides_per_view_desktop",
+      "label": "Slides per view (desktop)",
+      "info": "Leave blank to use the theme default.",
+      "visible_if": "{{ block.settings.custom_layout == true and block.settings.show_advanced_settings == true }}"
+    },
+    {
+      "type": "number",
+      "id": "slides_per_view_large_desktop",
+      "label": "Slides per view (large desktop)",
+      "info": "Leave blank to use the theme default.",
+      "visible_if": "{{ block.settings.custom_layout == true and block.settings.show_advanced_settings == true }}"
+    },
+    {
+      "type": "header",
+      "content": "Slider Behaviour",
+      "visible_if": "{{ block.settings.show_advanced_settings == true }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Enable Loop",
+      "default": false,
+      "visible_if": "{{ block.settings.show_advanced_settings == true }}"
+    },
+    {
+      "type": "select",
+      "id": "centered_slides",
+      "label": "Centered Slides",
+      "options": [
+        {
+          "value": "none",
+          "label": "No"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ block.settings.show_advanced_settings == true }}"
+    },
+    {
+      "type": "number",
+      "id": "initial_slide",
+      "label": "Initial Slide",
+      "info": "The initial slide to display.",
+      "default": 0,
+      "visible_if": "{{ block.settings.show_advanced_settings == true and block.settings.centered_slides != 'none' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Enable Autoplay",
+      "default": false,
+      "visible_if": "{{ block.settings.show_advanced_settings == true }}"
+    },
+    {
+      "type": "range",
+      "id": "autoplay_delay",
+      "label": "Autoplay Delay (s)",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 3,
+      "info": "Only used when autoplay is enabled.",
+      "visible_if": "{{ block.settings.show_advanced_settings == true and block.settings.autoplay == true }}"
+    },
+    {
+      "type": "header",
+      "content": "Slider Navigation",
+      "visible_if": "{{ block.settings.show_advanced_settings == true }}"
+    },
+    {
+      "type": "select",
+      "id": "navigation_display",
+      "label": "Navigation Display",
+      "options": [
+        {
+          "value": "no-navigation",
+          "label": "None"
+        },
+        {
+          "value": "desktop-navigation",
+          "label": "Desktop"
+        },
+        {
+          "value": "mobile-navigation",
+          "label": "Mobile"
+        },
+        {
+          "value": "both-navigation",
+          "label": "Both"
+        }
+      ],
+      "info": "Set the navigation display for different screen sizes.",
+      "default": "desktop-navigation",
+      "visible_if": "{{ block.settings.show_advanced_settings == true }}"
+    },
+    {
+      "type": "select",
+      "id": "navigation_style",
+      "label": "Navigation Arrows Style",
+      "options": [
+        {
+          "value": "default",
+          "label": "Default"
+        },
+        {
+          "value": "inline",
+          "label": "Inline"
+        }
+      ],
+      "info": "Default will display arrows outside of the slider if the Navigation Arrows block is present, inline will display arrows on top of the slider content.",
+      "default": "default",
+      "visible_if": "{{ block.settings.show_advanced_settings == true and block.settings.navigation_display != 'none' }}"
+    },
+    {
+      "type": "select",
+      "id": "pagination_display",
+      "label": "Pagination Display",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        }
+      ],
+      "info": "Set the pagination display for different screen sizes.",
+      "default": "desktop",
+      "visible_if": "{{ block.settings.show_advanced_settings == true }}"
+    },
+    {
+      "type": "select",
+      "id": "scrollbar_display",
+      "label": "Scrollbar Display",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        }
+      ],
+      "info": "Set the scrollbar display for different screen sizes.",
+      "default": "none",
+      "visible_if": "{{ block.settings.show_advanced_settings == true }}"
+    }
+  ],
+  "blocks": [{ "type": "_usp" }],
+  "presets": [
+    {
+      "name": "USP Slider",
+      "blocks": [
+        {
+          "type": "_usp",
+          "id": "usp",
+          "static": true
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,20 @@
+{%- render 'product-card', show_quickview_button: block.settings.show_quickview_button -%}
+{% schema %}
+{
+  "name": "Product Card",
+  "tag": null,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_quickview_button",
+      "label": "Show Quickview Button",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Card"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,120 @@
+<main-product
+  data-has-default-variant="{{ product.has_only_default_variant }}"
+  data-section-id="{{ section.id }}"
+  data-product-id="{{ product.id }}"
+  data-product-url="{{ product.url }}"
+  class="quick-view-wrapper fixed inset-0 flex flex-end overflow-hidden"
+  style="z-index: 9999"
+>
+  <quick-view-inner
+    class="content relative h-100 p-3 pt-0 pb-4 overflow-hidden"
+    style=" width: min(400px, 90vw); max-width: 340px; overflow-y: auto;background-color: var(--body-background-color);"
+  >
+    <button
+      class="close absolute top-0 right-0 cursor-pointer p-1 m-1 border-radius-circle"
+      style="z-index: 2;background: var(--brand-color-2);color: #fff;"
+      aria-label="Close quick view"
+      close-quick-view
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="12px"
+        height="12px"
+        viewBox="0 0 20.723 20.723"
+      >
+        <g id="Icon_feather-menu" data-name="Icon feather-menu" transform="translate(-4.239 -10.408)">
+          <path id="Path_6" data-name="Path 6" d="M4.5,18H32.806" transform="translate(14.139 -5.149) rotate(45)" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1"/>
+          <path id="Path_11736" data-name="Path 11736" d="M0,0H28.306" transform="translate(24.608 10.761) rotate(135)" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1"/>
+        </g>
+      </svg>
+    </button>
+    <div class="modal-body absolute inset-0 overflow-y-auto w-100 pl-2 pr-2" style="z-index: 1;">
+      <!-- Quick view content will be loaded here -->
+      <div style="width: calc(100% + calc(2 * var(--content-spacing-2))); margin-inline: calc(-1 * var(--content-spacing-2));">
+        {%- render 'quickview-gallery' -%}
+      </div>
+
+      <div class="product-form flex flex-col g-3">
+        {%- capture form_content -%}
+          {%- render 'product-title', tag: 'h2', style: 'heading-h2' -%}
+          {%- render 'product-variant-prices', product: product, price_format: 'variant_price' -%}
+          {%- render 'variant-selector', product: product, section_id: section.id, option_type: 'select' -%}
+          {%- render 'selling-plan-selector', product: product, section_id: section.id, option_type: 'select' -%}
+          {%- render 'product-submit-wrapper', hide_wishlist_button: true, card: true -%}
+        {%- endcapture -%}
+        {%- assign section_id = section.id -%}
+        {%- render 'product-form',
+          product: product,
+          content: form_content,
+          section_id: section_id,
+          enable_history: false
+        -%}
+      </div>
+      <a
+        href="{{ product.selected_or_first_available_variant.url }}"
+        quickview-link
+        class="w-100 text-center mt-3 block"
+        style="color: var(--brand-color-2)"
+      >
+        {{ 'products.product.view_full_product' | t }}
+      </a>
+    </div>
+  </quick-view-inner>
+</main-product>
+
+{%- stylesheet -%}
+  /* Ensure quickview overlay wrapper visual state */
+  quickview-modal .quick-view-wrapper {
+    display: flex;
+    background: rgb(0 0 0 / 80%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  quickview-modal[open] .quick-view-wrapper {
+    pointer-events: auto;
+    opacity: 1;
+  }
+
+  quickview-modal .quick-view-wrapper quick-view-inner {
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  quickview-modal[open] .quick-view-wrapper quick-view-inner {
+    /* Ensure quickview panel width matches the side-cart drawer.
+     Preferred: remove the inline max-width (done above).
+     Fallback: override with a higher-specificity rule so the quickview
+     matches the cart drawer width (min 400px or 90vw). */
+    quickview-modal quick-view-inner {
+      width: min(400px, 90vw);
+      max-width: min(400px, 90vw);
+    }
+
+    transform: translateX(0);
+  }
+
+  quickview-modal [close-quick-view] {
+    transition: 0.3s ease;
+  }
+
+  quickview-modal [close-quick-view]:hover {
+    rotate: 90deg;
+  }
+
+  quickview-modal .quickview-selects {
+    flex-direction: column;
+    gap: var(--content-spacing-3);
+  }
+
+  quickview-modal .custom-select-option-name {
+    display: inline-flex !important;
+  }
+
+  quickview-modal .quickview-selects,
+  quickview-modal .variant-price-wrapper {
+    padding-bottom: var(--content-spacing-3);
+    border-bottom: 1px solid var(--brand-color-5);
+  }
+{%- endstylesheet -%}

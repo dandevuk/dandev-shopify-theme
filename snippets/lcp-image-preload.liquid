@@ -1,0 +1,44 @@
+{%- comment -%}
+  Emits an early LCP preload hint from the document head via image_tag (Link response header).
+
+  @param {image} image - Desktop hero image
+  @param {image} image_mobile - Optional mobile hero image
+  @param {number} max_width - Desktop display width cap (default: 1600)
+  @param {number} mobile_width - Mobile display width cap (default: 600)
+  @param {string} image_format - CDN format, e.g. 'webp' (default: 'webp')
+{%- endcomment -%}
+
+{%- liquid
+  assign image_format = image_format | default: 'webp'
+  assign mobile_width = mobile_width | plus: 0 | default: 600
+  assign max_width = max_width | plus: 0 | default: 1600
+  assign widths = '100,200,300,400,600,800,1000,1200,1400,1600,2000' | split: ','
+
+  if image_mobile != blank
+    assign lcp_image = image_mobile
+    assign lcp_max = mobile_width
+    assign sizes = '(max-width: 767px) ' | append: mobile_width | append: 'px, ' | append: mobile_width | append: 'px'
+  else
+    assign lcp_image = image
+    assign lcp_max = max_width
+    assign sizes = '(max-width: 767px) 100vw, ' | append: max_width | append: 'px'
+  endif
+
+  assign srcset = ''
+  for width in widths
+    assign w = width | plus: 0
+    if w <= lcp_max
+      assign src = lcp_image | image_url: width: w, format: image_format
+      assign srcset = srcset | append: src | append: ' ' | append: w | append: 'w'
+      unless forloop.last
+        assign srcset = srcset | append: ', '
+      endunless
+    endif
+  endfor
+
+  assign preload_width = 800
+  if lcp_max < preload_width
+    assign preload_width = lcp_max
+  endif
+-%}
+{{- lcp_image | image_url: width: preload_width, format: image_format | image_tag: preload: true, fetchpriority: 'high', format: image_format, srcset: srcset, sizes: sizes, alt: '', class: 'visually-hidden', width: lcp_image.width, height: lcp_image.height -}}

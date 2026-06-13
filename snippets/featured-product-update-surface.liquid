@@ -1,0 +1,37 @@
+{%- doc -%}
+  Product form regions used by the Section Rendering API for featured product
+  variant and selling plan updates.
+  @param {product} product - The product object
+  @param {string} section_id - Section id for unique input names
+  @param {string} [option_type] - 'radio' or 'select'
+  @param {string} [price_format] - Price display format
+{%- enddoc -%}
+
+{%- liquid
+  assign option_type = option_type | default: 'radio'
+  assign price_format = price_format | default: 'variant_price'
+-%}
+
+{%- render 'variant-selector',
+  product: product,
+  section_id: section_id,
+  option_type: option_type
+-%}
+{%- render 'selling-plan-selector',
+  product: product,
+  section_id: section_id,
+  option_type: option_type
+-%}
+<div class="product-price">
+  {%- render 'product-variant-prices',
+    product: product,
+    price_format: price_format
+  -%}
+</div>
+{%- render 'product-submit-wrapper',
+  product: product,
+  section_id: section_id,
+  add_to_cart_style: 'button-1',
+  show_quantity: true,
+  show_wishlist_button: true
+-%}

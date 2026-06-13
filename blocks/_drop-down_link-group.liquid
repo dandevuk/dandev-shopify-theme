@@ -1,0 +1,86 @@
+{%- if block.settings.menu.links.size > 1 -%}
+  <div
+    class="mega-menu-links-container flex-start flex-col g-4 w-auto"
+    {{ block.shopify_attributes }}
+  >
+    <nav class="sublinks-container flex-start flex-col g-2">
+      <div class="dropdown-title heading-h3 m-0">
+        {% if block.settings.link_title != blank -%}
+          {{- block.settings.link_title -}}
+        {%- else -%}
+          {{- block.settings.menu.title -}}
+        {%- endif %}
+      </div>
+
+      {%- for sublink in block.settings.menu.links -%}
+        <a
+          class="sublink {% if forloop.index == 1 %}first{% endif %}"
+          href="{{ sublink.url }}"
+          aria-label="Link to {{ sublink.title }}"
+        >
+          {{- sublink.title -}}
+        </a>
+      {%- endfor -%}
+    </nav>
+  </div>
+{%- else -%}
+  {%- comment -%} NO SUBLINKS, DO NOT CREATE DROPDOWN {%- endcomment -%}
+  <div
+    class="mega-menu-links-container flex-start flex-col g-4 w-auto"
+    {{ block.shopify_attributes }}
+  >
+    <a
+      class="top-level-link heading-h3 m-0"
+      href="{{ block.settings.menu.url }}"
+      aria-label="Link to {{ block.settings.link_title }}"
+    >
+      {%- if block.settings.link_title != blank -%}
+        {{ block.settings.link_title }}
+      {%- else -%}
+        {{ block.settings.menu.title }}
+      {%- endif -%}
+    </a>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .mega-menu-links-container .sublinks-container .dropdown-title,
+  .mega-menu-links-container .top-level-link {
+    color: var(--brand-color-2);
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .mega-menu-links-container .sublinks-container .sublink {
+    text-decoration: none;
+  }
+
+  .mega-menu-dropdown .sublinks-container .sublink {
+    text-decoration: none;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Drop Down Link Group",
+  "tag": null,
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu Links"
+    },
+    {
+      "type": "text",
+      "id": "link_title",
+      "label": "Menu Item Title",
+      "info": "This overrides the existing title of the menu"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Drop Down Link Group"
+    }
+  ]
+}
+{% endschema %}

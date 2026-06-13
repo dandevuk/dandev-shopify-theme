@@ -1,0 +1,64 @@
+<div
+  class="span-5 section-content flex flex-col {{ block.settings.content_spacing }}"
+  {{ block.shopify_attributes }}
+>
+  {%- content_for 'blocks' -%}
+</div>
+
+{% schema %}
+{
+  "name": "Section Content",
+  "tag": null,
+  "blocks": [
+    { "type": "heading" },
+    { "type": "richtext" },
+    { "type": "links-container" },
+    { "type": "searchbar" },
+    { "type": "contact-details" },
+    { "type": "spacer" }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "content_spacing",
+      "label": "Vertical Content Spacing",
+      "options": [
+        {
+          "value": "g-1",
+          "label": "Small"
+        },
+        {
+          "value": "g-2",
+          "label": "Medium"
+        },
+        {
+          "value": "g-3",
+          "label": "Large"
+        },
+        {
+          "value": "g-4",
+          "label": "Extra Large"
+        }
+      ],
+      "default": "g-3"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Section Content",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "richtext"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

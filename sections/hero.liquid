@@ -1,0 +1,470 @@
+{%- liquid
+  # HEADER
+  assign transparent_header = section.settings.transparent_header
+
+  # CONTENT
+  assign image = section.settings.image
+  assign mobile_image = section.settings.mobile_image
+
+  # LAYOUT
+  assign layout_style = section.settings.layout_style
+  assign text_alignment = section.settings.text_alignment
+  assign truncate_text = section.settings.truncate_text
+  assign truncate_lines = section.settings.truncate_lines
+  assign desktop_height = section.settings.desktop_height
+  assign mobile_height = section.settings.mobile_height
+  assign text_vertical_position = section.settings.text_content_vertical_position
+  assign text_horizontal_position = section.settings.text_content_horizontal_position
+
+  # STYLING
+  assign style_selector = section.settings.style_selector
+  assign section_styling = section.settings.section_styling
+  assign overlay_type = section.settings.overlay_type
+  assign overlay_styling = section.settings.overlay_styling
+  assign overlay_background = section.settings.overlay_color
+  assign background_color = section.settings.background_color
+  assign text_color = section.settings.text_color
+-%}
+
+<div
+  class="hero-wrapper section-container {{ section_styling }} {{ layout_style }} {% if transparent_header %}transparent-header{% endif %}"
+  style="--height: {{ desktop_height }}px;--mobile-height: {{ mobile_height }}px;{% if style_selector == 'custom' %}background: {{ background_color }}; color: {{ text_color }};{% endif %}"
+>
+  <div class="hero-container overflow-hidden margin-auto relative ">
+    <div class="page-width flex {% if layout_style == 'full-width' %}{{ text_vertical_position }}{% endif %}">
+      <div class="hero-grid grid-section">
+        <div
+          class="content no-text-margins {% if layout_style == 'full-width' %}{{ text_horizontal_position }} {{ text_alignment }}{% else %}span-6 flex align-center{% endif %} relative container-v-padding {% if truncate_text %}truncate-text{% endif %}"
+          {% if truncate_text %}
+            style="--webkit-line-clamp: {{ truncate_lines }};"
+          {% endif %}
+        >
+          {% content_for 'blocks' %}
+        </div>
+        {%- if image != blank -%}
+          <div class="media {% if layout_style == 'side-by-side' %}span-6{% else %}absolute inset-0{% endif %} h-100 w-100">
+            <div class="media-item">
+              <div class="media-wrapper relative h-100 overflow-hidden">
+                <div class="media-container absolute inset-0 h-100 w-100">
+                  {%- if layout_style == 'side-by-side' -%}
+                    {%- render 'image',
+                      image: image,
+                      image_mobile: mobile_image,
+                      mobile_width: 600,
+                      max_width: 1000,
+                      image_format: 'webp',
+                      use_placeholder: true,
+                      lazy: false,
+                      preload_hint: false,
+                      fetchpriority_high: true
+                    -%}
+                  {%- else -%}
+                    {%- render 'image',
+                      image: image,
+                      image_mobile: mobile_image,
+                      mobile_width: 600,
+                      max_width: 1600,
+                      image_format: 'webp',
+                      use_placeholder: true,
+                      lazy: false,
+                      preload_hint: false,
+                      fetchpriority_high: true
+                    -%}
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+          </div>
+          {%- if layout_style == 'full-width' and overlay_type != 'none' -%}
+            <div
+              class="absolute inset-0 h-100 w-100 overlay {% if overlay_styling == 'primary' %}gradient-bg{% elsif overlay_styling == 'secondary' %}gradient-bg-alt{% endif %}"
+              {% if section.settings.overlay_type == 'custom' %}
+                style="background: {{ overlay_background }};"
+              {% endif %}
+            ></div>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- stylesheet -%}
+  .hero .page-width {
+    min-height: var(--height);
+  }
+
+  body:has(.announcement-bar-section) .hero-wrapper .page-width {
+    min-height: calc(var(--height) + 30px);
+  }
+
+  @media only screen and (max-width: 767.98px) {
+    .hero .page-width {
+      min-height: var(--mobile-height);
+    }
+    body:has(.announcement-bar-section) .hero-wrapper .page-width {
+      min-height: calc(var(--mobile-height) + 30px);
+    }
+  }
+
+  @media only screen and (max-width: 767.98px) {
+    .hero .hero-container .hero-grid .content {
+      order: 2;
+    }
+  }
+
+  /* Breadcrumbs */
+
+  .hero .hero-container .hero-grid .content .breadcrumbs-container ul {
+    margin: 0;
+  }
+
+  @media only screen and (max-width: 767.98px) {
+    .hero .hero-container .hero-grid .content .breadcrumbs-container ul li {
+      padding: 0 4px;
+    }
+  }
+
+  /* Media section */
+
+  @media only screen and (max-width: 767.98px) {
+    .hero .hero-container .hero-grid .media {
+      order: 1;
+      aspect-ratio: 3/2;
+    }
+  }
+
+  .hero .hero-container .hero-grid .media .media-item {
+    width: 100%;
+    height: 100%;
+  }
+
+  @media only screen and (max-width: 767.98px) {
+    .hero .hero-container .hero-grid .media .media-item {
+      width: calc(100% + (var(--page-width-padding) * 2));
+      position: relative;
+      left: calc(-1 * var(--page-width-padding));
+    }
+  }
+
+  /* Media wrapper */
+  .hero .hero-container .hero-grid .media .media-item .media-wrapper {
+    width: 100%;
+  }
+
+  @media only screen and (min-width: 768px) {
+    .hero .side-by-side .hero-container .hero-grid .media .media-item .media-wrapper {
+      width: calc((100vw / 2) - (var(--page-width-padding) - 58px));
+    }
+  }
+
+  /* Media container */
+
+  .hero .hero-container .hero-grid .media .media-item .media-wrapper .media-container picture,
+  .hero .hero-container .hero-grid .media .media-item .media-wrapper .media-container img,
+  .hero .hero-container .hero-grid .media .media-item .media-wrapper .media-container svg,
+  .hero .hero-container .hero-grid .media .media-item .media-wrapper .media-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--object-position);
+  }
+
+  @media only screen and (max-width: 767.98px) {
+    .hero .hero-container .hero-grid .media .media-item .media-wrapper .media-container picture,
+    .hero .hero-container .hero-grid .media .media-item .media-wrapper .media-container img,
+    .hero .hero-container .hero-grid .media .media-item .media-wrapper .media-container svg,
+    .hero .hero-container .hero-grid .media .media-item .media-wrapper .media-container video {
+      left: 0;
+      width: 100%;
+      transform: unset;
+    }
+  }
+
+  .hero .full-width .content {
+    z-index: 1;
+  }
+
+  .hero .full-width .content.truncate-text .rte {
+    display: -webkit-box;
+    line-clamp: var(--webkit-line-clamp);
+    -webkit-line-clamp: var(--webkit-line-clamp);
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  /* Picture with image
+.hero .hero-container .hero-grid .media .media-item .media-wrapper .media-container picture:has(img) img {
+  position: unset;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: unset;
+  object-position: var(--object-position);
+} */
+{%- endstylesheet -%}
+
+{% schema %}
+{
+  "name": "Hero",
+  "tag": "section",
+  "class": "hero overflow-hidden isolate",
+  "max_blocks": 1,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "checkbox",
+      "id": "transparent_header",
+      "label": "Transparent Header",
+      "default": false,
+      "info": "There is a text colour setting in the header section for transparent headers."
+    },
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile Image"
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "range",
+      "id": "desktop_height",
+      "label": "Desktop Height",
+      "min": 200,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "default": 300
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "label": "Mobile Height",
+      "min": 200,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "default": 300
+    },
+    {
+      "type": "select",
+      "id": "layout_style",
+      "label": "Layout Style",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "side-by-side",
+          "label": "Side by Side"
+        }
+      ],
+      "default": "full-width"
+    },
+    {
+      "type": "select",
+      "id": "style_selector",
+      "label": "Styling Type",
+      "options": [
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "theme"
+    },
+    {
+      "type": "select",
+      "id": "section_styling",
+      "label": "Section Style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "third",
+          "label": "Third"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ section.settings.style_selector == 'theme' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "background_color",
+      "label": "Background Colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Colour",
+      "default": "#393939",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "overlay_type",
+      "label": "Overlay Type",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ section.settings.layout_style == 'full-width' }}"
+    },
+    {
+      "type": "select",
+      "id": "overlay_styling",
+      "label": "Overlay Style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "third",
+          "label": "Third"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ section.settings.overlay_type == 'theme' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "overlay_color",
+      "label": "Overlay Colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ section.settings.overlay_type == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "text_content_horizontal_position",
+      "label": "Text Horizontal Position",
+      "options": [
+        {
+          "value": "span-5",
+          "label": "Left"
+        },
+        {
+          "value": "span-center-6",
+          "label": "Center"
+        },
+        {
+          "value": "span-end-5",
+          "label": "Right"
+        }
+      ],
+      "default": "span-5",
+      "visible_if": "{{ section.settings.layout_style == 'full-width' }}"
+    },
+    {
+      "type": "select",
+      "id": "text_content_vertical_position",
+      "label": "Text Vertical Position",
+      "options": [
+        {
+          "value": "align-start",
+          "label": "Top"
+        },
+        {
+          "value": "align-center",
+          "label": "Center"
+        },
+        {
+          "value": "align-end",
+          "label": "Bottom"
+        }
+      ],
+      "default": "align-center",
+      "visible_if": "{{ section.settings.layout_style == 'full-width' }}"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "Left"
+        },
+        {
+          "value": "text-center",
+          "label": "Centre"
+        },
+        {
+          "value": "text-right",
+          "label": "Right"
+        }
+      ],
+      "default": "text-left",
+      "visible_if": "{{ section.settings.layout_style == 'full-width' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "truncate_text",
+      "label": "Truncate Text",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "truncate_lines",
+      "label": "Truncate by number of lines",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 3,
+      "visible_if": "{{ section.settings.truncate_text == true }}"
+    }
+  ],
+  "blocks": [{ "type": "section-content" }],
+  "presets": [
+    {
+      "name": "Hero",
+      "category": "Hero"
+    }
+  ]
+}
+{% endschema %}

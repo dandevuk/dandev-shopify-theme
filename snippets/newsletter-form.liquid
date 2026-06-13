@@ -1,0 +1,130 @@
+<div class="form w-100 flex-1">
+  {%- if section.settings.custom_form != blank -%}
+    {{ section.settings.custom_form }}
+  {%- else -%}
+    {%- form 'customer', class: 'newsletter-form' -%}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+
+      {%- if form.posted_successfully? -%}
+        <div
+          class="flex flex-center align-center g-2"
+          id="Newsletter-success--{{ section.id }}"
+          tabindex="-1"
+          autofocus
+        >
+          <img
+            src="{{ "icon-success.svg" |  asset_url }}"
+            width="50"
+            height="50"
+            alt="Success"
+            loading="lazy"
+            decoding="async"
+          >
+          {{- 'sections.newsletter.success' | t }}
+        </div>
+
+      {%- else -%}
+        <div class="newsletter-form__field-wrapper">
+          <div class="field flex flex-between flex-wrap align-center g-2 to-sm-flex-col">
+            <input
+              id="NewsletterForm--{{ section.id }}"
+              type="email"
+              name="contact[email]"
+              class="field__input flex-1 border-radius"
+              value="{{ form.email }}"
+              style="order: 1;"
+              aria-required="true"
+              autocorrect="off"
+              autocapitalize="off"
+              autocomplete="email"
+              {% if form.errors %}
+                autofocus
+                aria-invalid="true"
+                aria-describedby="Newsletter-error--{{ section.id }}"
+              {% elsif form.posted_successfully? %}
+                aria-describedby="Newsletter-success--{{ section.id }}"
+              {% endif %}
+              placeholder="{{ 'sections.newsletter.inputs.email.placeholder' | t }}"
+              data-already-subscribed="{{ 'sections.newsletter.already_subscribed' | t | default: 'You are already subscribed' }}"
+              newsletter-email-input
+              required
+            >
+            <label
+              class="field__label visually-hidden"
+              for="NewsletterForm--{{ section.id }}"
+              style="order: 2;"
+            >
+              {{ 'sections.newsletter.inputs.email.label' | t }}
+            </label>
+            {%- assign terms = 'general.checkboxes.tc' | t -%}
+            <label class="field__label flex align-center to-sm-flex-center" style="order: 3;">
+              <input
+                type="checkbox"
+                name="contact[terms_and_conditions]"
+                class="relative"
+                required
+              >
+              <span>{{ terms }}</span>
+            </label>
+            <button
+              type="submit"
+              class="button-1"
+              name="commit"
+              style="order: 4;"
+              id="Subscribe"
+            >
+              {{ 'sections.newsletter.sign_up' | t }}
+            </button>
+          </div>
+        </div>
+        {%- if form.errors -%}
+          <div
+            class="newsletter-form__message form__message"
+            id="Newsletter-error--{{ section.id }}"
+          >
+            <img
+              src="{{ 'icon--close.svg' | asset_url }}"
+              class="icon"
+              height="19"
+              width="19"
+              alt="Error"
+              loading="lazy"
+              decoding="async"
+            >
+            {{- form.errors.translated_fields.email | capitalize }}
+            {{ form.errors.messages.email }}
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+    {%- endform -%}
+  {%- endif -%}
+</div>
+
+{%- stylesheet -%}
+  @media only screen and (max-width: 767.98px) {
+    .form .newsletter-form .field .field__label {
+      order: 4 !important;
+    }
+    .form .newsletter-form .field button {
+      order: 3 !important;
+    }
+  }
+
+  .form .newsletter-form .field .field__input {
+    width: 100%;
+    min-width: 350px;
+  }
+
+  @media only screen and (max-width: 767.98px) {
+    .form .newsletter-form .field .field__input {
+      min-width: 100%;
+    }
+  }
+
+  .form .newsletter-form .field .custom-checkbox {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    text-align: left;
+  }
+{%- endstylesheet -%}

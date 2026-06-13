@@ -1,0 +1,632 @@
+{% style %}
+  {%- liquid
+    assign body_font = "Montserrat"
+    assign heading_font = "Montserrat"
+
+    assign vw_min = 360
+    assign vw_max = 1199
+    assign vw_range = vw_max | minus: vw_min
+
+    # COLOURS
+
+    # Body background
+    assign body_background_color = settings.body_background_color | default: '#ffffff'
+
+    # Body text
+    assign text_color = settings.text_color | default: '#121212'
+    assign text_color_alternate = settings.text_color_alternate | default: '#ffffff'
+    assign text_color_highlight = settings.text_color_highlight | default: '#0789c8'
+
+    # Section schemes
+    assign section_background_color = settings.section_background_color | default: '#ffffff'
+    assign section_background_color_2 = settings.section_background_color_2 | default: '#f5f5f5'
+    assign section_background_color_3 = settings.section_background_color_3 | default: '#232323'
+
+    assign section_text_color = settings.section_text_color | default: '#3c3c3c'
+    assign section_text_color_2 = settings.section_text_color_2 | default: '#6f6f6f'
+    assign section_text_color_3 = settings.section_text_color_3 | default: '#ffffff'
+
+    assign section_highlight_color = settings.section_highlight_color | default: '#65bbe5'
+    assign section_highlight_color_2 = settings.section_highlight_color_2 | default: '#44d3c9'
+    assign section_highlight_color_3 = settings.section_highlight_color_3 | default: '#ffd100'
+
+    # Brand colors
+
+    assign brand_color_1 = settings.brand_color_1 | default: '#3c3c3c'
+    assign brand_color_2 = settings.brand_color_2 | default: '#0789c8'
+    assign brand_color_3 = settings.brand_color_3 | default: '#44d3c9'
+    assign brand_color_4 = settings.brand_color_4 | default: '#65bbe5'
+    assign brand_color_5 = settings.brand_color_5 | default: '#65bbe5'
+    assign brand_color_6 = settings.brand_color_6 | default: '#44d3c9'
+
+    assign gradient_background = settings.gradient_background | default: '#65bbe5'
+    assign gradient_background_alternate = settings.gradient_background_alternate | default: '#0789c8'
+
+    # TEXT SIZES
+    assign body_font_size = settings.body_font_size | default: 16 | plus: 0
+    assign body_font_large = settings.body_font_size_large | default: 20 | plus: 0
+    assign heading_h0_size = settings.heading_h0_size | default: 56 | plus: 0
+    assign heading_h1_size = settings.heading_h1_size | default: 48 | plus: 0
+    assign heading_h2_size = settings.heading_h2_size | default: 32 | plus: 0
+    assign heading_h3_size = settings.heading_h3_size | default: 24 | plus: 0
+    assign heading_h4_size = settings.heading_h4_size | default: 20 | plus: 0
+    assign heading_h5_size = settings.heading_h5_size | default: 18 | plus: 0
+    assign heading_h6_size = settings.heading_h6_size | default: 16 | plus: 0
+    assign caption_text_size = settings.caption_text_size | default: 14 | plus: 0
+
+    assign body_font_size_mobile = settings.body_font_size_mobile | plus: 0
+    assign body_font_large_mobile = settings.body_font_size_mobile_large | plus: 0
+    assign heading_h0_size_mobile = settings.heading_h0_size_mobile | plus: 0
+    assign heading_h1_size_mobile = settings.heading_h1_size_mobile | plus: 0
+    assign heading_h2_size_mobile = settings.heading_h2_size_mobile | plus: 0
+    assign heading_h3_size_mobile = settings.heading_h3_size_mobile | plus: 0
+    assign heading_h4_size_mobile = settings.heading_h4_size_mobile | plus: 0
+    assign heading_h5_size_mobile = settings.heading_h5_size_mobile | plus: 0
+    assign heading_h6_size_mobile = settings.heading_h6_size_mobile | plus: 0
+    assign caption_text_size_mobile = settings.caption_text_size_mobile | plus: 0
+
+    # FLUID TEXT SIZING
+    assign body_slope = body_font_size | minus: body_font_size_mobile | times: 100.0 | divided_by: vw_range
+    assign body_slope_part = body_slope | times: vw_min | divided_by: 100.0
+    assign body_intercept = body_font_size_mobile | minus: body_slope_part
+
+    assign body_large_slope = body_font_large | minus: body_font_large_mobile | times: 100.0 | divided_by: vw_range
+    assign body_large_slope_part = body_large_slope | times: vw_min | divided_by: 100.0
+    assign body_large_intercept = body_font_large_mobile | minus: body_large_slope_part
+
+    assign heading_h0_slope = heading_h0_size | minus: heading_h0_size_mobile | times: 100.0 | divided_by: vw_range
+    assign h0_slope_part = heading_h0_slope | times: vw_min | divided_by: 100.0
+    assign heading_h0_intercept = heading_h0_size_mobile | minus: h0_slope_part
+
+    assign heading_h1_slope = heading_h1_size | minus: heading_h1_size_mobile | times: 100.0 | divided_by: vw_range
+    assign h1_slope_part = heading_h1_slope | times: vw_min | divided_by: 100.0
+    assign heading_h1_intercept = heading_h1_size_mobile | minus: h1_slope_part
+
+    assign heading_h2_slope = heading_h2_size | minus: heading_h2_size_mobile | times: 100.0 | divided_by: vw_range
+    assign h2_slope_part = heading_h2_slope | times: vw_min | divided_by: 100.0
+    assign heading_h2_intercept = heading_h2_size_mobile | minus: h2_slope_part
+
+    assign heading_h3_slope = heading_h3_size | minus: heading_h3_size_mobile | times: 100.0 | divided_by: vw_range
+    assign h3_slope_part = heading_h3_slope | times: vw_min | divided_by: 100.0
+    assign heading_h3_intercept = heading_h3_size_mobile | minus: h3_slope_part
+
+    assign heading_h4_slope = heading_h4_size | minus: heading_h4_size_mobile | times: 100.0 | divided_by: vw_range
+    assign h4_slope_part = heading_h4_slope | times: vw_min | divided_by: 100.0
+    assign heading_h4_intercept = heading_h4_size_mobile | minus: h4_slope_part
+
+    assign heading_h5_slope = heading_h5_size | minus: heading_h5_size_mobile | times: 100.0 | divided_by: vw_range
+    assign h5_slope_part = heading_h5_slope | times: vw_min | divided_by: 100.0
+    assign heading_h5_intercept = heading_h5_size_mobile | minus: h5_slope_part
+
+    assign heading_h6_slope = heading_h6_size | minus: heading_h6_size_mobile | times: 100.0 | divided_by: vw_range
+    assign h6_slope_part = heading_h6_slope | times: vw_min | divided_by: 100.0
+    assign heading_h6_intercept = heading_h6_size_mobile | minus: h6_slope_part
+
+    assign caption_slope = caption_text_size | minus: caption_text_size_mobile | times: 100.0 | divided_by: vw_range
+    assign caption_slope_part = caption_slope | times: vw_min | divided_by: 100.0
+    assign caption_intercept = caption_text_size_mobile | minus: caption_slope_part
+
+    # TEXT WEIGHTS
+    assign body_font_weight = settings.body_font_weight | default: 400 | plus: 0
+    assign body_large_font_weight = settings.body_font_weight_large | default: 400 | plus: 0
+    assign heading_h0_font_weight = settings.heading_h0_font_weight | default: 700 | plus: 0
+    assign heading_h1_font_weight = settings.heading_h1_font_weight | default: 700 | plus: 0
+    assign heading_h2_font_weight = settings.heading_h2_font_weight | default: 700 | plus: 0
+    assign heading_h3_font_weight = settings.heading_h3_font_weight | default: 700 | plus: 0
+    assign heading_h4_font_weight = settings.heading_h4_font_weight | default: 700 | plus: 0
+    assign heading_h5_font_weight = settings.heading_h5_font_weight | default: 700 | plus: 0
+    assign heading_h6_font_weight = settings.heading_h6_font_weight | default: 700 | plus: 0
+
+    # TEXT LINE HEIGHTS
+    assign body_line_height = settings.body_line_height | default: 150 | plus: 0
+    assign body_line_height_value = body_line_height | divided_by: 100.0
+
+    assign body_large_line_height = settings.body_line_height_large | default: 150 | plus: 0
+    assign body_large_line_height_value = body_large_line_height | divided_by: 100.0
+
+    assign heading_h0_line_height = settings.heading_h0_line_height | default: 150 | plus: 0
+    assign heading_h0_line_height_value = heading_h0_line_height | divided_by: 100.0
+
+    assign heading_h1_line_height = settings.heading_h1_line_height | default: 150 | plus: 0
+    assign heading_line_height_value = heading_h1_line_height | divided_by: 100.0
+
+    assign heading_h2_line_height = settings.heading_h2_line_height | default: 150 | plus: 0
+    assign heading_h2_line_height_value = heading_h2_line_height | divided_by: 100.0
+
+    assign heading_h3_line_height = settings.heading_h3_line_height | default: 150 | plus: 0
+    assign heading_h3_line_height_value = heading_h3_line_height | divided_by: 100.0
+
+    assign heading_h4_line_height = settings.heading_h4_line_height | default: 150 | plus: 0
+    assign heading_h4_line_height_value = heading_h4_line_height | divided_by: 100.0
+
+    assign heading_h5_line_height = settings.heading_h5_line_height | default: 150 | plus: 0
+    assign heading_h5_line_height_value = heading_h5_line_height | divided_by: 100.0
+
+    assign heading_h6_line_height = settings.heading_h6_line_height | default: 150 | plus: 0
+    assign heading_h6_line_height_value = heading_h6_line_height | divided_by: 100.0
+
+    # FONT FAMILY
+    if settings.heading_h0_font_family == 'body'
+      assign heading_h0_font_family = body_font
+    else
+      assign heading_h0_font_family = heading_font
+    endif
+    if settings.heading_h1_font_family == 'body'
+      assign heading_h1_font_family = body_font
+    else
+      assign heading_h1_font_family = heading_font
+    endif
+    if settings.heading_h2_font_family == 'body'
+      assign heading_h2_font_family = body_font
+    else
+      assign heading_h2_font_family = heading_font
+    endif
+    if settings.heading_h3_font_family == 'body'
+      assign heading_h3_font_family = body_font
+    else
+      assign heading_h3_font_family = heading_font
+    endif
+    if settings.heading_h4_font_family == 'body'
+      assign heading_h4_font_family = body_font
+    else
+      assign heading_h4_font_family = heading_font
+    endif
+    if settings.heading_h5_font_family == 'body'
+      assign heading_h5_font_family = body_font
+    else
+      assign heading_h5_font_family = heading_font
+    endif
+    if settings.heading_h6_font_family == 'body'
+      assign heading_h6_font_family = body_font
+    else
+      assign heading_h6_font_family = heading_font
+    endif
+
+    # PAGE WIDTHS
+    assign page_width = settings.page_width | default: 1920 | plus: 0
+    assign page_width_narrow = settings.page_width_narrow | default: 800 | plus: 0
+    assign page_width_wide = settings.page_width_wide | default: 2000 | plus: 0
+    assign page_width_padding = settings.page_width_padding | default: 30 | plus: 0
+    assign page_width_padding_mobile = settings.page_width_padding_mobile | default: 20 | plus: 0
+
+    # FLUID PAGE PADDING
+    assign padding_slope = page_width_padding | minus: page_width_padding_mobile | times: 100.0 | divided_by: vw_range
+    assign padding_slope_part = padding_slope | times: vw_min | divided_by: 100.0
+    assign padding_intercept = page_width_padding_mobile | minus: padding_slope_part
+
+    # SECTION VERTICAL SPACING
+    assign spacing_sections = settings.section_spacing | default: 60 | plus: 0
+    assign spacing_sections_mobile = settings.section_spacing_mobile | default: 30 | plus: 0
+
+    # CONTAINER HORIZONTAL PADDING
+    assign container_h_padding = settings.container_h_padding | default: 0 | plus: 0
+    assign container_h_padding_mobile = settings.container_h_padding_mobile | default: 0 | plus: 0
+
+    # FLUID CONTAINER HORIZONTAL PADDING
+    assign container_h_padding_slope = container_h_padding | minus: container_h_padding_mobile | times: 100.0 | divided_by: vw_range
+    assign container_h_padding_slope_part = container_h_padding_slope | times: vw_min | divided_by: 100.0
+    assign container_h_padding_intercept = container_h_padding_mobile | minus: container_h_padding_slope_part
+
+    # CONTAINER VERTICAL PADDING
+    assign container_v_padding = settings.container_v_padding | default: 0 | plus: 0
+    assign container_v_padding_mobile = settings.container_v_padding_mobile | default: 0 | plus: 0
+
+    # FLUID CONTAINER VERTICAL PADDING
+    assign container_v_padding_slope = container_v_padding | minus: container_v_padding_mobile | times: 100.0 | divided_by: vw_range
+    assign container_v_padding_slope_part = container_v_padding_slope | times: vw_min | divided_by: 100.0
+    assign container_v_padding_intercept = container_v_padding_mobile | minus: container_v_padding_slope_part
+
+    # FLUID SECTION SPACING
+    assign spacing_slope = spacing_sections | minus: spacing_sections_mobile | times: 100.0 | divided_by: vw_range
+    assign spacing_slope_part = spacing_slope | times: vw_min | divided_by: 100.0
+    assign spacing_intercept = spacing_sections_mobile | minus: spacing_slope_part
+
+    # CONTENT SPACING
+    # Used for consistent spacing inside components, e.g. padding inside cards, spacing between elements in stacks, etc.
+    assign content_spacing = settings.content_spacing | default: 8 | plus: 0
+
+    # LISTNG PAGE GRID GAP
+    assign listing_grid_gap = settings.listing_page_grid_gap_desktop | default: 30 | plus: 0
+    assign listing_grid_gap_mobile = settings.listing_page_grid_gap_mobile | default: 20 | plus: 0
+
+    # FLUID LISTING PAGE GRID GAP
+    assign listing_grid_slope = listing_grid_gap | minus: listing_grid_gap_mobile | times: 100.0 | divided_by: vw_range
+    assign listing_grid_slope_part = listing_grid_slope | times: vw_min | divided_by: 100.0
+    assign listing_grid_intercept = listing_grid_gap_mobile | minus: listing_grid_slope_part
+
+    # GRID GAP
+    assign grid_gap = settings.grid_gap | default: 30 | plus: 0
+    assign grid_gap_mobile = settings.grid_gap_mobile | default: 20 | plus: 0
+
+    # FLUID GRID GAP
+    assign grid_slope = grid_gap | minus: grid_gap_mobile | times: 100.0 | divided_by: vw_range
+    assign grid_slope_part = grid_slope | times: vw_min | divided_by: 100.0
+    assign grid_intercept = grid_gap_mobile | minus: grid_slope_part
+
+    # RADII
+    assign global_radius = settings.global_radius | default: 0 | plus: 0
+    assign global_radius_mobile = settings.global_radius_mobile | default: 0 | plus: 0
+    assign global_radius_large = settings.global_radius_large | default: 0 | plus: 0
+    assign global_radius_large_mobile = settings.global_radius_large_mobile | default: 0 | plus: 0
+
+    # BUTTONS
+    assign button_h_padding = settings.button_h_padding | default: 30 | plus: 0
+    assign button_v_padding = settings.button_v_padding | default: 14 | plus: 0
+    assign button_h_padding_hover = button_h_padding | minus: 1
+    assign button_v_padding_hover = button_v_padding | minus: 1
+    assign button_font_size = settings.button_font_size | default: 16 | plus: 0
+    assign button_font_weight = settings.button_font_weight | default: 400 | plus: 0
+    assign button_line_height = settings.button_line_height | default: 140 | plus: 0
+    assign button_line_height_value = button_line_height | divided_by: 100.0
+    assign button_transition_duration = settings.button_transition | default: 0.3
+
+    assign buttons_radius = settings.buttons_radius | default: 0 | plus: 0
+    assign buttons_border_thickness = settings.buttons_border_thickness | default: 0 | plus: 0
+
+    assign button_1_color = settings.button_1_color | default: settings.theme_accent_2_color | default: settings.theme_secondary_color | default: settings.theme_primary_color | default: '#65bbe5'
+    assign button_1_text_color = settings.button_1_text_color | default: settings.text_main_color | default: '#393939'
+    assign button_1_border_color = settings.button_1_border_color | default: button_1_color
+    assign button_1_hover_color = settings.button_1_hover_color | default: settings.theme_secondary_color | default: button_1_color
+    assign button_1_hover_text_color = settings.button_1_hover_text_color | default: settings.text_alternate_color | default: '#ffffff'
+    assign button_1_hover_border_color = settings.button_1_hover_border_color | default: button_1_hover_color
+
+    assign button_2_color = settings.button_2_color | default: settings.theme_secondary_color | default: settings.theme_primary_color | default: '#054c6f'
+    assign button_2_text_color = settings.button_2_text_color | default: settings.text_alternate_color | default: '#ffffff'
+    assign button_2_border_color = settings.button_2_border_color | default: button_2_color
+    assign button_2_hover_color = settings.button_2_hover_color | default: settings.theme_accent_2_color | default: button_2_color
+    assign button_2_hover_text_color = settings.button_2_hover_text_color | default: settings.text_main_color | default: '#000000'
+    assign button_2_hover_border_color = settings.button_2_hover_border_color | default: button_2_hover_color
+
+    assign button_3_color = settings.button_3_color | default: '#393939'
+    assign button_3_text_color = settings.button_3_text_color | default: '#ffffff'
+    assign button_3_border_color = settings.button_3_border_color | default: button_3_color
+    assign button_3_hover_color = settings.button_3_hover_color | default: settings.theme_accent_1_color | default: '#65bbe5'
+    assign button_3_hover_text_color = settings.button_3_hover_text_color | default: settings.text_main_color | default: '#393939'
+    assign button_3_hover_border_color = settings.button_3_hover_border_color | default: button_3_hover_color
+
+    assign button_4_color = settings.button_4_color | default: '#ffffff'
+    assign button_4_text_color = settings.button_4_text_color | default: '#393939'
+    assign button_4_border_color = settings.button_4_border_color | default: '#393939'
+    assign button_4_hover_color = settings.button_4_hover_color | default: '#f5f5f5'
+    assign button_4_hover_text_color = settings.button_4_hover_text_color | default: button_4_text_color
+    assign button_4_hover_border_color = settings.button_4_hover_border_color | default: button_4_border_color
+
+    assign button_5_color = settings.button_5_color | default: '#f5f5f5'
+    assign button_5_text_color = settings.button_5_text_color | default: '#393939'
+    assign button_5_border_color = settings.button_5_border_color | default: '#d4d4d4'
+    assign button_5_hover_color = settings.button_5_hover_color | default: '#393939'
+    assign button_5_hover_text_color = settings.button_5_hover_text_color | default: '#ffffff'
+    assign button_5_hover_border_color = settings.button_5_hover_border_color | default: button_5_hover_color
+
+    assign button_6_color = settings.button_6_color | default: '#ffffff'
+    assign button_6_text_color = settings.button_6_text_color | default: '#393939'
+    assign button_6_border_color = settings.button_6_border_color | default: '#393939'
+    assign button_6_hover_color = settings.button_6_hover_color | default: '#393939'
+    assign button_6_hover_text_color = settings.button_6_hover_text_color | default: '#ffffff'
+    assign button_6_hover_border_color = settings.button_6_hover_border_color | default: button_6_hover_color
+
+    # INPUTS
+    assign input_font_size = settings.input_font_size | default: 16 | plus: 0
+    assign input_h_padding = settings.input_h_padding | default: 12 | plus: 0
+    assign input_v_padding = settings.input_v_padding | default: 14 | plus: 0
+    assign input_border_width = settings.input_border_thickness | default: 1 | plus: 0
+    assign input_border_radius = settings.input_border_radius | default: 4 | plus: 0
+    assign input_border_color = settings.input_border_color | default: '#d4d4d4'
+    assign input_focus_border_color = settings.input_focus_border_color | default: '#65bbe5'
+    assign input_placeholder_color = settings.input_placeholder_color | default: '#a1a1a1'
+    assign input_background_color = settings.input_background_color | default: '#ffffff'
+    assign input_text_color = settings.input_text_color | default: '#393939'
+    assign input_success_text_color = settings.input_success_text_color | default: '#44d3c9'
+    assign input_success_background_color = settings.input_success_background_color | default: '#e6fffe'
+    assign input_error_text_color = settings.input_error_text_color | default: '#f44336'
+    assign input_error_background_color = settings.input_error_background_color | default: '#ffebee'
+    assign input_error_placeholder_color = settings.input_error_placeholder_color | default: '#f44336'
+    assign input_error_border_color = settings.input_error_border_color | default: '#f44336'
+
+    # ICONS
+    assign icon_height = settings.icon_height | default: 24 | plus: 0
+    assign icon_color = settings.icon_color | default: '#393939'
+    assign icon_color_secondary = settings.icon_color_secondary | default: '#ffffff'
+
+    # BADGES
+    assign badge_text_size = settings.badge_text_size | default: 14 | plus: 0
+    assign badge_font_weight = settings.badge_font_weight | default: 600 | plus: 0
+    assign badge_line_height = settings.badge_line_height | default: 120 | plus: 0
+    assign badge_line_height_value = badge_line_height | divided_by: 100.0
+    assign badge_radius_tl = settings.badge_rad_top_left | default: 8 | plus: 0
+    assign badge_radius_tr = settings.badge_rad_top_right | default: 8 | plus: 0
+    assign badge_radius_br = settings.badge_rad_bottom_right | default: 8 | plus: 0
+    assign badge_radius_bl = settings.badge_rad_bottom_left | default: 8 | plus: 0
+    assign badge_background_color_1 = settings.badge_1_background_color| default: '#44d3c9'
+    assign badge_text_color_1 = settings.badge_1_text_color | default: '#ffffff'
+    assign badge_background_color_2 = settings.badge_2_background_color| default: '#393939'
+    assign badge_text_color_2 = settings.badge_2_text_color | default: '#ffffff'
+    assign badge_position = settings.badge_position | default: 'top-left'
+    assign badge_indentation = settings.badge_indentation | default: 10 | plus: 0
+
+  -%}
+
+  :root {
+    /* Fonts */
+    --body-font-family: {{ body_font }};
+    --heading-font-family: {{ heading_font }};
+
+    /* Brand colors */
+    --brand-color-1: {{ brand_color_1 | default: '#3c3c3c' }};
+    --brand-color-2: {{ brand_color_2 | default: '#0789c8' }};
+    --brand-color-3: {{ brand_color_3 | default: '#44d3c9' }};
+    --brand-color-4: {{ brand_color_4 | default: '#65bbe5' }};
+    --brand-color-5: {{ brand_color_5 | default: '#f5f5f5' }};
+    --brand-color-6: {{ brand_color_6 | default: '#393939' }};
+
+    /* Text colors */
+    --text-color: {{ text_color | default: '#393939' }};
+    --text-color-alternate: {{ text_color_alternate | default: '#ffffff' }};
+    --text-color-highlight: {{ text_color_highlight | default: '#44d3c9' }};
+
+    /* Background colors */
+    --body-background-color: {{ body_background_color | default: '#ffffff' }};
+    --gradient-background: {{ gradient_background }};
+    --gradient-background-alternate: {{ gradient_background_alternate }};
+
+    /* Section colors */
+    --section-background-color: {{ section_background_color | default: '#ffffff' }};
+    --section-background-color-2: {{ section_background_color_2 | default: '#f5f5f5' }};
+    --section-background-color-3: {{ section_background_color_3 | default: '#232323' }};
+    --section-text-color: {{ section_text_color | default: '#3c3c3c' }};
+    --section-text-color-2: {{ section_text_color_2 | default: '#6f6f6f' }};
+    --section-text-color-3: {{ section_text_color_3 | default: '#ffffff' }};
+    --section-highlight-color: {{ section_highlight_color | default: '#65bbe5' }};
+    --section-highlight-color-2: {{ section_highlight_color_2 | default: '#65bbe5' }};
+    --section-highlight-color-3: {{ section_highlight_color_3 | default: '#65bbe5' }};
+
+    /* Typography */
+    --body-font-size: {{ body_font_size }}px;
+    --body-font-size-large: {{ body_font_large }}px;
+    --heading-h0-size: {{ heading_h0_size }}px;
+    --heading-h1-size: {{ heading_h1_size }}px;
+    --heading-h2-size: {{ heading_h2_size }}px;
+    --heading-h3-size: {{ heading_h3_size }}px;
+    --heading-h4-size: {{ heading_h4_size }}px;
+    --heading-h5-size: {{ heading_h5_size }}px;
+    --heading-h6-size: {{ heading_h6_size }}px;
+    --caption-text-size: {{ caption_text_size }}px;
+
+    --body-font-size-mobile: {{ body_font_size_mobile }}px;
+    --body-font-size-large-mobile: {{ body_font_large_mobile }}px;
+    --heading-h0-size-mobile: {{ heading_h0_size_mobile }}px;
+    --heading-h1-size-mobile: {{ heading_h1_size_mobile }}px;
+    --heading-h2-size-mobile: {{ heading_h2_size_mobile }}px;
+    --heading-h3-size-mobile: {{ heading_h3_size_mobile }}px;
+    --heading-h4-size-mobile: {{ heading_h4_size_mobile }}px;
+    --heading-h5-size-mobile: {{ heading_h5_size_mobile }}px;
+    --heading-h6-size-mobile: {{ heading_h6_size_mobile }}px;
+    --caption-text-size-mobile: {{ caption_text_size_mobile }}px;
+
+    /* Fluid sizing */
+    --body-slope: {{ body_slope | round: 3 }};
+    --body-intercept: {{ body_intercept | round: 3 }}px;
+    --body-large-slope: {{ body_large_slope | round: 3 }};
+    --body-large-intercept: {{ body_large_intercept | round: 3 }}px;
+    --heading-h0-slope: {{ heading_h0_slope | round: 3 }};
+    --heading-h0-intercept: {{ heading_h0_intercept | round: 3 }}px;
+    --heading-h1-slope: {{ heading_h1_slope | round: 3 }};
+    --heading-h1-intercept: {{ heading_h1_intercept | round: 3 }}px;
+    --heading-h2-slope: {{ heading_h2_slope | round: 3 }};
+    --heading-h2-intercept: {{ heading_h2_intercept | round: 3 }}px;
+    --heading-h3-slope: {{ heading_h3_slope | round: 3 }};
+    --heading-h3-intercept: {{ heading_h3_intercept | round: 3 }}px;
+    --heading-h4-slope: {{ heading_h4_slope | round: 3 }};
+    --heading-h4-intercept: {{ heading_h4_intercept | round: 3 }}px;
+    --heading-h5-slope: {{ heading_h5_slope | round: 3 }};
+    --heading-h5-intercept: {{ heading_h5_intercept | round: 3 }}px;
+    --heading-h6-slope: {{ heading_h6_slope | round: 3 }};
+    --heading-h6-intercept: {{ heading_h6_intercept | round: 3 }}px;
+    --caption-slope: {{ caption_slope | round: 3 }};
+    --caption-intercept: {{ caption_intercept | round: 3 }}px;
+
+    /* Weights */
+    --body-font-weight: {{ body_font_weight }};
+    --body-font-weight-large: {{ body_large_font_weight }};
+    --heading-h0-font-weight: {{ heading_h0_font_weight }};
+    --heading-h1-font-weight: {{ heading_h1_font_weight }};
+    --heading-h2-font-weight: {{ heading_h2_font_weight }};
+    --heading-h3-font-weight: {{ heading_h3_font_weight }};
+    --heading-h4-font-weight: {{ heading_h4_font_weight }};
+    --heading-h5-font-weight: {{ heading_h5_font_weight }};
+    --heading-h6-font-weight: {{ heading_h6_font_weight }};
+
+    /* Line heights */
+    --body-line-height: {{ body_line_height_value }};
+    --body-line-height-large: {{ body_large_line_height_value }};
+    --heading-h0-line-height: {{ heading_h0_line_height_value }};
+    --heading-h1-line-height: {{ heading_line_height_value }};
+    --heading-h2-line-height: {{ heading_h2_line_height_value }};
+    --heading-h3-line-height: {{ heading_h3_line_height_value }};
+    --heading-h4-line-height: {{ heading_h4_line_height_value }};
+    --heading-h5-line-height: {{ heading_h5_line_height_value }};
+    --heading-h6-line-height: {{ heading_h6_line_height_value }};
+
+    /* Heading font families */
+    --heading-h0-font-family: {{ heading_h0_font_family }};
+    --heading-h1-font-family: {{ heading_h1_font_family }};
+    --heading-h2-font-family: {{ heading_h2_font_family }};
+    --heading-h3-font-family: {{ heading_h3_font_family }};
+    --heading-h4-font-family: {{ heading_h4_font_family }};
+    --heading-h5-font-family: {{ heading_h5_font_family }};
+    --heading-h6-font-family: {{ heading_h6_font_family }};
+
+    /* Layout and spacing */
+    --page-width: {{ page_width }}px;
+    --page-width-narrow: {{ page_width_narrow }}px;
+    --page-width-wide: {{ page_width_wide }}px;
+    --page-width-padding: {{ page_width_padding }}px;
+    --page-width-padding-mobile: {{ page_width_padding_mobile }}px;
+
+    /* Fluid page padding */
+    --padding-slope: {{ padding_slope | round: 3 }};
+    --padding-intercept: {{ padding_intercept | round: 3 }}px;
+
+    /* Section vertical spacing */
+    --spacing-sections-desktop: {{ spacing_sections }}px;
+    --spacing-sections-mobile: {{ spacing_sections_mobile }}px;
+
+    /* Fluid section spacing */
+    --spacing-slope: {{ spacing_slope | round: 3 }};
+    --spacing-intercept: {{ spacing_intercept | round: 3 }}px;
+
+    /* Container vertical padding */
+    --container-v-padding: {{ container_v_padding }}px;
+    --container-v-padding-mobile: {{ container_v_padding_mobile }}px;
+
+    /* Container horizontal padding */
+    --container-h-padding: {{ container_h_padding }}px;
+    --container-h-padding-mobile: {{ container_h_padding_mobile }}px;
+
+    /* Fluid container horizontal padding */
+    --container_h_padding-slope: {{ container_h_padding_slope | round: 3 }};
+    --container_h_padding-intercept: {{ container_h_padding_intercept | round: 3 }}px;
+
+    /* Fluid container vertical padding */
+    --container_v_padding-slope: {{ container_v_padding_slope | round: 3 }};
+    --container_v_padding-intercept: {{ container_v_padding_intercept | round: 3 }}px;
+
+    /* Listing page grid gap */
+    --listing-grid-gap: {{ listing_grid_gap }}px;
+    --listing-grid-gap-mobile: {{ listing_grid_gap_mobile }}px;
+
+    /* Fluid listing page grid gap */
+    --listing-grid-slope: {{ listing_grid_slope | round: 3 }};
+    --listing-grid-intercept: {{ listing_grid_intercept | round: 3 }}px;
+
+    /* Grid gap */
+    --grid-gap: {{ grid_gap }}px;
+    --grid-gap-mobile: {{ grid_gap_mobile }}px;
+
+    /* Fluid grid gap */
+    --grid-slope: {{ grid_slope | round: 3 }};
+    --grid-intercept: {{ grid_intercept | round: 3 }}px;
+
+    /* Content spacing */
+    --content-spacing-1: {{ content_spacing }}px;
+    --content-spacing-2: {{ content_spacing | times: 2 }}px;
+    --content-spacing-3: {{ content_spacing | times: 3 }}px;
+    --content-spacing-4: {{ content_spacing | times: 4 }}px;
+    --content-spacing-5: {{ content_spacing | times: 5 }}px;
+    --content-spacing-6: {{ content_spacing | times: 6 }}px;
+    --content-spacing-7: {{ content_spacing | times: 7 }}px;
+    --content-spacing-8: {{ content_spacing | times: 8 }}px;
+    --content-spacing-9: {{ content_spacing | times: 9 }}px;
+    --content-spacing-10: {{ content_spacing | times: 10 }}px;
+
+    /* Radii  */
+    --global-radius: {{ global_radius }}px;
+    --global-radius-mobile: {{ global_radius_mobile }}px;
+    --global-radius-large: {{ global_radius_large }}px;
+    --global-radius-large-mobile: {{ global_radius_large_mobile }}px;
+
+    /* Buttons */
+    --buttons-border-width: {{ buttons_border_thickness }}px;
+    --button-transition: {{ button_transition_duration }}s ease;
+    --button-h-padding: {{ button_h_padding }}px;
+    --button-v-padding: {{ button_v_padding }}px;
+    --button-h-padding-hover: {{ button_h_padding_hover }}px;
+    --button-v-padding-hover: {{ button_v_padding_hover }}px;
+    --button-font-size: {{ button_font_size }}px;
+    --button-font-weight: {{ button_font_weight }};
+    --button-line-height: {{ button_line_height_value }};
+    --buttons-radius: {{ buttons_radius }}px;
+
+    --button-1-color: {{ button_1_color }};
+    --button-1-text-color: {{ button_1_text_color }};
+    --button-1-border-color: {{ button_1_border_color }};
+    --button-1-radius: {{ button_1_radius }}px;
+    --button-1-hover-color: {{ button_1_hover_color }};
+    --button-1-hover-text-color: {{ button_1_hover_text_color }};
+    --button-1-hover-border-color: {{ button_1_hover_border_color }};
+    --button-1-hover-radius: {{ button_1_hover_radius }}px;
+
+    --button-2-color: {{ button_2_color }};
+    --button-2-text-color: {{ button_2_text_color }};
+    --button-2-border-color: {{ button_2_border_color }};
+    --button-2-radius: {{ button_2_radius }}px;
+    --button-2-hover-color: {{ button_2_hover_color }};
+    --button-2-hover-text-color: {{ button_2_hover_text_color }};
+    --button-2-hover-border-color: {{ button_2_hover_border_color }};
+    --button-2-hover-radius: {{ button_2_hover_radius }}px;
+
+    --button-3-color: {{ button_3_color }};
+    --button-3-text-color: {{ button_3_text_color }};
+    --button-3-border-color: {{ button_3_border_color }};
+    --button-3-radius: {{ button_3_radius }}px;
+    --button-3-hover-color: {{ button_3_hover_color }};
+    --button-3-hover-text-color: {{ button_3_hover_text_color }};
+    --button-3-hover-border-color: {{ button_3_hover_border_color }};
+    --button-3-hover-radius: {{ button_3_hover_radius }}px;
+
+    --button-4-color: {{ button_4_color }};
+    --button-4-text-color: {{ button_4_text_color }};
+    --button-4-border-color: {{ button_4_border_color }};
+    --button-4-radius: {{ button_4_radius }}px;
+    --button-4-hover-color: {{ button_4_hover_color }};
+    --button-4-hover-text-color: {{ button_4_hover_text_color }};
+    --button-4-hover-border-color: {{ button_4_hover_border_color }};
+    --button-4-hover-radius: {{ button_4_hover_radius }}px;
+
+    --button-5-color: {{ button_5_color }};
+    --button-5-text-color: {{ button_5_text_color }};
+    --button-5-border-color: {{ button_5_border_color }};
+    --button-5-radius: {{ button_5_radius }}px;
+    --button-5-hover-color: {{ button_5_hover_color }};
+    --button-5-hover-text-color: {{ button_5_hover_text_color }};
+    --button-5-hover-border-color: {{ button_5_hover_border_color }};
+    --button-5-hover-radius: {{ button_5_hover_radius }}px;
+
+    --button-6-color: {{ button_6_color }};
+    --button-6-text-color: {{ button_6_text_color }};
+    --button-6-border-color: {{ button_6_border_color }};
+    --button-6-radius: {{ button_6_radius }}px;
+    --button-6-hover-color: {{ button_6_hover_color }};
+    --button-6-hover-text-color: {{ button_6_hover_text_color }};
+    --button-6-hover-border-color: {{ button_6_hover_border_color }};
+    --button-6-hover-radius: {{ button_6_hover_radius }}px;
+
+    /* Inputs */
+    --input-font-size: {{ input_font_size }}px;
+    --input-h-padding: {{ input_h_padding }}px;
+    --input-v-padding: {{ input_v_padding }}px;
+    --input-border-width: {{ input_border_width }}px;
+    --input-border-radius: {{ input_border_radius }}px;
+    --input-border-color: {{ input_border_color }};
+    --input-focus-border-color: {{ input_focus_border_color }};
+    --input-placeholder-color: {{ input_placeholder_color }};
+    --input-background-color: {{ input_background_color }};
+    --input-text-color: {{ input_text_color }};
+    --input-success-text-color: {{ input_success_text_color }};
+    --input-success-background-color: {{ input_success_background_color }};
+    --input-error-text-color: {{ input_error_text_color }};
+    --input-error-background-color: {{ input_error_background_color }};
+    --input-error-placeholder-color: {{ input_error_placeholder_color }};
+    --input-error-border-color: {{ input_error_border_color }};
+
+    /* Icons */
+    --icon-height: {{ icon_height }}px;
+    --icon-color: {{ icon_color | default: '#393939' }};
+    --icon-color-secondary: {{ icon_color_secondary | default: '#6f6f6f' }};
+
+    /* Badges */
+    --badge-text-size: {{ badge_text_size }}px;
+    --badge-font-weight: {{ badge_font_weight }};
+    --badge-line-height: {{ badge_line_height_value }};
+    --badge-radius-tl: {{ badge_radius_tl }}px;
+    --badge-radius-tr: {{ badge_radius_tr }}px;
+    --badge-radius-br: {{ badge_radius_br }}px;
+    --badge-radius-bl: {{ badge_radius_bl }}px;
+    --badge-background-color-1: {{ badge_background_color_1 }};
+    --badge-text-color-1: {{ badge_text_color_1 }};
+    --badge-background-color-2: {{ badge_background_color_2 }};
+    --badge-text-color-2: {{ badge_text_color_2 }};
+    --badge-position: {{ badge_position }};
+    --badge-indentation: {{ badge_indentation }}px;
+  }
+{% endstyle %}

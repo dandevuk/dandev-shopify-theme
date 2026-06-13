@@ -1,0 +1,23 @@
+<div class="product-information" data-variant-update="product-accordions" {{ block.shopify_attributes }}>
+  {%- content_for 'blocks' -%}
+</div>
+
+{% stylesheet %}
+  .product-information #description-read-more {
+    scroll-margin-top: 170px;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product Information",
+  "tag": null,
+  "settings": [],
+  "blocks": [{ "type": "_accordion" }],
+  "presets": [
+    {
+      "name": "Product Information"
+    }
+  ]
+}
+{% endschema %}

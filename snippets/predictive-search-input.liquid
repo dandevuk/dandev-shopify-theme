@@ -1,0 +1,34 @@
+<form
+  class="predictive-search-form {{ class }} relative flex-center "
+  action="{{ routes.search_url }}"
+>
+  <label for="main-search-input" class="visually-hidden">{{ 'sections.header.search' | t }}</label>
+  <input
+    type="text"
+    placeholder="{{ placeholder }}"
+    name="q"
+    value="{{- search.terms | escape -}}"
+    class="predictive-search-form__input w-100 h-100"
+    id="main-search-input"
+  >
+  <input type="hidden" name="type" value="product">
+
+  <button
+    type="submit"
+    id="search-submit"
+    class="predictive-search-form__submit h-100 absolute flex-center align-center p-0"
+    value=""
+    aria-label="{{ 'sections.header.search' | t }}"
+  >
+    {{ 'icon-search.svg' | inline_asset_content }}
+  </button>
+
+  <button
+    type="button"
+    id="search-reset"
+    class="predictive-search-form__reset h-100 absolute flex-center align-center p-0"
+    aria-label="{{ 'general.search.reset' | t }}"
+  >
+    {{ 'icon-search-close.svg' | inline_asset_content }}
+  </button>
+</form>

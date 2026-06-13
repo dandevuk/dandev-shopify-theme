@@ -1,0 +1,40 @@
+{% doc %}
+  @param {metaobject} [loop_usp] - USP metaobject from a parent loop via content_for
+  @param {boolean} [lazy] - Lazy-load images when passed from a parent slider
+{% enddoc %}
+
+{%- liquid
+  assign usp_entry = loop_usp | default: closest.metaobject.usp
+  assign usp_size = block.settings.usp_size
+  assign lazy_load = lazy | default: false
+-%}
+{%- render 'usp-card', usp: usp_entry, usp_size: usp_size, lazy: lazy_load, shopify_attributes: block.shopify_attributes -%}
+{% schema %}
+{
+  "name": "USP",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "usp_size",
+      "label": "USP Size",
+      "options": [
+        {
+          "value": "large",
+          "label": "Large"
+        },
+        {
+          "value": "small",
+          "label": "Small"
+        }
+      ],
+      "default": "large"
+    }
+  ],
+  "presets": [
+    {
+      "name": "USP"
+    }
+  ]
+}
+{% endschema %}

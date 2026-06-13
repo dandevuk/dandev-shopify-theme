@@ -1,0 +1,20 @@
+<product-form
+  class="product-form flex flex-col {{ gap | default: 'g-3' }}"
+  data-section-id="{{ section_id }}"
+  data-product-handle="{{ product.handle }}"
+  data-money-format="{{ shop.money_format }}"
+  {%- if enable_history -%}
+    data-enable-history="true"
+  {%- endif -%}
+>
+  {{ content }}
+</product-form>
+
+{%- stylesheet -%}
+  .product-details .border-bottom {
+    border-bottom: 1px solid var(--brand-color-5);
+  }
+  .product-details .accordion:first-of-type {
+    padding-top: 0;
+  }
+{%- endstylesheet -%}

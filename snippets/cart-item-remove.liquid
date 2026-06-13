@@ -1,0 +1,16 @@
+<button
+  type="button"
+  class="remove-item w-100 h-100"
+  data-cart-remove
+  data-variant-id="{{ item.variant_id }}"
+  aria-label="{{ 'general.side_cart.remove' | t }}"
+>
+  {{ 'icon--bin.svg' | inline_asset_content }}
+</button>
+
+{% stylesheet %}
+  .remove-item svg {
+    width: 100%;
+    height: 100%;
+  }
+{% endstylesheet %}

@@ -1,0 +1,224 @@
+{%- comment -%}
+  Block: accordion_item
+  Settings expected on the block:
+   - question (text)
+   - content (richtext)
+   - header_color (color) (optional)
+   - header_bg (color) (optional)
+   - heading_tag (select: h2, h3)
+   - heading_size (select: heading-h1, heading-h2, heading-h3)
+   - content_bg (color) (optional)
+   - content_color (color) (optional)
+   - open_default (checkbox)
+   - is_faq (checkbox)
+  This file renders a single accordion item as a runtime snippet.
+  It supports being rendered with either:
+    - a `block` variable (the normal block usage) OR
+    - `question` and `content` variables passed directly (e.g., when rendering from section-level metaobjects/settings)
+  If both are present, `block` takes precedence.
+{%- endcomment -%}
+
+{%- assign faq_mode = faq_mode | default: false -%}
+{%- assign header_styles = '' -%}
+{%- if block and block.settings.header_color != blank -%}
+  {%- assign header_styles = header_styles
+    | append: 'color: '
+    | append: block.settings.header_color
+    | append: ';'
+  -%}
+{%- endif -%}
+{%- if block and block.settings.header_bg != blank -%}
+  {%- assign header_styles = header_styles
+    | append: 'background:'
+    | append: block.settings.header_bg
+    | append: ';'
+  -%}
+{%- endif -%}
+
+{%- assign content_styles = '' -%}
+{%- if block and block.settings.content_color != blank -%}
+  {%- assign content_styles = content_styles
+    | append: 'color: '
+    | append: block.settings.content_color
+    | append: ';'
+  -%}
+{%- endif -%}
+{%- if block and block.settings.content_bg != blank -%}
+  {%- assign content_styles = content_styles
+    | append: 'background:'
+    | append: block.settings.content_bg
+    | append: ';'
+  -%}
+{%- endif -%}
+
+{%- comment -%}
+  Determine open/default state for server-side rendering.
+  If `block` is present use its `open_default`, otherwise no default open.
+{%- endcomment -%}
+{%- assign btn_classes = 'button-accordion accordion flex-between align-center g-3 pt-2 pb-2 pl-0 pr-0 w-100 cursor-pointer heading-h3' -%}
+{%- if block and block.settings.open_default -%}
+  {%- assign btn_classes = btn_classes | append: ' active' -%}
+  {%- assign aria_state = 'true' -%}
+  {%- assign panel_inline = 'max-height: max-content' -%}
+  {%- assign panel_open_class = 'panel-open-default' -%}
+{%- else -%}
+  {%- assign aria_state = 'false' -%}
+  {%- assign panel_inline = '' -%}
+  {%- assign panel_open_class = '' -%}
+{%- endif -%}
+
+{%- comment -%}
+  Effective FAQ decision: prefer block.settings.is_faq, then the passed `faq_mode`,
+  then the containing section's faq_mode.
+{%- endcomment -%}
+{%- assign is_faq_effective = false -%}
+{%- if block and block.settings.is_faq -%}
+  {%- assign is_faq_effective = true -%}
+{%- elsif faq_mode -%}
+  {%- assign is_faq_effective = true -%}
+{%- elsif section and section.settings.faq_mode -%}
+  {%- assign is_faq_effective = true -%}
+{%- endif -%}
+
+{%- comment -%}
+  Question text: prefer block.settings.question, then `question` variable.
+{%- endcomment -%}
+{%- if block and block.settings.question != blank -%}
+  {%- assign question_text = block.settings.question | escape -%}
+{%- else -%}
+  {%- assign question_text = question | escape -%}
+{%- endif -%}
+
+{%- if heading_tag == blank -%}
+  {%- assign heading_tag = 'span' -%}
+{%- endif -%}
+
+{%- if heading_size != blank -%}
+  {%- assign heading_size = heading_size | append: ' mb-0' -%}
+{%- endif -%}
+
+{%- if heading_color == blank -%}
+  {%- assign heading_color = 'var(--brand-color-2)' -%}
+{%- endif -%}
+
+{%- if border_color == blank -%}
+  {%- assign border_color = 'var(--brand-color-5)' -%}
+{%- endif -%}
+
+{%- comment -%}
+  Button (Question)
+{%- endcomment -%}
+<button
+  type="button"
+  class="{{ btn_classes }} mt-0 mb-0"
+  style="color: {{ heading_color }};"
+  aria-expanded="{{ aria_state }}"
+  {%- if header_styles != blank -%}
+    style="{{ header_styles }}"
+  {%- endif -%}
+  {%- if is_faq_effective -%}
+    itemprop="mainEntity"
+    itemscope
+    itemtype="https://schema.org/Question"
+  {%- endif -%}
+  {% if id_attribute != blank -%}
+    id="{{ id_attribute }}"
+  {% endif -%}
+  {%- if shopify_attributes != blank -%}
+    {{ shopify_attributes }}
+  {%- endif -%}
+>
+  {%- if is_faq_effective -%}
+    <{{ heading_tag }}
+      itemprop="name"
+      class="accordion__question text-left {% if heading_size != blank %}{{ heading_size }}{% else %}large-body-text{% endif %}"
+      style="color: {{ heading_color }}"
+    >
+      {{- question_text -}}
+    </{{ heading_tag }}>
+  {%- else -%}
+    <{{ heading_tag }}
+      class="accordion__question text-left {% if heading_size != blank %}{{ heading_size }}{% else %}large-body-text{% endif %}"
+      style="color: {{ heading_color }};"
+    >
+      {{- question_text -}}
+    </{{ heading_tag }}>
+  {%- endif -%}
+
+  <span class="chevron" aria-hidden="true">
+    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="9" viewBox="0 0 19 9" fill="none">
+      <path d="M18.318 0.574341L9.55707 8.38916L0.796143 0.574341" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </span>
+</button>
+
+{%- comment -%}
+  Panel (Answer / Content) - must be the immediate sibling of the button
+  Prefer block.settings.content, then the `content` variable.
+{%- endcomment -%}
+<div
+  class="panel max-h-0 overflow-hidden {{ panel_open_class }} {{ panel_inline }}"
+  {%- if panel_inline != blank -%}
+    style="{{ panel_inline }} {%- if content_styles != blank -%} {{ content_styles }}{%- endif -%}"
+  {%- elsif content_styles != blank -%}
+    style="{{ content_styles }}"
+  {%- endif -%}
+  {%- if is_faq_effective -%}
+    itemprop="acceptedAnswer"
+    itemscope
+    itemtype="https://schema.org/Answer"
+  {%- endif -%}
+>
+  <div
+    class="content pt-0 pb-3 {% unless flex_col == false %}flex flex-col g-2{% endunless %}"
+    {%- if is_faq_effective -%}
+      itemprop="text"
+    {%- endif -%}
+  >
+    {%- if block and block.settings.content != blank -%}
+      {{ block.settings.content }}
+    {%- else -%}
+      {{ content }}
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .accordion {
+    background: transparent;
+    border: none;
+    outline: none;
+    transition: 0.3s all;
+  }
+
+  .accordion > div {
+    display: flex;
+    align-items: center;
+  }
+
+  .panel {
+    border-bottom: 1px solid var(--brand-color-5);
+  }
+
+  .accordion * {
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .accordion .chevron {
+    width: 24px;
+    height: 12px;
+  }
+
+  .accordion .chevron svg {
+    transition: all 0.3s;
+  }
+
+  .accordion.active .chevron svg {
+    transform: rotateX(180deg);
+  }
+
+  .panel {
+    transition: max-height 0.2s ease-out;
+  }
+{% endstylesheet %}

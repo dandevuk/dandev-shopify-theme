@@ -1,0 +1,66 @@
+<div
+  class="social-icon-block"
+  style="{% if block.settings.svg_colors %}--svg-color: {{ block.settings.svg_color }};--svg-color-hover: {{ block.settings.svg_color_hover }};{% else %}currentColor{% endif %};"
+  {{ block.shopify_attributes }}
+>
+  {%- render 'social-icons', size: block.settings.size -%}
+</div>
+{% stylesheet %}
+  .social-icon-block svg path {
+    fill: var(--svg-color);
+  }
+  .social-icon-block svg:hover path {
+    fill: var(--svg-color-hover);
+  }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Social Links",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "size",
+      "label": "Size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "checkbox",
+      "id": "svg_colors",
+      "label": "Change SVG Colours",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "svg_color",
+      "label": "SVG Colour",
+      "visible_if": "{{ block.settings.svg_colors == true }}"
+    },
+    {
+      "type": "color",
+      "id": "svg_color_hover",
+      "label": "SVG Hover Colour",
+      "visible_if": "{{ block.settings.svg_colors == true }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Social Links"
+    }
+  ]
+}
+{% endschema %}

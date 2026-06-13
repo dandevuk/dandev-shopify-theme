@@ -1,0 +1,21 @@
+{% comment %}
+  Renders a list of product's price (regular, sale)
+
+  Accepts:
+  - product: {Object} Product Liquid object (optional)
+  - use_variant: {Boolean} Renders selected or first variant price instead of overall product pricing (optional)
+  - show_badges: {Boolean} Renders 'Sale' and 'Sold Out' tags if the product matches the condition (optional)
+  - price_class: {String} Adds a price class to the price element (optional)
+
+  Usage:
+  {% render 'price', product: product %}
+{% endcomment %}
+
+{%- if product.compare_at_price > product.price -%}
+  <span class="large-body-text bold">{{ product.price | money }}</span>
+  <span class="large-body-text" style="text-decoration:line-through;opacity: 0.7">
+    {{- product.compare_at_price | money -}}
+  </span>
+{%- else -%}
+  <span class="large-body-text bold">{{ product.price | money }}</span>
+{%- endif -%}

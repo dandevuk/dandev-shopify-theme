@@ -1,0 +1,97 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "page_header_rnrYbK": {
+      "type": "page-header",
+      "blocks": {
+        "section_content_BmB68z": {
+          "type": "section-content",
+          "settings": {
+            "content_spacing": "g-1"
+          },
+          "blocks": {
+            "heading_Q9YcGm": {
+              "type": "heading",
+              "name": "Heading",
+              "settings": {
+                "heading": "{{ closest.page.title }}",
+                "heading_type": "h2",
+                "heading_size": "heading-h1"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "heading_Q9YcGm"
+          ]
+        }
+      },
+      "block_order": [
+        "section_content_BmB68z"
+      ],
+      "name": "Page Header",
+      "settings": {
+        "image": "shopify://shop_images/MacronStand_-_CTA_desktop.png",
+        "style_selector": "theme",
+        "section_styling": "third",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "overlay_type": "theme",
+        "overlay_styling": "secondary",
+        "overlay_color": "linear-gradient(#ffffff, #ffffff)",
+        "layout_style": "full-width",
+        "text_alignment": "center",
+        "truncate_text": true,
+        "truncate_lines": 3
+      }
+    },
+    "text_section": {
+      "type": "text-section",
+      "blocks": {
+        "id": {
+          "type": "section-content",
+          "static": true,
+          "settings": {
+            "content_spacing": "g-1"
+          },
+          "blocks": {
+            "richtext_bRQ6qi": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "richtext": "{{ closest.page.content }}"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "richtext_bRQ6qi"
+          ]
+        }
+      },
+      "name": "Text Section",
+      "settings": {
+        "style_selector": "theme",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "text_alignment": "text-left",
+        "page_width": "page-width--narrow",
+        "vertical_spacing": "vertical-padding",
+        "id_text": ""
+      }
+    }
+  },
+  "order": [
+    "page_header_rnrYbK",
+    "text_section"
+  ]
+}

@@ -1,0 +1,35 @@
+{%- comment -%}
+  Minimal section for the Section Rendering API — returns featured product form
+  regions so variant and selling plan updates work outside the product template.
+{%- endcomment -%}
+
+<main-product
+  data-section-id="{{ section.id }}"
+  data-product-id="{{ product.id }}"
+  data-product-url="{{ product.url }}"
+  data-featured-product="true"
+>
+  {%- capture form_content -%}
+    {%- render 'featured-product-update-surface',
+      product: product,
+      section_id: section.id
+    -%}
+  {%- endcapture -%}
+  {%- render 'product-form',
+    product: product,
+    content: form_content,
+    section_id: section.id,
+    enable_history: false,
+    gap: 'g-2'
+  -%}
+</main-product>
+
+{% schema %}
+{
+  "name": "Featured product API",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": []
+}
+{% endschema %}

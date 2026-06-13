@@ -1,0 +1,13 @@
+{% comment %}
+  Side cart section rendered via AJAX when the cart drawer is opened.
+  Outputs the cart markup migrated from the legacy theme.
+{% endcomment %}
+
+{% render 'side-cart', full_basket_threshold: section.settings.full_basket_threshold %}
+
+{% schema %}
+{
+  "name": "Side cart",
+  "class": "h-screen"
+}
+{% endschema %}

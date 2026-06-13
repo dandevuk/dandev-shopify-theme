@@ -1,0 +1,433 @@
+<section class="vertical-margin-bottom" id="main-product-container">
+  <div class="page-width desktop-breadcrumbs">
+    {%- render 'breadcrumbs', class: 'w-100 overflow-auto' -%}
+  </div>
+
+  {%- liquid
+    assign show_design mode = false
+    if request.design_mode and section.settings.show_oos
+      assign show_design_mode = true
+    endif
+
+    assign block_spacing_desktop = section.settings.block_spacing
+    assign block_spacing_mobile = section.settings.block_spacing_mobile
+
+    assign block_spacing = block_spacing_desktop | append: ' ' | append: block_spacing_mobile
+
+    assign style_selector = section.settings.style_selector
+    assign section_styling = section.settings.section_styling
+    assign background_color = section.settings.background_color
+    assign text_color = section.settings.text_color
+
+    if style_selector == 'custom'
+      assign custom_style = 'background: ' | append: background_color | append: '; color: ' | append: text_color | append: ';'
+      assign section_styling = ''
+    else
+      assign custom_style = ''
+    endif
+
+    assign background_image_type = section.settings.background_image_type
+    assign background_image_theme = section.settings.background_image_theme
+    assign bg_image = section.settings.bg_image
+
+    if background_image_type == 'none'
+      assign bg_image = blank
+    elsif background_image_type == 'theme'
+      if background_image_theme == '1'
+        assign bg_image = settings.section_background_image
+      elsif background_image_theme == '2'
+        assign bg_image = settings.section_background_image_2
+      endif
+    endif
+
+    assign form_input_bg_color = section.settings.form_input_bg_color
+    assign form_input_text_color = section.settings.form_input_text_color
+    assign form_submit_style = section.settings.form_submit_style
+
+    # OOS Template
+    if product.available != true or show_design_mode == true
+      render 'product-sold-out', product: product, show_recommendations_slider: section.settings.show_recommendations_slider, recommendations_heading: section.settings.recommendations_heading, bg_image: bg_image, custom_style: custom_style, section_styling: section_styling, form_input_bg_color: form_input_bg_color, form_input_text_color: form_input_text_color, form_submit_style: form_submit_style
+    endif
+  -%}
+
+  <main-product
+    id="main-product"
+    class="page-width grid-section g-5 {% unless product.available %}oos pt-5{% endunless %}"
+    data-section-id="{{ section.id }}"
+    data-product-id="{{ product.id }}"
+    data-product-url="{{ product.url }}"
+  >
+    <div class="gallery span-6">
+      <div class="mobile-slider-overflow">
+        {%- render 'product-gallery',
+          style: section.settings.desktop_gallery_style,
+          thumb_positioning: section.settings.thumb_positioning
+        -%}
+      </div>
+    </div>
+
+    {%- capture blocks -%}
+      {% content_for 'blocks' %}
+    {%- endcapture -%}
+
+    <div class="product-information span-6">
+      <div class="product-details sticky flex flex-col {{ block_spacing }} {{ block_spacing_mobile }}">
+        {% comment %}
+          <div class="mobile-breadcrumbs">
+          {%- render 'breadcrumbs' -%}
+             </div>
+        {% endcomment %}
+        {%- render 'product-form',
+          product: product,
+          content: blocks,
+          section_id: section.id,
+          radios: false,
+          enable_history: true,
+          gap: block_spacing
+        -%}
+      </div>
+    </div>
+  </main-product>
+</section>
+
+{%- stylesheet -%}
+  @media only screen and (max-width: 767.98px) {
+    .main-product {
+      overflow: hidden;
+    }
+  }
+
+  /* #main-product-container #main-product.oos {
+  border-top: 1px solid var(--brand-color-1);
+} */
+
+  #main-product-container .mobile-slider-overflow {
+    overflow: visible !important;
+  }
+
+  #main-product-container #main-product .product-details {
+    top: 105px;
+    transition: all 0.3s;
+  }
+
+  /*
+#main-product-container .size-guide {
+  display: block !important;
+} */
+{%- endstylesheet -%}
+
+{% schema %}
+{
+  "name": "Product",
+  "class": "main-product margin-bottom-l",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "block_spacing",
+      "label": "Block Spacing Desktop",
+      "options": [
+        {
+          "value": "g-3",
+          "label": "15px"
+        },
+        {
+          "value": "g-4",
+          "label": "20px"
+        },
+        {
+          "value": "g-5",
+          "label": "25px"
+        },
+        {
+          "value": "g-6",
+          "label": "30px"
+        }
+      ],
+      "default": "g-4"
+    },
+    {
+      "type": "select",
+      "id": "block_spacing_mobile",
+      "label": "Block Spacing Mobile",
+      "options": [
+        {
+          "value": "to-sm-g-3",
+          "label": "15px"
+        },
+        {
+          "value": "to-sm-g-4",
+          "label": "20px"
+        },
+        {
+          "value": "to-sm-g-5",
+          "label": "25px"
+        },
+        {
+          "value": "to-sm-g-6",
+          "label": "30px"
+        }
+      ],
+      "default": "to-sm-g-3"
+    },
+    {
+      "type": "header",
+      "content": "Gallery"
+    },
+    {
+      "type": "select",
+      "id": "desktop_gallery_style",
+      "label": "Desktop Gallery Style",
+      "options": [
+        {
+          "value": "slider",
+          "label": "Slider"
+        },
+        {
+          "value": "grid",
+          "label": "Grid"
+        }
+      ],
+      "default": "slider",
+      "info": "Mobile gallery will always be a slider"
+    },
+    {
+      "type": "select",
+      "id": "thumb_positioning",
+      "label": "Thumbnail Slider Positioning",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left of Main Gallery"
+        },
+        {
+          "value": "under",
+          "label": "Under Main Gallery"
+        }
+      ],
+      "default": "left",
+      "visible_if": "{{ section.settings.desktop_gallery_style == 'slider' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_out_of_stock_settings",
+      "label": "Show Out of Stock Settings",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Out of Stock Settings",
+      "visible_if": "{{ section.settings.show_out_of_stock_settings == true }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_recommendations_slider",
+      "label": "Show Recommendations Slider",
+      "default": true,
+      "visible_if": "{{ section.settings.show_out_of_stock_settings == true }}"
+    },
+    {
+      "type": "text",
+      "id": "recommendations_heading",
+      "label": "Recommendations Heading",
+      "default": "You May Also Like",
+      "visible_if": "{{ section.settings.show_recommendations_slider == true and section.settings.show_out_of_stock_settings == true }}"
+    },
+    {
+      "type": "header",
+      "content": "Out of Stock Styling",
+      "visible_if": "{{ section.settings.show_out_of_stock_settings == true }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_oos",
+      "label": "Show OOS in customiser",
+      "default": false,
+      "visible_if": "{{ section.settings.show_out_of_stock_settings == true }}"
+    },
+    {
+      "type": "select",
+      "id": "style_selector",
+      "label": "Styling Type",
+      "options": [
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "theme",
+      "visible_if": "{{ section.settings.show_out_of_stock_settings == true }}"
+    },
+    {
+      "type": "select",
+      "id": "section_styling",
+      "label": "Section Style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "third",
+          "label": "Third"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ section.settings.style_selector == 'theme' and section.settings.show_out_of_stock_settings == true }}"
+    },
+    {
+      "type": "color_background",
+      "id": "background_color",
+      "label": "Background Colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ section.settings.style_selector == 'custom' and section.settings.show_out_of_stock_settings == true }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Colour",
+      "default": "#393939",
+      "visible_if": "{{ section.settings.style_selector == 'custom' and section.settings.show_out_of_stock_settings == true }}"
+    },
+    {
+      "type": "select",
+      "id": "background_image_type",
+      "label": "Background Type",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ section.settings.show_out_of_stock_settings == true }}"
+    },
+    {
+      "type": "select",
+      "id": "background_image_theme",
+      "label": "Background Theme",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "1",
+      "visible_if": "{{ section.settings.background_image_type == 'theme' and section.settings.show_out_of_stock_settings == true }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image",
+      "info": "Used if 'Custom' is selected for Background Type",
+      "visible_if": "{{ section.settings.background_image_type == 'custom' and section.settings.show_out_of_stock_settings == true }}"
+    },
+    {
+      "type": "color",
+      "id": "form_input_bg_color",
+      "label": "Form Input Background Colour",
+      "default": "#ffffff",
+      "visible_if": "{{ section.settings.show_out_of_stock_settings == true }}"
+    },
+    {
+      "type": "color",
+      "id": "form_input_text_color",
+      "label": "Form Input Text Colour",
+      "visible_if": "{{ section.settings.show_out_of_stock_settings == true }}"
+    },
+    {
+      "type": "select",
+      "id": "form_submit_style",
+      "label": "Form Submit Button Style",
+      "options": [
+        {
+          "value": "button-1",
+          "label": "Button 1"
+        },
+        {
+          "value": "button-2",
+          "label": "Button 2"
+        },
+        {
+          "value": "button-3",
+          "label": "Button 3"
+        },
+        {
+          "value": "button-4",
+          "label": "Button 4"
+        }
+      ],
+      "default": "button-1",
+      "visible_if": "{{ section.settings.show_out_of_stock_settings == true }}"
+    }
+  ],
+  "blocks": [
+    { "type": "_product-submit" },
+    { "type": "_product-variant-selectors" },
+    { "type": "_product-title" },
+    { "type": "_product-price" },
+    { "type": "_product-reviews" },
+    { "type": "_product-description" },
+    { "type": "_product-gift-card-fields" },
+    { "type": "_payment-icons" },
+    { "type": "_product-complementary-products" },
+    { "type": "_product-information" },
+    { "type": "_product-text-icon" },
+    { "type": "_product-usp-group" },
+    { "type": "_product-collection-links" },
+    { "type": "_product-selling-plan-selector" },
+    { "type": "@app" }
+  ],
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "presets": [
+    {
+      "name": "Main Product",
+      "blocks": [
+        {
+          "type": "_product-title"
+        },
+        {
+          "type": "_product-price"
+        },
+        {
+          "type": "_product-description"
+        },
+        {
+          "type": "_product-variant-selectors"
+        },
+        {
+          "type": "_product-selling-plan-selector"
+        },
+        {
+          "type": "_product-submit"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

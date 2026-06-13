@@ -1,0 +1,76 @@
+{%- if localization.available_countries.size > 1 -%}
+  <localization-form>
+    {%- form 'localization', return_to: request.path -%}
+      <div class="relative">
+        <button
+          class="relative align-center flex g-2 w-100 p-2"
+          type="button"
+          aria-expanded="false"
+          aria-controls="CountryList"
+          style="border: 1px solid var(--brand-color-6);border-radius:8px;"
+        >
+          <img
+            data-src="{{ localization.country | image_url: width: 20, height: 20 }}"
+            width="20"
+            height="20"
+            alt="{{ localization.country.name }}"
+            width="20"
+            height="20"
+          >
+
+          {{ localization.country.name }}
+          ({{ localization.country.currency.symbol }})
+
+          <div style="margin-left:auto;">
+            {{- 'icon--chevron-down.svg' | inline_asset_content -}}
+          </div>
+        </button>
+
+        <ul
+          id="CountryList"
+          role="list"
+          class="list-none overflow-auto absolute w-100 border-radius-lg z-1"
+          hidden
+          style="top: 50px;max-height: 250px;background: var(--body-background-color);"
+        >
+          {%- for country in localization.available_countries -%}
+            <li tabindex="-1" class="pt-1 pb-1 pl-2 pr-2 flex g-2 align-center">
+              <a
+                class="align-center g-1 flex{% if country.iso_code == localization.country.iso_code %} active{% endif %} w-100 h-100"
+                href="#"
+                {% if country.iso_code == localization.country.iso_code %}
+                  aria-current="true"
+                {% endif %}
+                data-value="{{ country.iso_code }}"
+                data-market="{{ country.market.handle }}"
+                style="text-decoration: none;"
+              >
+                <span class="overflow-hidden">
+                  {{-
+                    country
+                    | image_url: width: 20, height: 20
+                    | image_tag:
+                      loading: 'lazy',
+                      decoding: 'async',
+                      alt: country.name,
+                      class: 'object-contain',
+                      style: 'width: 20px; height: auto;'
+                  -}}
+                </span>
+
+                <span>
+                  {{ country.name }}
+                  ({{ country.currency.symbol }})
+                </span>
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      <input type="hidden" name="country_code" value="{{ localization.country.iso_code }}">
+      <input type="hidden" name="return_to" value="{{request.path}}">
+      <button type="submit" class="visually-hidden">Submit</button>
+    {%- endform -%}
+  </localization-form>
+{%- endif -%}

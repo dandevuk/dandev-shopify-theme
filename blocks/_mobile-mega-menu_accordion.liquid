@@ -1,0 +1,58 @@
+{%- capture accordion -%}
+    {% content_for 'blocks' %}
+{%- endcapture -%}
+
+{%- render 'accordion-item',
+  question: block.settings.title,
+  content: accordion,
+  heading_tag: 'h3',
+  heading_size: 'heading-h3',
+  shopify_attributes: block.shopify_attributes
+-%}
+
+{% stylesheet %}
+  .mobile-menu-outer-wrapper .mobile-menu .mobile-menu-navigation .accordion {
+    padding-top: var(--content-spacing-1);
+    padding-bottom: var(--content-spacing-1);
+  }
+  .mobile-menu-outer-wrapper .mobile-menu .mobile-menu-navigation .accordion .accordion__question {
+    color: var(--brand-color-2);
+  }
+
+  .mobile-menu-outer-wrapper .mobile-menu .mobile-menu-navigation .panel {
+    border-bottom: unset;
+  }
+  .mobile-menu-outer-wrapper .mobile-menu .mobile-menu-navigation .panel .content {
+    padding-bottom: 8px;
+  }
+
+  .mobile-menu-outer-wrapper .mobile-menu .mobile-menu-navigation .panel .content .link-group {
+    padding-bottom: 0;
+    border-bottom: unset;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Accordion Menu",
+  "tag": null,
+  "blocks": [
+    { "type": "_mobile-mega-menu_link-group" },
+    { "type": "_top-level_link" },
+    { "type": "_mobile-cta-group" }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Accordion Title",
+      "default": "Menu"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Accordion Menu"
+    }
+  ]
+}
+{% endschema %}

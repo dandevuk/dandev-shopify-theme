@@ -1,0 +1,17 @@
+<div class="grid-section" {{ block.shopify_attributes }}>
+  {%- content_for 'blocks' -%}
+</div>
+
+{% schema %}
+{
+  "name": "Grid Section",
+  "tag": null,
+  "settings": [],
+  "blocks": [{ "type": "collection-card" }],
+  "presets": [
+    {
+      "name": "Grid Section"
+    }
+  ]
+}
+{% endschema %}

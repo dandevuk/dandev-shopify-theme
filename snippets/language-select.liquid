@@ -1,0 +1,155 @@
+{% if localization.available_languages.size > 1 %}
+  <localization-form>
+    {% form 'localization' %}
+      <div class="disclosure">
+        <button
+          type="button"
+          class="flex-center align-center g-1 p-0 m-0"
+          aria-expanded="false"
+          aria-controls="language-list"
+        >
+          {% comment %} <img src="{{ 'icon-globe-small.svg' |  asset_url }}" width="16" height="16" class="ar-1 w-100 h-100" alt="Globe icon" loading="lazy" decoding="async"> {% endcomment %}
+          {{ 'icon-globe-small.svg' | inline_asset_content }}
+
+          <span
+            class="flex-center align-center caret"
+            style="gap:calc(var(--content-spacing-1) / 2);"
+          >
+            {{ localization.language.iso_code | upcase }}
+            {% comment %} <img src="{{ 'icon--caret.svg' |  asset_url }}" width="8" height="8" alt="Caret icon" loading="lazy" decoding="async"> {% endcomment %}
+            {{ 'icon--caret.svg' | inline_asset_content }}
+          </span>
+        </button>
+
+        <ul
+          id="language-list"
+          role="list"
+          class="p-2 absolute list-none g-2"
+          style="background-color: var(--body-background-color);"
+          hidden
+        >
+          {%- for language in localization.available_languages -%}
+            {%- liquid
+              assign order = forloop.index | plus: 1
+              if language.iso_code == localization.language.iso_code
+                assign order = 1
+              endif
+            -%}
+            <li class="disclosure__item" tabindex="-1" style="order:{{ order }};">
+              <a
+                href="#"
+                {% if language.iso_code == localization.language.iso_code %}
+                  aria-current="true"
+                {% endif %}
+                hreflang="{{ language.iso_code }}"
+                lang="{{ language.iso_code }}"
+                data-value="{{ language.iso_code }}"
+                style="text-decoration: none;"
+                {% if language.iso_code == localization.language.iso_code %}
+                  class="bold"
+                {% endif %}
+              >
+                {{ language.endonym_name | capitalize }}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+
+        <input type="hidden" name="language_code" value="{{ localization.language.iso_code }}">
+      </div>
+    {% endform %}
+  </localization-form>
+{% endif %}
+
+{%- stylesheet -%}
+  .header .header-wrapper .header-icons localization-form,
+  .mobile-menu-outer-wrapper .mobile-menu .mobile-menu-bottom localization-form {
+    aspect-ratio: unset;
+  }
+  .header .header-wrapper .header-icons localization-form #language-list:not([hidden]),
+  .mobile-menu-outer-wrapper .mobile-menu .mobile-menu-bottom #language-list:not([hidden]) {
+    top: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-right: var(--content-spacing-3);
+    padding-left: var(--content-spacing-3) !important;
+    border-radius: var(--global-radius-large);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+  .header .header-wrapper .header-icons localization-form form button,
+  .mobile-menu-outer-wrapper .mobile-menu .mobile-menu-bottom localization-form form button {
+    color: inherit;
+    aspect-ratio: unset;
+  }
+  .header .header-wrapper .header-icons localization-form form button img:not([alt='Caret icon']) {
+    height: 16px;
+  }
+  .header .header-wrapper .header-icons localization-form form button .caret svg,
+  .mobile-menu-outer-wrapper
+    .mobile-menu
+    .mobile-menu-bottom
+    localization-form
+    form
+    button
+    img[alt='Caret icon'] {
+    height: 8px;
+    transition: transform 200ms ease;
+  }
+  .header
+    .header-wrapper
+    .header-icons
+    localization-form:has(ul:not([hidden]))
+    form
+    button
+    .caret
+    svg {
+    transform: rotateX(180deg);
+  }
+
+  /* Mobile menu */
+  .mobile-menu-outer-wrapper .mobile-menu .mobile-menu-bottom #language-list:not([hidden]) {
+    top: unset;
+    bottom: calc(100% + 10px);
+    border: 1px solid var(--brand-color-5);
+    font-size: 15px;
+  }
+  .mobile-menu-outer-wrapper .mobile-menu .mobile-menu-bottom localization-form {
+    position: relative;
+  }
+  .mobile-menu-outer-wrapper
+    .mobile-menu
+    .mobile-menu-bottom
+    localization-form
+    button[aria-controls='language-list'] {
+    gap: var(--content-spacing-2);
+    font-size: 14px;
+  }
+  .mobile-menu-outer-wrapper
+    .mobile-menu
+    .mobile-menu-bottom
+    localization-form
+    button[aria-controls='language-list']
+    img {
+    width: 20px;
+    height: 20px;
+  }
+  .mobile-menu-outer-wrapper
+    .mobile-menu
+    .mobile-menu-bottom
+    localization-form
+    form
+    button
+    img[alt='Caret icon'] {
+    transform: rotate(180deg);
+  }
+  .mobile-menu-outer-wrapper
+    .mobile-menu
+    .mobile-menu-bottom
+    localization-form:has(ul:not([hidden]))
+    form
+    button
+    img[alt='Caret icon'] {
+    transform: rotate(0deg);
+  }
+{%- endstylesheet -%}

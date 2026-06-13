@@ -1,0 +1,272 @@
+{% comment %}
+  This section is used in the 404 template to render page shown when customers
+  enter an invalid store URL.
+
+  https://shopify.dev/docs/storefronts/themes/architecture/templates/404
+{% endcomment %}
+
+{%- liquid
+  # CONTENT
+  assign image = section.settings.image
+
+  # LAYOUT
+  assign content_alignment = section.settings.content_alignment
+  assign text_alignment = section.settings.text_alignment
+  assign page_width = section.settings.page_width
+  assign vertical_spacing = section.settings.vertical_spacing
+
+  # STYLING
+  assign style_selector = section.settings.style_selector
+  assign section_styling = section.settings.section_styling
+  assign overlay_styling = section.settings.overlay_styling
+  assign overlay_background = section.settings.overlay_color
+  assign background_color = section.settings.background_color
+  assign text_color = section.settings.text_color
+-%}
+
+<section class="main-404-section section-container section-container {{ page_width }} {{vertical_spacing}} flex align-center relative">
+  {%- if image != blank -%}
+    <div class="media-container absolute inset-0 h-100 w-100 section-container overflow-hidden">
+      {%- render 'image',
+        image: image,
+        max_width: 1600,
+        use_placeholder: true,
+        lazy: false,
+        class: 'absolute-center object-cover'
+      -%}
+    </div>
+    <div
+      class="absolute inset-0 h-100 w-100 section-container overlay {% if overlay_styling == 'primary' %}gradient-bg{% elsif overlay_styling == 'secondary' %}gradient-bg-alt{% endif %}"
+      {% if section.settings.overlay_type == 'custom' %}
+        style="background: {{ overlay_background }};"
+      {% endif %}
+    ></div>
+  {%- endif -%}
+  <div class="grid-section relative max-h-max">
+    <div
+      class="no-text-margins content-group section-container border-radius flex flex-col container-h-padding container-v-padding relative {{ section_styling }} {% if content_alignment == 'left' %}content-left{% endif %} {% if text_alignment == 'center' %}align-center text-center{% endif %}"
+      {% if style_selector == 'custom' %}
+        style="background: {{ background_color }}; color: {{ text_color }};"
+      {% endif %}
+    >
+      {% content_for 'block', type: 'section-content', id: 'section-content' %}
+    </div>
+  </div>
+</section>
+
+{%- stylesheet -%}
+  .main-404-section .content-group {
+    grid-column: 4 / span 6;
+  }
+
+  @media (max-width: 991.98px) {
+    .main-404-section .content-group {
+      grid-column: 3 / span 8;
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    .main-404-section .content-group {
+      grid-column: span 6;
+    }
+  }
+
+  .main-404-section .content-group.content-left {
+    grid-column: 1 / span 6;
+  }
+
+  @media (max-width: 991.98px) {
+    .main-404-section .content-group.content-left {
+      grid-column: 1 / span 8;
+    }
+  }
+{%- endstylesheet -%}
+
+{% schema %}
+{
+  "name": "404 Section",
+  "class": "section-404",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Content Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "page_width",
+      "label": "Page Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Default"
+        },
+        {
+          "value": "page-width--narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "page-width--wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "select",
+      "id": "vertical_spacing",
+      "label": "Vertical Spacing",
+      "options": [
+        {
+          "value": "vertical-margin",
+          "label": "Margin"
+        },
+        {
+          "value": "vertical-padding",
+          "label": "Padding"
+        },
+        {
+          "value": "vertical-margin vertical-padding",
+          "label": "Margin and Padding"
+        },
+        {
+          "value": "",
+          "label": "None"
+        }
+      ],
+      "default": "vertical-margin"
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "select",
+      "id": "style_selector",
+      "label": "Styling Type",
+      "options": [
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "theme"
+    },
+    {
+      "type": "select",
+      "id": "section_styling",
+      "label": "Section Style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ section.settings.style_selector == 'theme' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "background_color",
+      "label": "Background Colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Colour",
+      "default": "#393939",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "overlay_type",
+      "label": "Overlay Type",
+      "options": [
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "theme"
+    },
+    {
+      "type": "select",
+      "id": "overlay_styling",
+      "label": "Overlay Style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ section.settings.overlay_type == 'theme' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "overlay_color",
+      "label": "Overlay Colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ section.settings.overlay_type == 'custom' }}"
+    }
+  ]
+}
+{% endschema %}

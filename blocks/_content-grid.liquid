@@ -1,0 +1,13 @@
+<div class="grid-section relative" {{ block.shopify_attributes }}>
+  {%- content_for 'blocks' -%}
+</div>
+
+{% schema %}
+{
+  "name": "Content Grid",
+  "tag": null,
+  "settings": [],
+  "blocks": [{ "type": "_column" }, { "type": "_divider" }],
+  "presets": [{ "name": "Content Grid" }]
+}
+{% endschema %}

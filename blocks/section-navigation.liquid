@@ -1,0 +1,38 @@
+<div
+  class="section-navigation span-7"
+  {{ block.shopify_attributes }}
+>
+  <div class="section-navigation-container flex-end h-100 flex-wrap g-3">
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+{%- stylesheet -%}
+  .section-navigation-container:has(.blaze-navigation-arrows.inline) {
+    gap: 0;
+  }
+{%- endstylesheet -%}
+
+{% schema %}
+{
+  "name": "Section Navigation",
+  "tag": null,
+  "settings": [
+  ],
+  "blocks": [{ "type": "links-container" }, { "type": "_slider-navigation-arrows" }],
+  "presets": [
+    {
+      "name": "Section Navigation",
+      "blocks": [
+        {
+          "type": "links-container"
+        },
+        {
+          "type": "_slider-navigation-arrows",
+          "settings": {}
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

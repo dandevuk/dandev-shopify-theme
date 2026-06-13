@@ -1,0 +1,332 @@
+{%- liquid
+  # CONTENT
+  assign store_logo = section.settings.logo | default: shop.brand.logo
+  assign link_to_t = 'accessibility.link_messages.link_to'
+
+  # STYLING
+  assign style_selector = section.settings.style_selector
+  assign section_styling = section.settings.section_styling
+  assign background_color = section.settings.background_color
+  assign text_color = section.settings.text_color
+
+  assign background_image_type = section.settings.background_image_type
+  assign background_image_theme = section.settings.background_image_theme
+  assign bg_image = section.settings.bg_image
+
+  if background_image_type == 'none'
+    assign bg_image = blank
+  elsif background_image_type == 'theme'
+    if background_image_theme == '1'
+      assign bg_image = settings.section_background_image
+    elsif background_image_theme == '2'
+      assign bg_image = settings.section_background_image_2
+    endif
+  endif
+
+  # LAYOUT
+  assign page_width = section.settings.page_width
+-%}
+
+<footer
+  class="footer section-container relative {{ section_styling }}"
+  {% if style_selector == 'custom' %}
+    style="background: {{ background_color }}; color: {{ text_color }};--custom-text-color: {{ text_color }};"
+  {% endif %}
+>
+  {%- if bg_image != blank -%}
+    <div class="absolute inset-0 opacity-10 z-0 overflow-hidden">
+      {%- render 'image',
+        image: bg_image,
+        max_width: 800,
+        use_placeholder: true,
+        lazy: true,
+        class: 'object-cover'
+      -%}
+    </div>
+  {%- endif -%}
+  <div class="footer-wrapper {{ page_width }} flex-center align-center flex-col">
+    <div class="footer__inner-container w-100 flex flex-wrap g-3 to-sm-flex-col relative container-v-padding pb-0">
+      <div class="footer__logo-container flex-col flex-start g-4 mr-auto to-sm-m-in-auto">
+        <div class="store-logo">
+          {%- if store_logo != blank -%}
+            <a href="{{ routes.root_url }}" aria-label="{{- link_to_t | t: link: shop.name -}}">
+              {%- render 'image',
+                image: store_logo,
+                max_width: 400,
+                use_placeholder: true,
+                lazy: true,
+                class: 'object-contain'
+              -%}
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <nav class="footer__navigation-container flex-1 flex flex-end flex-wrap g-5 to-sm-flex-center to-sm-flex-col to-sm-g-0 mb-3 to-sm-mb-0">
+        {% content_for 'blocks' %}
+      </nav>
+
+      <div class="social-payment-container w-100 flex flex-between g-4 pt-3 to-sm-pt-0 pb-3 to-md-flex-col">
+        <div class="footer-socials">
+          <div class="social-heading caption-text hidden to-sm-block mb-1">
+            {{ 'sections.footer.follow_us' | t }}
+          </div>
+          {% content_for 'block', type: '_social-links', id: 'social-links' %}
+        </div>
+        <div class="footer-payment-icons to-sm-pt-3 flex align-items">
+          {% content_for 'block', type: '_payment-icons', id: 'section-navigation' %}
+        </div>
+      </div>
+
+      <div class="footer-bar w-100 pb-3 to-sm-pb-5">
+        <div class="footer-bar-wrapper flex flex-between g-2 flex-wrap to-sm-flex-col to-sm-flex-center g-3 to-sm-g-2">
+          <div class="company-info">
+            &copy;
+            {{ 'now' | date: '%Y' }}
+            {{ shop.name | link_to: routes.root_url, class: 'no-decoration' }}
+            {{- settings.company_trade_number -}}
+          </div>
+
+          <div class="created-by">
+            {{- 'sections.footer.website_created_by' | t -}}
+            <a
+              href="https://www.quickfiredigital.com/"
+              rel="nofollow"
+              target="_blank"
+              class="no-decoration"
+              aria-label="Link to Quickfire Digital"
+              >Quickfire Digital</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+{% stylesheet %}
+  .site-footer--section {
+    background-color: var(--background-color-1, #fff);
+  }
+
+  @media only screen and (max-width: 479.98px) {
+    .site-footer--section .footer-bar .footer-bar-wrapper .created-by,
+    .site-footer--section .footer-bar .footer-bar-wrapper .company-info {
+      text-align: center;
+    }
+  }
+
+  @media only screen and (max-width: 767.98px) {
+    .site-footer--section .footer-payment-icons {
+      border-top: 1px solid #f0ece033;
+    }
+    .site-footer--section .social-payment-container {
+      border-bottom: 1px solid #f0ece033;
+    }
+  }
+
+  .site-footer--section .footer-bar .footer-bar-wrapper .created-by a,
+  .site-footer--section .footer-bar .footer-bar-wrapper .company-info a {
+    color: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+  }
+
+  .site-footer--section .footer-bar .footer-bar-wrapper .created-by a:hover,
+  .site-footer--section .footer-bar .footer-bar-wrapper .company-info a:hover {
+    text-decoration: underline;
+  }
+
+  @media only screen and (min-width: 767.98px) {
+    .site-footer--section .social-payment-container {
+      border-top: 1px solid #f0ece033;
+      border-bottom: 1px solid #f0ece033;
+    }
+
+    .footer-link-group button {
+      padding: 0;
+      border-bottom: none;
+    }
+    .footer-link-group button.accordion .chevron {
+      display: none;
+    }
+    .footer-link-group .panel {
+      max-height: 100%;
+    }
+    .footer-link-group .content {
+      padding: 0;
+    }
+
+    .site-footer--section .payment-icons {
+      max-width: 360px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Footer",
+  "tag": "section",
+  "class": "site-footer site-footer--section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "select",
+      "id": "style_selector",
+      "label": "Styling Type",
+      "options": [
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "theme"
+    },
+    {
+      "type": "select",
+      "id": "section_styling",
+      "label": "Section Style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "third",
+          "label": "Third"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ section.settings.style_selector == 'theme' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "background_color",
+      "label": "Background Colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Colour",
+      "default": "#393939",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "background_image_type",
+      "label": "Background Type",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "background_image_theme",
+      "label": "Background Theme",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "1",
+      "visible_if": "{{ section.settings.background_image_type == 'theme' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image",
+      "info": "Used if 'Custom' is selected for Background Type",
+      "visible_if": "{{ section.settings.background_image_type == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "Left"
+        },
+        {
+          "value": "text-center",
+          "label": "Centre"
+        }
+      ],
+      "default": "text-left"
+    },
+    {
+      "type": "select",
+      "id": "page_width",
+      "label": "Page Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Default"
+        },
+        {
+          "value": "page-width--narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "page-width--wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "page-width"
+    }
+  ],
+  "blocks": [{ "type": "_footer-accordion-item" }],
+  "presets": [
+    {
+      "name": "Footer"
+    }
+  ],
+  "enabled_on": {
+    "groups": ["footer"]
+  }
+}
+{% endschema %}

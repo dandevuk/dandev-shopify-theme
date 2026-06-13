@@ -1,0 +1,20 @@
+<div class="product-title-price flex-between flex-col" {{ block.shopify_attributes }}>
+  {%- content_for 'blocks' -%}
+</div>
+
+{% schema %}
+{
+  "name": "Title & Price",
+  "tag": null,
+  "settings": [],
+  "blocks": [
+    { "type": "_product-title" },
+    { "type": "_product-price" }
+  ],
+  "presets": [
+    {
+      "name": "Title & Price"
+    }
+  ]
+}
+{% endschema %}

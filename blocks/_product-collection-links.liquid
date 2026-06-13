@@ -1,0 +1,39 @@
+<div class="product-collection-links" {{ block.shopify_attributes }}>
+  <h2 class="heading-h3 product-collection-links-title uppercase">{{ block.settings.title }}</h2>
+  <div class="product-collection-links-list flex flex-wrap g-1">
+    {%- for collection in block.settings.collection_list -%}
+      {%- render 'collection-card', coll: collection, card_style: 'title-link' -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .product-collection-links-title {
+    font-size: 14px;
+    font-family: var(--body-font-family);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection Links",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "collection_list",
+      "id": "collection_list",
+      "label": "Collections"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Links"
+    }
+  ]
+}
+{% endschema %}

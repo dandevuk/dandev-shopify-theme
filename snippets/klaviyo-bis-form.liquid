@@ -1,0 +1,82 @@
+{%- liquid
+  assign coming_soon_text = 'products.product.bis_form.coming_soon_text' | t
+  assign email_placeholder = 'products.product.bis_form.email_placeholder' | t
+  assign notify_text = 'products.product.bis_form.notify_text' | t
+  assign form_success_message = 'products.product.bis_form.success_message' | t
+  assign form_error_message = 'products.product.bis_form.error_message' | t
+  assign form_id = product.id | prepend: 'NotifyForm__'
+  assign discontinued = product.metafields.product_data.discontinued
+  assign klaviyo_api_key = settings.klaviyo_api_key
+
+  if form_submit_style == blank
+    assign form_submit_style = 'button-1'
+  endif
+-%}
+
+{%- if klaviyo_api_key != blank and discontinued != true -%}
+  {% comment %} REMINDER FORM {% endcomment %}
+  <div
+    klaviyo-sold-out-form
+    class="pdp-sold-out-form__form relative w-100 flex-center flex-col align-stretch g-2 flex-1"
+  >
+    <div class="heading heading-sm bold to-sm-text-center">{{- coming_soon_text -}}</div>
+
+    <form
+      class="notify-form account-form w-100 flex-center align-stretch g-4 to-sm-align-center to-sm-flex-col"
+      id="{{ form_id }}"
+      data-klaviyo-api-key="{{ klaviyo_api_key }}"
+      data-product-id="{{ product.selected_or_first_available_variant.id }}"
+      data-form-success-message="{{ form_success_message }}"
+      data-form-error-message="{{ form_error_message }}"
+    >
+      <div class="form-field email flex-1 to-sm-w-100">
+        <input
+          type="email"
+          name="Email"
+          id="notify_email"
+          class="w-100 border-radius"
+          value="{{ customer.email }}"
+          placeholder="{{ email_placeholder }}"
+          aria-required="true"
+          autocorrect="off"
+          autocapitalize="off"
+          autocomplete="email"
+          required
+          {% if form.errors contains 'form' %}
+            aria-invalid="true"
+          {% endif %}
+          style="background-color: {{ form_input_bg_color }};color: {{ form_input_text_color }};--placeholder-color: {{ form_input_text_color }};"
+        >
+      </div>
+      <button
+        type="submit"
+        class="{{ form_submit_style }}"
+        aria-label="{{ notify_text }}"
+        form="{{- form_id -}}"
+      >
+        {{ notify_text }}
+      </button>
+    </form>
+    <div class="form-message heading-sm"></div>
+  </div>
+
+  <script
+    src="{{ 'klaviyo-back-in-stock.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+{%- endif -%}
+
+{%- stylesheet -%}
+  .pdp-sold-out-form__form form.notify-form button {
+    white-space: nowrap;
+  }
+
+  .pdp-sold-out-form__form form.notify-form input::placeholder {
+    color: var(--placeholder-color);
+  }
+
+  .pdp-sold-out-form__form .form-message:empty {
+    display: none;
+  }
+{%- endstylesheet -%}

@@ -1,0 +1,36 @@
+{% doc %}
+  Resolves variant pre-order state from metafields.
+  When pre_order.available_date is set, pre-order turns off on or after that date.
+  Outputs a pipe-delimited string: active|raw_date|formatted_date (e.g. true|2025-06-15|15.06.2025).
+  @param {variant} variant - The variant to evaluate
+{% enddoc %}
+
+{%- liquid
+  assign pre_order_active = false
+  assign pre_order_despatch_raw = ''
+  assign pre_order_despatch_formatted = ''
+
+  if variant.metafields.pre_order.is_pre_order
+    assign pre_order_active = true
+    assign pre_order_despatch_raw = variant.metafields.pre_order.expected_despatch_date
+
+    assign available_date = variant.metafields.pre_order.available_date
+    if available_date != blank
+      assign available_day = available_date | date: '%Y-%m-%d'
+      assign today = 'now' | date: '%Y-%m-%d'
+      if today >= available_day
+        assign pre_order_active = false
+        assign pre_order_despatch_raw = ''
+      endif
+    endif
+
+    if pre_order_active and pre_order_despatch_raw != blank
+      assign pre_order_despatch_formatted = pre_order_despatch_raw | date: '%d.%m.%Y'
+    endif
+  endif
+-%}
+{%- if pre_order_active -%}
+  true|{{ pre_order_despatch_raw }}|{{ pre_order_despatch_formatted }}
+{%- else -%}
+  false||
+{%- endif -%}

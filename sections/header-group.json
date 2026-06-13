@@ -1,0 +1,460 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "header",
+  "name": "t:general.header",
+  "sections": {
+    "announcement_bar_Uhat87": {
+      "type": "announcement-bar",
+      "blocks": {
+        "slide_ePhakU": {
+          "type": "slide",
+          "settings": {
+            "text": "Worldwide Delivery Available",
+            "link": "",
+            "link_text": ""
+          }
+        },
+        "slide_We4NCM": {
+          "type": "slide",
+          "settings": {
+            "text": "Latest products now available to buy",
+            "link": "shopify://collections",
+            "link_text": ""
+          }
+        }
+      },
+      "block_order": [
+        "slide_ePhakU",
+        "slide_We4NCM"
+      ],
+      "name": "Announcement Bar",
+      "settings": {
+        "background_color": "#000000",
+        "text_color": "#ffffff",
+        "autoplay": 3,
+        "slides_per_view": 1
+      }
+    },
+    "header": {
+      "type": "header",
+      "blocks": {
+        "mega-menu": {
+          "type": "_mega-menu",
+          "static": true,
+          "settings": {},
+          "blocks": {
+            "top_level_drop_down_6QebDx": {
+              "type": "_top-level_drop-down",
+              "name": "Top Level Drop Down",
+              "settings": {
+                "link_title": "Collections",
+                "link_url": "shopify://collections",
+                "open_to_custiomise": false
+              },
+              "blocks": {
+                "drop_down_link_group_jaLrFU": {
+                  "type": "_drop-down_link-group",
+                  "name": "Drop Down Link Group",
+                  "settings": {
+                    "menu": "collections",
+                    "link_title": ""
+                  },
+                  "blocks": {}
+                },
+                "drop_down_link_group_DhqtXk": {
+                  "type": "_drop-down_link-group",
+                  "name": "Drop Down Link Group",
+                  "settings": {
+                    "menu": "collections",
+                    "link_title": ""
+                  },
+                  "blocks": {}
+                },
+                "drop_down_link_group_Mt9wtW": {
+                  "type": "_drop-down_link-group",
+                  "name": "Drop Down Link Group",
+                  "settings": {
+                    "menu": "collections",
+                    "link_title": ""
+                  },
+                  "blocks": {}
+                },
+                "cta_TcX399": {
+                  "type": "_cta",
+                  "name": "CTA",
+                  "settings": {
+                    "cta": "test-1",
+                    "in_mega_menu": true,
+                    "heading_size": "heading-h4",
+                    "style": "image_card"
+                  },
+                  "blocks": {}
+                },
+                "cta_tKH7Ra": {
+                  "type": "_cta",
+                  "name": "CTA",
+                  "settings": {
+                    "cta": "test-2",
+                    "in_mega_menu": true,
+                    "heading_size": "heading-h4",
+                    "style": "image_card"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "drop_down_link_group_jaLrFU",
+                "drop_down_link_group_DhqtXk",
+                "drop_down_link_group_Mt9wtW",
+                "cta_TcX399",
+                "cta_tKH7Ra"
+              ]
+            },
+            "top_level_drop_down_XDH7fc": {
+              "type": "_top-level_drop-down",
+              "name": "Top Level Drop Down",
+              "settings": {
+                "link_title": "Collections",
+                "link_url": "shopify://collections",
+                "open_to_custiomise": false
+              },
+              "blocks": {
+                "drop_down_link_group_MUrxWj": {
+                  "type": "_drop-down_link-group",
+                  "name": "Drop Down Link Group",
+                  "settings": {
+                    "menu": "collections",
+                    "link_title": ""
+                  },
+                  "blocks": {}
+                },
+                "drop_down_link_group_xLjtyp": {
+                  "type": "_drop-down_link-group",
+                  "name": "Drop Down Link Group",
+                  "settings": {
+                    "menu": "collections",
+                    "link_title": ""
+                  },
+                  "blocks": {}
+                },
+                "drop_down_link_group_EUiTLU": {
+                  "type": "_drop-down_link-group",
+                  "name": "Drop Down Link Group",
+                  "settings": {
+                    "menu": "collections",
+                    "link_title": ""
+                  },
+                  "blocks": {}
+                },
+                "cta_mL3RpK": {
+                  "type": "_cta",
+                  "name": "CTA",
+                  "settings": {
+                    "cta": "test-1",
+                    "in_mega_menu": true,
+                    "heading_size": "heading-h4",
+                    "style": "image_card"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "drop_down_link_group_MUrxWj",
+                "drop_down_link_group_xLjtyp",
+                "drop_down_link_group_EUiTLU",
+                "cta_mL3RpK"
+              ]
+            },
+            "top_level_drop_down_GiExaP": {
+              "type": "_top-level_drop-down",
+              "name": "Top Level Drop Down",
+              "settings": {
+                "link_title": "Collections",
+                "link_url": "shopify://collections",
+                "open_to_custiomise": false
+              },
+              "blocks": {
+                "drop_down_link_group_YJ8y8E": {
+                  "type": "_drop-down_link-group",
+                  "name": "Drop Down Link Group",
+                  "settings": {
+                    "menu": "collections",
+                    "link_title": ""
+                  },
+                  "blocks": {}
+                },
+                "drop_down_link_group_r8awXT": {
+                  "type": "_drop-down_link-group",
+                  "name": "Drop Down Link Group",
+                  "settings": {
+                    "menu": "collections",
+                    "link_title": ""
+                  },
+                  "blocks": {}
+                },
+                "drop_down_link_group_pYrwTb": {
+                  "type": "_drop-down_link-group",
+                  "name": "Drop Down Link Group",
+                  "settings": {
+                    "menu": "collections",
+                    "link_title": ""
+                  },
+                  "blocks": {}
+                },
+                "cta_WaJPcQ": {
+                  "type": "_cta",
+                  "name": "CTA",
+                  "settings": {
+                    "cta": "test-2",
+                    "in_mega_menu": true,
+                    "heading_size": "heading-h4",
+                    "style": "image_card"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "drop_down_link_group_YJ8y8E",
+                "drop_down_link_group_r8awXT",
+                "drop_down_link_group_pYrwTb",
+                "cta_WaJPcQ"
+              ]
+            },
+            "top_level_link_gfNV78": {
+              "type": "_top-level_link",
+              "name": "Top Level Link",
+              "settings": {
+                "link_title": "Link 1",
+                "link_url": "shopify://pages/contact",
+                "button": false,
+                "button_style": "button-2"
+              },
+              "blocks": {}
+            },
+            "top_level_link_w6e98F": {
+              "type": "_top-level_link",
+              "name": "Top Level Link",
+              "settings": {
+                "link_title": "Link 2",
+                "link_url": "shopify://pages/test-1",
+                "button": false,
+                "button_style": "button-2"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "top_level_drop_down_6QebDx",
+            "top_level_drop_down_XDH7fc",
+            "top_level_drop_down_GiExaP",
+            "top_level_link_gfNV78",
+            "top_level_link_w6e98F"
+          ]
+        },
+        "mobile-mega-menu": {
+          "type": "_mobile-mega-menu",
+          "static": true,
+          "settings": {
+            "open_to_custiomise": false
+          },
+          "blocks": {
+            "mobile_mega_menu_accordion_8w6c4W": {
+              "type": "_mobile-mega-menu_accordion",
+              "name": "Accordion Menu",
+              "settings": {
+                "title": "Collection 1"
+              },
+              "blocks": {
+                "mobile_mega_menu_link_group_DMjcgU": {
+                  "type": "_mobile-mega-menu_link-group",
+                  "name": "Mobile Link Group",
+                  "settings": {
+                    "title": "Collection 1",
+                    "menu": "collections"
+                  },
+                  "blocks": {}
+                },
+                "mobile_mega_menu_link_group_zwPQix": {
+                  "type": "_mobile-mega-menu_link-group",
+                  "name": "Mobile Link Group",
+                  "settings": {
+                    "title": "Collection 2",
+                    "menu": "collections"
+                  },
+                  "blocks": {}
+                },
+                "mobile_cta_group_V488pj": {
+                  "type": "_mobile-cta-group",
+                  "name": "Mobile CTA Group",
+                  "settings": {},
+                  "blocks": {
+                    "cta_pYU3eA": {
+                      "type": "_cta",
+                      "name": "CTA",
+                      "settings": {
+                        "cta": "test-1",
+                        "in_mega_menu": true,
+                        "heading_size": "heading-h4",
+                        "style": "image_card"
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "cta_pYU3eA"
+                  ]
+                }
+              },
+              "block_order": [
+                "mobile_mega_menu_link_group_DMjcgU",
+                "mobile_mega_menu_link_group_zwPQix",
+                "mobile_cta_group_V488pj"
+              ]
+            },
+            "mobile_mega_menu_accordion_TBbjgX": {
+              "type": "_mobile-mega-menu_accordion",
+              "name": "Accordion Menu",
+              "settings": {
+                "title": "Collection 1"
+              },
+              "blocks": {
+                "mobile_mega_menu_link_group_PEkpCC": {
+                  "type": "_mobile-mega-menu_link-group",
+                  "name": "Mobile Link Group",
+                  "settings": {
+                    "title": "Collection 1",
+                    "menu": "collections"
+                  },
+                  "blocks": {}
+                },
+                "mobile_mega_menu_link_group_ky7rfc": {
+                  "type": "_mobile-mega-menu_link-group",
+                  "name": "Mobile Link Group",
+                  "settings": {
+                    "title": "Collection 2",
+                    "menu": "collections"
+                  },
+                  "blocks": {}
+                },
+                "mobile_cta_group_Mk6nwQ": {
+                  "type": "_mobile-cta-group",
+                  "name": "Mobile CTA Group",
+                  "settings": {},
+                  "blocks": {
+                    "cta_x8cGRH": {
+                      "type": "_cta",
+                      "name": "CTA",
+                      "settings": {
+                        "cta": "test-1",
+                        "in_mega_menu": true,
+                        "heading_size": "heading-h4",
+                        "style": "image_card"
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "cta_x8cGRH"
+                  ]
+                }
+              },
+              "block_order": [
+                "mobile_mega_menu_link_group_PEkpCC",
+                "mobile_mega_menu_link_group_ky7rfc",
+                "mobile_cta_group_Mk6nwQ"
+              ]
+            },
+            "mobile_mega_menu_accordion_gg6AaB": {
+              "type": "_mobile-mega-menu_accordion",
+              "name": "Accordion Menu",
+              "settings": {
+                "title": "Collection 1"
+              },
+              "blocks": {
+                "mobile_mega_menu_link_group_CGzwh8": {
+                  "type": "_mobile-mega-menu_link-group",
+                  "name": "Mobile Link Group",
+                  "settings": {
+                    "title": "Collection 1",
+                    "menu": "collections"
+                  },
+                  "blocks": {}
+                },
+                "mobile_mega_menu_link_group_DQAfAK": {
+                  "type": "_mobile-mega-menu_link-group",
+                  "name": "Mobile Link Group",
+                  "settings": {
+                    "title": "Collection 2",
+                    "menu": "collections"
+                  },
+                  "blocks": {}
+                },
+                "mobile_cta_group_yheNU6": {
+                  "type": "_mobile-cta-group",
+                  "name": "Mobile CTA Group",
+                  "settings": {},
+                  "blocks": {
+                    "cta_pJi4wD": {
+                      "type": "_cta",
+                      "name": "CTA",
+                      "settings": {
+                        "cta": "test-1",
+                        "in_mega_menu": true,
+                        "heading_size": "heading-h4",
+                        "style": "image_card"
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "cta_pJi4wD"
+                  ]
+                }
+              },
+              "block_order": [
+                "mobile_mega_menu_link_group_CGzwh8",
+                "mobile_mega_menu_link_group_DQAfAK",
+                "mobile_cta_group_yheNU6"
+              ]
+            }
+          },
+          "block_order": [
+            "mobile_mega_menu_accordion_8w6c4W",
+            "mobile_mega_menu_accordion_TBbjgX",
+            "mobile_mega_menu_accordion_gg6AaB"
+          ]
+        }
+      },
+      "settings": {
+        "mega_menu_position": "inside_header"
+      }
+    },
+    "cart-drawer": {
+      "type": "cart-drawer",
+      "settings": {}
+    },
+    "cart-recommendations": {
+      "type": "cart-recommendations",
+      "settings": {}
+    },
+    "cart-recommendations-modal": {
+      "type": "cart-recommendations-modal",
+      "settings": {}
+    }
+  },
+  "order": [
+    "announcement_bar_Uhat87",
+    "header",
+    "cart-drawer",
+    "cart-recommendations",
+    "cart-recommendations-modal"
+  ]
+}

@@ -1,0 +1,208 @@
+{%- comment -%}
+  Unified quantity selector snippet:
+  - If 'item' is provided (cart/sidecart), render the cart version compatible with Cart UI.
+  - Else assume product context and render product version with hidden input and plus/minus UI.
+  B2B quantity rules (increment, min, max) come from variant.quantity_rule.
+{%- endcomment -%}
+
+{%- liquid
+  if item
+    assign qty_variant = item.variant
+  else
+    assign qty_variant = product.selected_or_first_available_variant
+    if product.selected_variant != blank
+      assign qty_variant = product.selected_variant
+    endif
+  endif
+
+  assign qty_increment = qty_variant.quantity_rule.increment | default: 1
+  assign qty_min = qty_variant.quantity_rule.min | default: 1
+  assign qty_max = nil
+
+  if qty_variant.quantity_rule.max != blank
+    assign qty_max = qty_variant.quantity_rule.max
+  endif
+
+  if qty_variant.inventory_management == 'shopify' and qty_variant.inventory_policy != 'continue'
+    assign inventory_cap = qty_variant.inventory_quantity
+    if qty_max == blank or inventory_cap < qty_max
+      assign qty_max = inventory_cap
+    endif
+  elsif qty_max == blank
+    assign qty_max = 10000000
+  endif
+-%}
+
+{%- if item -%}
+  {% if item.variant.available %}
+    <div
+      class="quantity-wrapper"
+      data-cart-quantity
+      data-quantity="{{ item.quantity }}"
+      data-step="{{ qty_increment }}"
+      data-min="{{ qty_min }}"
+      data-max="{{ qty_max }}"
+    >
+      <button
+        type="button"
+        class="quantity-btn quantity-btn--decrement minus"
+        data-quantity-decrement
+        data-action="decrease"
+        aria-label="{{ 'accessibility.minus' | default: 'Decrease quantity' }}"
+      >
+        &minus;
+      </button>
+
+      <div class="quantity">
+        <span
+          data-cart-quantity-display
+          data-variant-id="{{ item.variant_id }}"
+          data-quantity-limit-title="{{ 'products.product.quantity.max_quantity_limit_title' | t }}"
+          data-quantity-limit-message="{{ 'products.product.quantity.max_quantity_limit_message' | t }}"
+          data-inventory-policy="{{ item.variant.inventory_policy }}"
+          data-stock="{% if item.variant.inventory_management == "shopify" and item.variant.inventory_policy != "continue" %}{{ item.variant.inventory_quantity | minus: item.quantity }}{% else %}10000000{% endif %}"
+        >
+          {{ item.quantity }}
+        </span>
+      </div>
+
+      <button
+        type="button"
+        class="quantity-btn quantity-btn--increment plus"
+        data-quantity-increment
+        data-action="increase"
+        aria-label="{{ 'accessibility.plus' | default: 'Increase quantity' }}"
+      >
+        +
+      </button>
+    </div>
+  {% else %}
+    <p class="oos">
+      {{ 'products.product.out_of_stock' | t }}
+      <button
+        type="button"
+        class="remove-item"
+        data-cart-remove
+        data-variant-id="{{ item.variant_id }}"
+      >
+        {{ 'general.cart.remove_item' | t }}
+      </button>
+    </p>
+  {% endif %}
+{%- else -%}
+  <div quantity-select class="quantity-select flex align-center w-max border-radius">
+    <button
+      type="button"
+      class="quantity-btn quantity-btn--decrement minus cursor-pointer flex-center align-center flex-1"
+      data-quantity-decrement
+      data-action="decrease"
+      aria-label="{{ 'accessibility.minus' | default: 'Decrease quantity' }}"
+    >
+      -
+    </button>
+
+    <div class="quantity flex-center align-center flex-1">
+      <span data-quantity-value quantity>{{ qty_min }}</span>
+    </div>
+
+    <button
+      type="button"
+      class="quantity-btn quantity-btn--increment plus cursor-pointer flex-center align-center flex-1"
+      data-quantity-increment
+      data-action="increase"
+      aria-label="{{ 'accessibility.plus' | default: 'Increase quantity' }}"
+    >
+      +
+    </button>
+
+    <input
+      style="display: none!important"
+      type="number"
+      name="quantity"
+      value="{{ qty_min }}"
+      min="{{ qty_min }}"
+      step="{{ qty_increment }}"
+      data-max-quantity-title="{{ 'products.product.quantity.max_quantity_limit_title' | t }}"
+      data-max-quantity-message="{{ 'products.product.quantity.max_quantity_limit_message' | t }}"
+      max="{{ qty_max }}"
+      class="quantity-selector quantity-input"
+      data-money-format="{{ shop.money_format }}"
+    >
+  </div>
+{%- endif -%}
+
+{%- stylesheet -%}
+  /* -----------------------
+   Cart/Side Cart Item Quantity
+   ----------------------- */
+  .quantity-wrapper {
+    display: flex;
+    width: 90px;
+    min-width: 90px;
+    min-height: 29px;
+    border: 1px solid var(--brand-color-5);
+    border-radius: 90px;
+    overflow: hidden;
+    background-color: #fff;
+  }
+
+  .quantity-wrapper > * {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    width: 21px;
+    height: auto;
+    border: none;
+    text-align: center;
+  }
+
+  .quantity-wrapper .quantity-btn--increment,
+  .quantity-wrapper .quantity-btn--decrement {
+    font-size: 22px;
+    cursor: pointer;
+    transition: 0.3s ease;
+  }
+
+  .quantity-wrapper .quantity-btn--increment[data-pending='true'],
+  .quantity-wrapper .quantity-btn--decrement[data-pending='true'] {
+    cursor: not-allowed;
+  }
+
+  .quantity-wrapper .quantity {
+    border-right: none;
+    border-left: none;
+  }
+
+  .quantity-wrapper .quantity span {
+    position: relative;
+    top: -2px;
+    font-family: var(--heading-font-family);
+    font-size: 16px;
+  }
+
+  /* -----------------------
+   Side Cart Item Out of Stock
+   ----------------------- */
+
+  /* .oos {
+  font-size: 12px;
+  width: 50%;
+  margin: 0px;
+  text-align: right;
+} */
+
+  /* -----------------------
+   Product Quantity (Form)
+   ----------------------- */
+
+  .quantity-select > * {
+    width: 30px;
+    height: 100%;
+    border: none;
+  }
+
+  .quantity-select .quantity {
+    flex: 2;
+  }
+{%- endstylesheet -%}

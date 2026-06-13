@@ -1,0 +1,15 @@
+{%- if article.tags.size > 0 -%}
+  <div class="{{ class }}">
+    {%- for tag in article.tags limit: limit -%}
+      {%- if tag_links == true -%}
+        <a href="{{ blog.url }}/tagged/{{ tag }}" class="{{ tag_class }} no-decoration uppercase">
+          {{- tag | remove: "filter_" -}}
+        </a>
+      {%- else -%}
+        <span class="{{ tag_class }} uppercase">
+          {{- tag | remove: "filter_" -}}
+        </span>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+{%- endif -%}

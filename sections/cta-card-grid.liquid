@@ -1,0 +1,354 @@
+ {%- liquid
+  # STYLING
+  assign cta_card_height = section.settings.cta_card_height
+  assign cta_card_height_mobile = section.settings.cta_card_height_mobile
+  assign style_selector = section.settings.style_selector
+  assign section_styling = section.settings.section_styling
+  assign background_color = section.settings.background_color
+  assign text_color = section.settings.text_color
+
+  # LAYOUT
+  assign mobile_layout = section.settings.mobile_layout
+  assign vertical_spacing = section.settings.vertical_spacing
+  assign custom_spacing = section.settings.custom_spacing
+  assign top_spacing = section.settings.top_spacing
+  assign bottom_spacing = section.settings.bottom_spacing
+  assign top_spacing_mobile = section.settings.top_spacing_mobile
+  assign bottom_spacing_mobile = section.settings.bottom_spacing_mobile
+  assign page_width = section.settings.page_width
+
+  # ID Attribute
+  assign id_text = section.settings.id_text | strip
+-%}
+<div
+  class="section-container {% unless custom_spacing %}{{ vertical_spacing }}{% else %}custom-spacing{% endunless %} {{ section_styling }} mobile-swiper-overflow"
+  style="
+    --cta-card-height: {{ cta_card_height }}px;
+    --mobile-cta-card-height: {{ cta_card_height_mobile }}px;
+    {%- if custom_spacing -%}
+      {%- if vertical_spacing == 'vertical-padding' -%}
+        padding-top: {{ top_spacing }}px; padding-bottom: {{ bottom_spacing }}px;--mobile-padding-top: {{ top_spacing_mobile }}px; --mobile-padding-bottom: {{ bottom_spacing_mobile }}px;
+      {%- elsif vertical_spacing == 'vertical-margin' -%}
+        margin-top: {{ top_spacing }}px; margin-bottom: {{ bottom_spacing }}px;--mobile-margin-top: {{ top_spacing_mobile }}px; --mobile-margin-bottom: {{ bottom_spacing_mobile }}px;
+      {%- elsif vertical_spacing == 'vertical-margin vertical-padding' -%}
+        padding-top: {{ top_spacing }}px; padding-bottom: {{ bottom_spacing }}px; margin-top: {{ top_spacing }}px; margin-bottom: {{ bottom_spacing }}px; --mobile-padding-top: {{ top_spacing_mobile }}px; --mobile-padding-bottom: {{ bottom_spacing_mobile }}px; --mobile-margin-top: {{ top_spacing_mobile }}px; --mobile-margin-bottom: {{ bottom_spacing_mobile }}px;
+      {%- endif -%}
+    {%- endif -%}
+    {% if style_selector == 'custom' %}
+      background: {{ background_color }}; color: {{ text_color }};
+    {% endif %}
+  "
+  id="{% if id_text != blank %}{{ id_text }}{% else %}shopify-section-{{ section.id }}{% endif %}"
+>
+  <div class="{{ page_width }}">
+    {%- if mobile_layout == 'slider' -%}
+      <div class="cta-card-grid-container" data-section-id="{{ section.id }}">
+        <div class="desktop-grid-wrapper">
+          <swiper-container
+            role="region"
+            loop="false"
+            aria-roledescription="carousel"
+            slides-per-view="1.2"
+            space-between="20"
+          >
+            {%- for block in section.blocks -%}
+              <swiper-slide class="swiper-slide h-auto {{ block.settings.width | default: 'span-4' }}">
+                {%- render block, swiper_mode: true -%}
+              </swiper-slide>
+            {%- endfor -%}
+          </swiper-container>
+        </div>
+      </div>
+    {%- else -%}
+      <div class="grid-section">
+        {%- content_for "blocks" -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{%- if mobile_layout == 'slider' -%}
+  <script
+    src="{{ 'cta-card-grid-swiper.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+{%- endif -%}
+
+{% stylesheet %}
+
+.cta-card-grid-container swiper-container::part(slide) {
+  max-width: 100% !important;
+}
+
+.cta-card-grid .cta {
+  height: var(--mobile-cta-card-height) !important;
+}
+
+/* Desktop swiper to grid override */
+@media screen and (min-width: 768px) {
+  .cta-card-grid .cta {
+    height: var(--cta-card-height) !important;
+  }
+  /* Apply grid to wrapper, NOT swiper-container */
+  .cta-card-grid-container .desktop-grid-wrapper.desktop {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--content-spacing-6);
+  }
+
+  .cta-card-grid-container .desktop-grid-wrapper.desktop .swiper-slide {
+    display: none;
+  }
+
+  .cta-card-grid-container .desktop-grid-wrapper.desktop .desktop-slide:has(.span-4) {
+    grid-column: span 4;
+  }
+
+  .cta-card-grid-container .desktop-grid-wrapper.desktop .desktop-slide:has(.span-6) {
+    grid-column: span 6;
+  }
+
+  .cta-card-grid-container .desktop-grid-wrapper.desktop .desktop-slide:has(.span-12) {
+    grid-column: span 12;
+  }
+
+  /* Hide swiper on desktop */
+  .cta-card-grid-container .desktop-grid-wrapper.desktop swiper-container {
+    display: none;
+  }
+
+  /* Show slides as direct children of grid wrapper */
+  .cta-card-grid-container .desktop-grid-wrapper.desktop > .desktop-slide {
+    display: block;
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+    "name": "CTA Card Grid",
+    "tag": "section",
+    "class": "cta-card-grid",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Styling"
+      },
+      {
+        "type": "range",
+        "id": "cta_card_height",
+        "label": "CTA Card Height",
+        "min": 290,
+        "max": 600,
+        "step": 10,
+        "unit": "px",
+        "default": 290
+      },
+      {
+        "type": "range",
+        "id": "cta_card_height_mobile",
+        "label": "CTA Card Height (Mobile)",
+        "min": 100,
+        "max": 400,
+        "step": 10,
+        "unit": "px",
+        "default": 100
+      },
+      {
+        "type": "select",
+        "id": "style_selector",
+        "label": "Styling Type",
+        "options": [
+          {
+            "value": "theme",
+            "label": "Theme",
+          },
+          {
+            "value": "custom",
+            "label": "Custom",
+          }
+        ],
+        "default": "theme"
+      },
+      {
+        "type": "select",
+        "id": "section_styling",
+        "label": "Section Style",
+        "options": [
+          {
+            "value": "primary",
+            "label": "Transparent"
+          },
+          {
+            "value": "secondary",
+            "label": "Dark"
+          },
+          {
+            "value": "third",
+            "label": "White"
+          },
+          {
+            "value": "fourth",
+            "label": "Light"
+          },
+          {
+            "value": "fifth",
+            "label": "Gold"
+          }
+        ],
+        "default": "primary",
+        "visible_if": "{{ section.settings.style_selector == 'theme' }}"
+      },
+      {
+        "type": "color_background",
+        "id": "background_color",
+        "label": "Background Colour",
+        "default": "linear-gradient(#ffffff, #ffffff)",
+        "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text Colour",
+        "default": "#393939",
+        "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+      },
+      {
+        "type": "header",
+        "content": "Layout"
+      },
+      {
+        "type": "select",
+        "id": "mobile_layout",
+        "label": "Mobile Layout",
+        "options": [
+          {
+            "value": "grid",
+            "label": "Grid"
+          },
+          {
+            "value": "slider",
+            "label": "Slider"
+          }
+        ],
+        "default": "grid"
+      },
+      {
+        "type": "select",
+        "id": "page_width",
+        "label": "Page Width",
+        "options": [
+          {
+            "value": "page-width",
+            "label": "Default"
+          },
+          {
+            "value": "page-width--narrow",
+            "label": "Narrow"
+          },
+          {
+            "value": "page-width--wide",
+            "label": "Wide"
+          }
+        ],
+        "default": "page-width"
+      },
+      {
+        "type": "select",
+        "id": "vertical_spacing",
+        "label": "Vertical Spacing",
+        "options": [
+          {
+            "value": "vertical-margin",
+            "label": "Margin"
+          },
+          {
+            "value": "vertical-padding",
+            "label": "Padding"
+          },
+          {
+            "value": "vertical-margin vertical-padding",
+            "label": "Margin and Padding"
+          },
+          {
+            "value": "",
+            "label": "None"
+          }
+        ],
+        "default": "vertical-margin",
+        "info": "This uses the global spacing settings from the theme settings to ensure consistent spacing between sections. If you want to use custom spacing, please check the 'Custom Spacing' option."
+      },
+      {
+        "type": "checkbox",
+        "id": "custom_spacing",
+        "label": "Custom Spacing",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "top_spacing",
+        "label": "Top Spacing",
+        "min": 0,
+        "max": 120,
+        "step": 5,
+        "unit": "px",
+        "default": 120,
+        "visible_if": "{{ section.settings.custom_spacing == true }}"
+      },
+      {
+        "type": "range",
+        "id": "bottom_spacing",
+        "label": "Bottom Spacing",
+        "min": 0,
+        "max": 120,
+        "step": 5,
+        "unit": "px",
+        "default": 120,
+        "visible_if": "{{ section.settings.custom_spacing == true }}"
+      },
+      {
+        "type": "range",
+        "id": "top_spacing_mobile",
+        "label": "Mobile Top Spacing",
+        "min": 0,
+        "max": 120,
+        "step": 5,
+        "unit": "px",
+        "default": 60,
+        "visible_if": "{{ section.settings.custom_spacing == true }}"
+      },
+      {
+        "type": "range",
+        "id": "bottom_spacing_mobile",
+        "label": "Mobile Bottom Spacing",
+        "min": 0,
+        "max": 120,
+        "step": 5,
+        "unit": "px",
+        "default": 60,
+        "visible_if": "{{ section.settings.custom_spacing == true }}"
+      },
+      {
+        "type": "header",
+        "content": "Targeting"
+      },
+      {
+        "type": "text",
+        "id": "id_text",
+        "label": "ID Attribute",
+        "info": "Add an optional ID to the section for advanced targeting with anchor links and CSS."
+      }
+    ],
+    "blocks": [{"type": "_cta-card"}],
+    "disabled_on": {
+        "groups": ["*"]
+    },
+    "presets": [
+      {
+        "name": "CTA Card Grid",
+        "category": "Promotional"
+      }
+    ]
+}
+{% endschema %}

@@ -1,0 +1,254 @@
+{%- liquid
+  assign slider_id = slider_id | default: id | default: ''
+  assign slider_class = slider_class | default: 'recommendations-slider'
+  assign slide_class = slide_class | default: 'product h-auto'
+  assign limit = limit | default: 10
+  assign use_fallback = use_fallback | default: false
+  assign show_quickview_button = show_quickview_button | default: false
+  assign show_pagination = show_pagination | default: false
+  assign pagination_class = pagination_class | default: 'blaze-pagination'
+  assign pagination_attributes = pagination_attributes | default: ''
+  assign slider_attributes = slider_attributes | default: ''
+  assign slider_aria_label = slider_aria_label | default: blank
+  assign slider_nav_scope = slider_nav_scope | default: blank
+  assign slider_nav_next = slider_nav_next | default: blank
+  assign slider_nav_prev = slider_nav_prev | default: blank
+  assign slider_mobile = slider_mobile | default: blank
+  assign slider_tablet = slider_tablet | default: blank
+  assign slider_desktop = slider_desktop | default: blank
+  assign slider_wide = slider_wide | default: blank
+  assign slider_gap_mobile = slider_gap_mobile | default: blank
+  assign slider_gap_tablet = slider_gap_tablet | default: blank
+  assign slider_gap_desktop = slider_gap_desktop | default: blank
+  assign slider_gap_wide = slider_gap_wide | default: blank
+  assign slider_loop = slider_loop | default: blank
+  assign slider_autoplay = slider_autoplay | default: blank
+  assign slider_autoplay_interval = slider_autoplay_interval | default: blank
+  assign slider_pagination = slider_pagination | default: blank
+  assign items = products
+
+  if items == blank and recommendations and recommendations.products_count > 0
+    assign items = recommendations.products
+  endif
+
+  # assign debug = ''
+
+  assign slider_attributes = slider_attributes | strip
+  if slider_attributes != blank
+    assign slider_attributes = ' ' | append: slider_attributes
+  endif
+
+  assign pagination_attributes = pagination_attributes | strip
+  if pagination_attributes != blank
+    assign pagination_attributes = ' ' | append: pagination_attributes
+  endif
+
+  assign ensure_structure = ensure_structure | default: false
+
+  assign css_mobile_slides = css_mobile_slides | default: blank
+  assign css_tablet_slides = css_tablet_slides | default: blank
+  assign css_desktop_slides = css_desktop_slides | default: blank
+  assign css_wide_slides = css_wide_slides | default: blank
+  assign css_mobile_gap = css_mobile_gap | default: blank
+  assign css_tablet_gap = css_tablet_gap | default: blank
+  assign css_desktop_gap = css_desktop_gap | default: blank
+  assign css_wide_gap = css_wide_gap | default: blank
+
+  assign css_mobile_slides_value = css_mobile_slides | default: slider_mobile | default: 2
+  assign css_tablet_slides_value = css_tablet_slides | default: slider_tablet | default: css_mobile_slides_value
+  assign css_desktop_slides_value = css_desktop_slides | default: slider_desktop | default: 3
+  assign css_wide_slides_value = css_wide_slides | default: slider_wide | default: 4
+  assign css_mobile_gap_value = css_mobile_gap | default: slider_gap_mobile | default: 16
+  assign css_tablet_gap_value = css_tablet_gap | default: slider_gap_tablet | default: css_mobile_gap_value
+  assign css_desktop_gap_value = css_desktop_gap | default: slider_gap_desktop | default: 24
+  assign css_wide_gap_value = css_wide_gap | default: slider_gap_wide | default: 30
+
+  assign default_slider_config = '{"all":{"slidesToShow":2,"slideGap":"16px"},"(min-width: 1234px)":{"slidesToShow":3,"slideGap":"24px"},"(min-width: 1500px)":{"slidesToShow":4,"slideGap":"30px"}}'
+  assign blaze_loop = slider_loop | default: false
+  assign blaze_loop_json = 'false'
+  if blaze_loop
+    assign blaze_loop_json = 'true'
+  endif
+
+  assign slider_config_resolved = slider_config | default: blank
+  if slider_config_resolved == blank
+    capture slider_config_resolved
+      echo '{"all":{"slidesToShow":'
+      echo css_mobile_slides_value
+      echo ',"slideGap":"'
+      echo css_mobile_gap_value
+      echo 'px","loop":'
+      echo blaze_loop_json
+      echo ',"enablePagination":false},"(min-width: 768px)":{"slidesToShow":'
+      echo css_tablet_slides_value
+      echo ',"slideGap":"'
+      echo css_tablet_gap_value
+      echo 'px","loop":'
+      echo blaze_loop_json
+      echo ',"enablePagination":false},"(min-width: 992px)":{"slidesToShow":'
+      echo css_desktop_slides_value
+      echo ',"slideGap":"'
+      echo css_desktop_gap_value
+      echo 'px","loop":'
+      echo blaze_loop_json
+      echo ',"enablePagination":false},"(min-width: 1600px)":{"slidesToShow":'
+      echo css_wide_slides_value
+      echo ',"slideGap":"'
+      echo css_wide_gap_value
+      echo 'px","loop":'
+      echo blaze_loop_json
+      echo ',"enablePagination":false}}'
+    endcapture
+  endif
+  assign slider_config = slider_config_resolved | default: default_slider_config
+
+  assign slides_rendered = 0
+  assign rendered_handles = ''
+-%}
+
+{%- capture slides_markup -%}
+  {%- if items != blank -%}
+    {%- for product in items -%}
+      {%- if slides_rendered >= limit -%}{% break %}{%- endif -%}
+      {%- if product -%}
+        {%- assign slides_rendered = slides_rendered | plus: 1 -%}
+        {%- assign rendered_handles = rendered_handles | append: '|' | append: product.handle | append: '|' -%}
+        <div class="{{ slide_class }}">
+          {%- render 'product-card', product: product, slider: true, show_quickview_button: show_quickview_button -%}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+
+  {%- if use_fallback and slides_rendered < limit -%}
+    {%- assign fallback_handles = settings.recommended_product_list -%}
+    {%- if fallback_handles != blank -%}
+      {%- for fallback_handle in fallback_handles -%}
+      {% comment %} {%- assign debug = fallback_handle %} {% endcomment %}
+      {%- if slides_rendered >= limit -%}{% break %}{%- endif -%}
+        {%- assign fh = fallback_handle -%}
+        {%- if fh.handle -%}{%- assign fh = fh.handle -%}{%- endif -%}
+        {%- assign fallback_product = all_products[fh] -%}
+        {%- if fallback_product -%}
+          {%- assign guard = '|' | append: fallback_product.handle | append: '|' -%}
+          {%- unless rendered_handles contains guard -%}
+            {%- assign slides_rendered = slides_rendered | plus: 1 -%}
+            {%- assign rendered_handles = rendered_handles | append: guard -%}
+            <div class="{{ slide_class }}">
+              {%- render 'product-card', product: fallback_product, slider: true, show_quickview_button: show_quickview_button -%}
+            </div>
+          {%- endunless -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+
+    {%- if slides_rendered < limit -%}
+      {%- assign fallback_collections = settings.recommended_collection_list -%}
+      {%- if fallback_collections != blank -%}
+        {%- for collection_handle in fallback_collections -%}
+        {%- if slides_rendered >= limit -%}{% break %}{%- endif -%}
+          {%- assign fallback_collection = collection_handle -%}
+          {%- if fallback_collection and fallback_collection.products_count > 0 -%}
+            {%- for fallback_product in fallback_collection.products -%}
+              {%- if slides_rendered >= limit -%}{% break %}{%- endif -%}
+              {%- if fallback_product -%}
+                {%- assign guard = '|' | append: fallback_product.handle | append: '|' -%}
+                {%- unless rendered_handles contains guard -%}
+                  {%- assign slides_rendered = slides_rendered | plus: 1 -%}
+                  {%- assign rendered_handles = rendered_handles | append: guard -%}
+                  <div class="{{ slide_class }}">
+                    {%- render 'product-card', product: fallback_product, slider: true, show_quickview_button: show_quickview_button -%}
+                  </div>
+                {%- endunless -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
+          {%- if slides_rendered >= limit -%}{% break %}{%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- if slides_rendered > 0 or ensure_structure -%}
+  <div
+    {% if slider_id != blank %}
+      id="{{ slider_id }}"
+    {% endif %}
+    class="blaze-slider {{ slider_class }}"
+    style="
+      --slides-to-show-mobile: {{ css_mobile_slides_value }};
+      --slides-to-show-tablet: {{ css_tablet_slides_value }};
+      --slides-to-show-desktop: {{ css_desktop_slides_value }};
+      --slides-to-show-wide: {{ css_wide_slides_value }};
+      --slide-gap-mobile: {{ css_mobile_gap_value }}px;
+      --slide-gap-tablet: {{ css_tablet_gap_value }}px;
+      --slide-gap-desktop: {{ css_desktop_gap_value }}px;
+      --slide-gap-wide: {{ css_wide_gap_value }}px;
+      --slides-to-show: var(--slides-to-show-mobile);
+      --slide-gap: var(--slide-gap-mobile);
+    "
+    {{ slider_attributes }}
+    data-blaze-slider
+    data-blaze-config="{{ slider_config | escape }}"
+    role="region"
+    aria-roledescription="carousel"
+    aria-label="{{ slider_aria_label | default: 'Carousel' }}"
+    {%- if slider_nav_scope != blank -%}
+      data-slider-nav-scope="{{ slider_nav_scope }}"
+    {%- endif -%}
+    {% if slider_nav_next != blank %}
+      data-slider-nav-next="{{ slider_nav_next }}"
+    {% endif %}
+    {% if slider_nav_prev != blank %}
+      data-slider-nav-prev="{{ slider_nav_prev }}"
+    {% endif %}
+    {% if slider_mobile != blank %}
+      data-slider-mobile="{{ slider_mobile }}"
+    {% endif %}
+    {% if slider_tablet != blank %}
+      data-slider-tablet="{{ slider_tablet }}"
+    {% endif %}
+    {% if slider_desktop != blank %}
+      data-slider-desktop="{{ slider_desktop }}"
+    {% endif %}
+    {% if slider_wide != blank %}
+      data-slider-wide="{{ slider_wide }}"
+    {% endif %}
+    {% if slider_gap_mobile != blank %}
+      data-slider-gap-mobile="{{ slider_gap_mobile }}"
+    {% endif %}
+    {% if slider_gap_tablet != blank %}
+      data-slider-gap-tablet="{{ slider_gap_tablet }}"
+    {% endif %}
+    {% if slider_gap_desktop != blank %}
+      data-slider-gap-desktop="{{ slider_gap_desktop }}"
+    {% endif %}
+    {% if slider_gap_wide != blank %}
+      data-slider-gap-wide="{{ slider_gap_wide }}"
+    {% endif %}
+    {% if slider_loop != blank %}
+      data-slider-loop="{{ slider_loop }}"
+    {% endif %}
+    {% if slider_autoplay != blank %}
+      data-slider-autoplay="{{ slider_autoplay }}"
+    {% endif %}
+    {% if slider_autoplay_interval != blank %}
+      data-slider-autoplay-interval="{{ slider_autoplay_interval }}"
+    {% endif %}
+    {% if slider_pagination != blank %}
+      data-slider-pagination="{{ slider_pagination }}"
+    {% endif %}
+  >
+    <div class="blaze-track-container">
+      <div class="blaze-track">
+        {{- slides_markup -}}
+      </div>
+    </div>
+    {%- if show_pagination -%}
+      <div class="blaze-pagination {{ pagination_class }}" {{ pagination_attributes }}></div>
+    {%- endif -%}
+  </div>
+{%- elsif empty_state -%}
+  {{- empty_state -}}
+{%- endif -%}

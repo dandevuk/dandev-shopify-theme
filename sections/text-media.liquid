@@ -1,0 +1,857 @@
+{%- liquid
+  # CONTENT
+  assign content_type = section.settings.content_type
+  assign video_type = section.settings.video_type
+  assign image = section.settings.image
+
+  assign video = section.settings.video
+  assign mobile_video = section.settings.mobile_video
+  assign video_display = section.settings.video_display
+  assign autoplay = section.settings.autoplay
+  assign preload = section.settings.preload
+  assign controls_type = section.settings.controls_type
+  assign loop = section.settings.loop
+  assign muted = section.settings.muted
+
+  if preload == true
+    assign preload = 'auto'
+  else
+    assign preload = 'none'
+  endif
+
+  assign image_display = section.settings.image_display
+  assign lazy_load = section.settings.lazy_load
+
+  # STYLING
+  assign style_selector = section.settings.style_selector
+  assign section_styling = section.settings.section_styling
+  assign background_color = section.settings.background_color
+  assign text_color = section.settings.text_color
+  assign vertical_text_alignment = section.settings.vertical_text_alignment
+
+  # TEXT CONTENT THEME STYLING
+  assign container_style_selector = section.settings.container_style_selector
+  assign container_section_styling = section.settings.container_section_styling
+  assign container_background_color = section.settings.container_background_color
+  assign container_text_color = section.settings.container_text_color
+
+  assign background_image_type = section.settings.background_image_type
+  assign background_image_theme = section.settings.background_image_theme
+  assign bg_image = section.settings.bg_image
+
+  assign remove_text_padding = section.settings.remove_text_padding
+
+  if background_image_type == 'none'
+    assign bg_image = blank
+  elsif background_image_type == 'theme'
+    if background_image_theme == '1'
+      assign bg_image = settings.section_background_image
+    elsif background_image_theme == '2'
+      assign bg_image = settings.section_background_image_2
+    endif
+  endif
+
+  # BACKGROUND IMAGE
+  assign container_background_image_type = section.settings.container_background_image_type
+  assign container_background_image_theme = section.settings.container_background_image_theme
+  assign container_bg_image = section.settings.container_bg_image
+
+  if container_background_image_type == 'none'
+    assign container_bg_image = blank
+  elsif container_background_image_type == 'theme'
+    if container_background_image_theme == '1'
+      assign container_bg_image = settings.section_background_image
+    elsif container_background_image_theme == '2'
+      assign container_bg_image = settings.section_background_image_2
+    endif
+  endif
+
+  # LAYOUT
+  assign horizontal_layout = section.settings.horizontal_layout
+  assign vertical_layout = section.settings.vertical_layout
+  assign vertical_spacing = section.settings.vertical_spacing
+  assign custom_spacing = section.settings.custom_spacing
+  assign top_spacing = section.settings.top_spacing
+  assign bottom_spacing = section.settings.bottom_spacing
+  assign top_spacing_mobile = section.settings.top_spacing_mobile
+  assign bottom_spacing_mobile = section.settings.bottom_spacing_mobile
+  assign page_width = section.settings.page_width
+
+  # ID Attribute
+  assign id_text = section.settings.id_text | strip
+-%}
+
+<div
+  class="section-container text-media relative {{ section_styling }} {% unless custom_spacing %}{{ vertical_spacing }}{% else %}custom-spacing{% endunless %}"
+  style="
+    {%- if custom_spacing -%}
+      {%- if vertical_spacing == 'vertical-padding' -%}
+        padding-top: {{ top_spacing }}px; padding-bottom: {{ bottom_spacing }}px; --mobile-padding-top: {{ top_spacing_mobile }}px; --mobile-padding-bottom: {{ bottom_spacing_mobile }}px;
+      {%- elsif vertical_spacing == 'vertical-margin' -%}
+        margin-top: {{ top_spacing }}px; margin-bottom: {{ bottom_spacing }}px; --mobile-margin-top: {{ top_spacing_mobile }}px; --mobile-margin-bottom: {{ bottom_spacing_mobile }}px;
+      {%- elsif vertical_spacing == 'vertical-margin vertical-padding' -%}
+        padding-top: {{ top_spacing }}px; padding-bottom: {{ bottom_spacing }}px; margin-top: {{ top_spacing }}px; margin-bottom: {{ bottom_spacing }}px; --mobile-padding-top: {{ top_spacing_mobile }}px; --mobile-padding-bottom: {{ bottom_spacing_mobile }}px; --mobile-margin-top: {{ top_spacing_mobile }}px; --mobile-margin-bottom: {{ bottom_spacing_mobile }}px;
+      {%- endif -%}
+    {%- endif -%}
+    {% if style_selector == 'custom' %}
+      background: {{ background_color }}; color: {{ text_color }};
+    {% endif %}
+  "
+>
+  {%- if bg_image != blank -%}
+    <div class="absolute inset-0 opacity-10 z-0 overflow-hidden">
+      {%- render 'image',
+        image: bg_image,
+        max_width: 2000,
+        use_placeholder: true,
+        lazy: true,
+        class: 'object-cover'
+      -%}
+    </div>
+  {%- endif -%}
+  <div
+    class=" {% if content_type == 'html' %}html to-sm-pt-0{% endif %} {{ page_width }} relative"
+    {% if id_text != blank %}
+      id="{{ id_text }}"
+    {% endif %}
+  >
+    <div
+      class="grid-section relative section-container border-radius text-media-container {% unless content_type == 'html' %}overflow-hidden{% endunless %} isolate {{ container_section_styling }} {{ horizontal_layout }} {{ vertical_layout }}"
+      {% if container_style_selector == 'custom' %}
+        style="background: {{ container_background_color }}; color: {{ container_text_color }};"
+      {% endif %}
+    >
+      <div
+        class="span-6 flex image relative {% if content_type == 'image' %}{{ image_display }}{% elsif content_type == 'video' %}flex align-center{% endif %}"
+        {%- if mobile_video != blank -%}
+          style="aspect-ratio: {{ mobile_video.aspect_ratio }}%;"
+        {%- endif -%}
+      >
+        {%- if content_type == 'html' -%}
+          {{ section.settings.html_embed_content }}
+        {%- elsif content_type == 'video' -%}
+          {%- if video_type == 'shopify' and video != blank -%}
+            {%- if video != blank -%}
+              {%- liquid
+                if mobile_video != blank
+                  assign video_class = 'w-100 h-100 to-sm-hidden' | append: ' ' | append: video_display
+                else
+                  assign video_class = 'w-100 h-100' | append: ' ' | append: video_display
+                endif
+              -%}
+
+              {%- render 'video',
+                video: video,
+                autoplay: autoplay,
+                preload: preload,
+                controls_type: controls_type,
+                loop: loop,
+                muted: muted,
+                class: video_class,
+                display: video_display
+              -%}
+
+              {%- if mobile_video != blank -%}
+                {%- render 'video',
+                  video: mobile_video,
+                  autoplay: autoplay,
+                  preload: preload,
+                  controls_type: controls_type,
+                  loop: loop,
+                  muted: muted,
+                  class: 'w-100 h-100 hidden to-sm-block'
+                -%}
+              {%- endif -%}
+
+            {%- else -%}
+              {{- 'image' | placeholder_svg_tag -}}
+            {%- endif -%}
+
+          {%- elsif video_type == 'embed' and section.settings.video_url != blank -%}
+            {%- assign embed_url = section.settings.video_url | replace: 'watch?v=', 'embed/' -%}
+            {%- assign video_id = embed_url | split: '/' | last -%}
+
+            <div
+              class="relative overflow-hidden w-100 {% if video_display == 'object-contain' %}h-auto{% else %}h-100{% endif %}"
+              {% if video_display == 'object-cover' %}
+                style="aspect-ratio: 4 / 3;"
+              {% endif %}
+            >
+              <iframe
+                src="{{ embed_url }}?autoplay=1&mute=1&loop=1&playlist={{ video_id }}&modestbranding=1&showinfo=0&rel=0&controls=0"
+                frameborder="0"
+                allow="autoplay; encrypted-media"
+                allowfullscreen
+                class="w-100 h-100 {% if video_display == 'object-cover' %}absolute inset-0{% endif %}"
+              ></iframe>
+            </div>
+          {%- endif -%}
+        {%- else -%}
+          {%- render 'image',
+            image: image,
+            max_width: 800,
+            use_placeholder: true,
+            lazy: lazy_load
+          -%}
+        {%- endif -%}
+      </div>
+      <div class="span-6 content no-text-margins flex {{ vertical_text_alignment }} {% unless remove_text_padding %}container-h-padding container-v-padding{% endunless %}">
+        {%- if container_bg_image != blank -%}
+          <div class="absolute inset-0 opacity-10 overflow-hidden" style="z-index: -1;">
+            {%- render 'image',
+              image: container_bg_image,
+              max_width: 1200,
+              use_placeholder: true,
+              lazy: true,
+              class: 'object-cover'
+            -%}
+          </div>
+        {%- endif -%}
+        {% content_for 'blocks' %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- if content_type == 'video' and video_type == 'shopify' -%}
+  <script
+    src="{{ 'video-controls.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+{%- endif -%}
+
+{%- stylesheet -%}
+  .text-media .text-media-container .content {
+    order: 1;
+  }
+
+  @media screen and (max-width: 767.98px) {
+    .text-media .html .image {
+      width: calc(
+        100% +
+          clamp(
+            var(--page-width-padding-mobile),
+            calc(var(--padding-intercept) + var(--padding-slope) * 1vw),
+            var(--page-width-padding)
+          ) *
+          2
+      );
+      margin-inline: calc(
+        -1 *
+          clamp(
+            var(--page-width-padding-mobile),
+            calc(var(--padding-intercept) + var(--padding-slope) * 1vw),
+            var(--page-width-padding)
+          )
+      );
+    }
+    .text-media .text-media-container .content {
+      order: 2;
+    }
+  }
+
+  .text-media .text-media-container .image {
+    order: 2;
+  }
+
+  @media screen and (max-width: 767.98px) {
+    .text-media .text-media-container .image.cover {
+      order: 1;
+      aspect-ratio: 4/3;
+    }
+  }
+
+  .text-media .text-media-container .image.cover img,
+  .text-media .text-media-container .image.cover picture {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .text-media .text-media-container .image.contain img,
+  .text-media .text-media-container .image.contain picture {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  @media screen and (min-width: 768px) {
+    .text-media .text-media-container.section-text-right .content {
+      order: 2;
+    }
+    .text-media .text-media-container.section-text-right .image {
+      order: 1;
+    }
+  }
+
+  @media screen and (max-width: 767.98px) {
+    .text-media .text-media-container.text-top .content {
+      order: 1;
+    }
+    .text-media .text-media-container.text-top .image {
+      order: 2;
+    }
+  }
+{%- endstylesheet -%}
+
+{% schema %}
+{
+  "name": "Text Media",
+  "tag": "section",
+  "class": "text-media",
+  "max_blocks": 1,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "select",
+      "id": "content_type",
+      "label": "Content Type",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        },
+        {
+          "value": "html",
+          "label": "HTML"
+        }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "html",
+      "id": "html_embed_content",
+      "label": "HTML Embed Content",
+      "visible_if": "{{ section.settings.content_type == 'html' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "visible_if": "{{ section.settings.content_type == 'image' }}"
+    },
+    {
+      "type": "select",
+      "id": "image_display",
+      "label": "Image Display",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Cover"
+        },
+        {
+          "value": "contain",
+          "label": "Contain"
+        }
+      ],
+      "default": "cover",
+      "info": "Set image to fill the area or fit within it.",
+      "visible_if": "{{ section.settings.content_type == 'image' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "lazy_load",
+      "label": "Lazy Load",
+      "default": true,
+      "info": "If enabled, image will load as it enters the viewport. Recommended for performance.",
+      "visible_if": "{{ section.settings.content_type == 'image' }}"
+    },
+    {
+      "type": "select",
+      "id": "video_type",
+      "label": "Video Type",
+      "options": [
+        {
+          "value": "shopify",
+          "label": "Shopify"
+        },
+        {
+          "value": "embed",
+          "label": "Embed"
+        }
+      ],
+      "default": "shopify",
+      "visible_if": "{{ section.settings.content_type == 'video' }}"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video",
+      "visible_if": "{{ section.settings.content_type == 'video' and section.settings.video_type == 'shopify' }}"
+    },
+    {
+      "type": "video",
+      "id": "mobile_video",
+      "label": "Mobile Video",
+      "visible_if": "{{ section.settings.video_type == 'shopify' }}"
+    },
+    {
+      "type": "header",
+      "content": "Youtube Video",
+      "visible_if": "{{ section.settings.content_type == 'video' and section.settings.video_type == 'embed' }}"
+    },
+    {
+      "type": "text",
+      "id": "video_url",
+      "label": "YouTube Video URL",
+      "default": "https://www.youtube.com/watch?v=XXXXXXXX",
+      "visible_if": "{{ section.settings.content_type == 'video' and section.settings.video_type == 'embed' }}"
+    },
+    {
+      "type": "header",
+      "content": "Video Settings",
+      "visible_if": "{{ section.settings.video_type == 'shopify' and section.settings.content_type == 'video' }}"
+    },
+    {
+      "type": "select",
+      "id": "video_display",
+      "label": "Video Display (Desktop)",
+      "options": [
+        {
+          "value": "object-contain",
+          "label": "Preserve Aspect Ratio"
+        },
+        {
+          "value": "object-cover",
+          "label": "Stretch to Fill Area"
+        }
+      ],
+      "default": "object-contain",
+      "visible_if": "{{ section.settings.content_type == 'video' }}"
+    },
+    {
+      "type": "select",
+      "id": "controls_type",
+      "label": "Controls Type",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "default",
+          "label": "Default"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "default",
+      "visible_if": "{{ section.settings.video_type == 'shopify' and section.settings.content_type == 'video' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Autoplay",
+      "default": false,
+      "info": "If no controls are selected, the video will always autoplay.",
+      "visible_if": "{{ section.settings.video_type == 'shopify' and section.settings.content_type == 'video' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "muted",
+      "label": "Muted",
+      "default": true,
+      "visible_if": "{{ section.settings.video_type == 'shopify' and section.settings.content_type == 'video' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Loop",
+      "default": true,
+      "visible_if": "{{ section.settings.video_type == 'shopify' and section.settings.content_type == 'video' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "preload",
+      "label": "Preload",
+      "default": true,
+      "visible_if": "{{ section.settings.video_type == 'shopify' and section.settings.content_type == 'video' }}"
+    },
+    {
+      "type": "header",
+      "content": "Section Styling"
+    },
+    {
+      "type": "select",
+      "id": "style_selector",
+      "label": "Styling Type",
+      "options": [
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "theme"
+    },
+    {
+      "type": "select",
+      "id": "section_styling",
+      "label": "Section style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "third",
+          "label": "Third"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ section.settings.style_selector == 'theme' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "background_color",
+      "label": "Background Colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Colour",
+      "default": "#393939",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "background_image_type",
+      "label": "Background Type",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "background_image_theme",
+      "label": "Background Theme",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "1",
+      "visible_if": "{{ section.settings.background_image_type == 'theme' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image",
+      "info": "Used if 'Custom' is selected for Background Type",
+      "visible_if": "{{ section.settings.background_image_type == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Text Content Styling"
+    },
+    {
+      "type": "select",
+      "id": "container_style_selector",
+      "label": "Styling Type",
+      "options": [
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "theme"
+    },
+    {
+      "type": "select",
+      "id": "container_section_styling",
+      "label": "Section style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "third",
+          "label": "Third"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ section.settings.container_style_selector == 'theme' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "container_background_color",
+      "label": "Background Colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ section.settings.container_style_selector == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "container_text_color",
+      "label": "Text Colour",
+      "default": "#393939",
+      "visible_if": "{{ section.settings.container_style_selector == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "container_background_image_type",
+      "label": "Background Type",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "container_background_image_theme",
+      "label": "Background Theme",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "1",
+      "visible_if": "{{ section.settings.container_background_image_type == 'theme' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_text_padding",
+      "label": "Remove Text Container Padding",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "vertical_text_alignment",
+      "label": "Vertical Text Alignment",
+      "options": [
+        {
+          "value": "align-start",
+          "label": "Top"
+        },
+        {
+          "value": "align-center",
+          "label": "Middle"
+        },
+        {
+          "value": "align-end",
+          "label": "Bottom"
+        }
+      ],
+      "default": "align-center"
+    },
+    {
+      "type": "select",
+      "id": "horizontal_layout",
+      "label": "Desktop Text Position",
+      "options": [
+        {
+          "value": "section-text-left",
+          "label": "Left"
+        },
+        {
+          "value": "section-text-right",
+          "label": "Right"
+        }
+      ],
+      "default": "section-text-left"
+    },
+    {
+      "type": "select",
+      "id": "vertical_layout",
+      "label": "Mobile Text Position",
+      "options": [
+        {
+          "value": "text-bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "text-top",
+          "label": "Top"
+        }
+      ],
+      "default": "text-bottom"
+    },
+    {
+      "type": "select",
+      "id": "page_width",
+      "label": "Page Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Default"
+        },
+        {
+          "value": "page-width--narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "page-width--wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "select",
+      "id": "vertical_spacing",
+      "label": "Vertical Spacing",
+      "options": [
+        {
+          "value": "vertical-margin",
+          "label": "Margin"
+        },
+        {
+          "value": "vertical-padding",
+          "label": "Padding"
+        },
+        {
+          "value": "vertical-margin vertical-padding",
+          "label": "Margin and Padding"
+        },
+        {
+          "value": "",
+          "label": "None"
+        }
+      ],
+      "default": "vertical-margin",
+      "info": "This uses the global spacing settings from the theme settings to ensure consistent spacing between sections. If you want to use custom spacing, please check the 'Custom Spacing' option."
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_spacing",
+      "label": "Custom Spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "top_spacing",
+      "label": "Top Spacing",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 120,
+      "visible_if": "{{ section.settings.custom_spacing == true }}"
+    },
+    {
+      "type": "range",
+      "id": "bottom_spacing",
+      "label": "Bottom Spacing",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 120,
+      "visible_if": "{{ section.settings.custom_spacing == true }}"
+    },
+    {
+      "type": "range",
+      "id": "top_spacing_mobile",
+      "label": "Mobile Top Spacing",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 60,
+      "visible_if": "{{ section.settings.custom_spacing == true }}"
+    },
+    {
+      "type": "range",
+      "id": "bottom_spacing_mobile",
+      "label": "Mobile Bottom Spacing",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 60,
+      "visible_if": "{{ section.settings.custom_spacing == true }}"
+    },
+    {
+      "type": "header",
+      "content": "Targeting"
+    },
+    {
+      "type": "text",
+      "id": "id_text",
+      "label": "ID Attribute",
+      "info": "Add an optional ID to the section for advanced targeting with anchor links and CSS."
+    }
+  ],
+  "blocks": [{ "type": "section-content" }],
+  "disabled_on": {
+    "groups": ["*"]
+  },
+  "presets": [
+    {
+      "name": "Text Media",
+      "category": "Content",
+      "blocks": [
+        {
+          "type": "section-content"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,199 @@
+{%- liquid
+  # STYLING
+  assign style_selector = section.settings.style_selector
+  assign section_styling = section.settings.section_styling
+  assign background_color = section.settings.background_color
+  assign text_color = section.settings.text_color
+
+  # LAYOUT
+  assign text_alignment = section.settings.text_alignment
+  assign vertical_spacing = section.settings.vertical_spacing
+  assign page_width = section.settings.page_width
+
+  # ID Attribute
+  assign id_text = section.settings.id_text | strip
+-%}
+
+<div
+  class="section-container {{ vertical_spacing }} {{ text_alignment }} {{ section_styling }}"
+  {% if style_selector == 'custom' %}
+    style="background: {{ background_color }}; color: {{ text_color }};"
+  {% endif %}
+  {% if id_text != blank %}
+    id="{{ id_text }}"
+  {% endif %}
+>
+  <div class="{{ page_width }}">
+    {% content_for 'block', type: 'section-content', id: 'id' %}
+    <div
+      class="wishlist-grid  grid g-5"
+      wishlist-grid
+      data-empty-message="{{- settings.wishlist_empty_message -}}"
+      data-button-message="{{- settings.wishlist_button_message -}}"
+      data-button-link="{{- settings.wishlist_button_link -}}"
+    ></div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .wishlist-grid {
+    grid-template-columns: repeat(auto-fill, minmax(clamp(260px, 20vw, 340px), 1fr));
+  }
+  .wishlist-grid:has(.empty-wishlist-message) {
+    display: flex;
+    justify-content: center;
+    padding-block: var(--content-spacing-5);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Wishlist Grid",
+  "tag": "section",
+  "class": "wishlist-grid",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "select",
+      "id": "style_selector",
+      "label": "Styling Type",
+      "options": [
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "theme"
+    },
+    {
+      "type": "select",
+      "id": "section_styling",
+      "label": "Section style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "third",
+          "label": "Third"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ section.settings.style_selector == 'theme' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "background_color",
+      "label": "Background Colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Colour",
+      "default": "#393939",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "Left"
+        },
+        {
+          "value": "text-center",
+          "label": "Centre"
+        }
+      ],
+      "default": "text-left"
+    },
+    {
+      "type": "select",
+      "id": "page_width",
+      "label": "Page Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Default"
+        },
+        {
+          "value": "page-width--narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "page-width--wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "select",
+      "id": "vertical_spacing",
+      "label": "Vertical Spacing",
+      "options": [
+        {
+          "value": "vertical-margin",
+          "label": "Margin"
+        },
+        {
+          "value": "vertical-padding",
+          "label": "Padding"
+        },
+        {
+          "value": "vertical-margin vertical-padding",
+          "label": "Margin and Padding"
+        },
+        {
+          "value": "",
+          "label": "None"
+        }
+      ],
+      "default": "vertical-margin"
+    },
+    {
+      "type": "header",
+      "content": "Targeting"
+    },
+    {
+      "type": "text",
+      "id": "id_text",
+      "label": "ID Attribute",
+      "info": "Add an optional ID to the section for advanced targeting with anchor links and CSS."
+    }
+  ],
+  "disabled_on": {
+    "groups": ["*"]
+  },
+  "presets": [
+    {
+      "name": "Wishlist Grid",
+      "category": "Products"
+    }
+  ]
+}
+{% endschema %}

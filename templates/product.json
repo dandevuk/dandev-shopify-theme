@@ -1,0 +1,477 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "product",
+      "blocks": {
+        "product_title_p3Bxkj": {
+          "type": "_product-title",
+          "name": "Title",
+          "settings": {},
+          "blocks": {}
+        },
+        "product_price_eti3bj": {
+          "type": "_product-price",
+          "name": "Price",
+          "settings": {
+            "price_format": "variant_price"
+          },
+          "blocks": {}
+        },
+        "product_collection_links_XGXj4z": {
+          "type": "_product-collection-links",
+          "name": "Collection Links",
+          "settings": {
+            "title": "Looking for these products?",
+            "collection_list": [
+              "best-sellers",
+              "frontpage",
+              "test-1",
+              "test-2"
+            ]
+          },
+          "blocks": {}
+        },
+        "product_description_YwJcVY": {
+          "type": "_product-description",
+          "name": "Description",
+          "settings": {
+            "description": "",
+            "add_read_more_link": true,
+            "read_more_link_url": "description-read-more",
+            "truncate_height": "vertical-clamp-three",
+            "add_border_bottom": true
+          },
+          "blocks": {}
+        },
+        "product_variant_selectors_GWTq3R": {
+          "type": "_product-variant-selectors",
+          "name": "Variant Selectors",
+          "settings": {
+            "option_select_type": "radio",
+            "add_border_bottom": true
+          },
+          "blocks": {}
+        },
+        "product_selling_plan_selector_dmncFQ": {
+          "type": "_product-selling-plan-selector",
+          "name": "Selling Plan Selector",
+          "settings": {
+            "option_select_type": "radio",
+            "add_border_bottom": false
+          },
+          "blocks": {}
+        },
+        "product_submit_bQTTGM": {
+          "type": "_product-submit",
+          "name": "Submit Form",
+          "settings": {
+            "add_to_cart_style": "button-3",
+            "show_quantity": true,
+            "add_border_bottom": true
+          },
+          "blocks": {}
+        },
+        "product_payment_icons_3a7fFn": {
+          "type": "_payment-icons",
+          "name": "Payment Icons",
+          "settings": {
+            "add_border_bottom": true
+          },
+          "blocks": {}
+        },
+        "product_usp_group_awWDpe": {
+          "type": "_product-usp-group",
+          "name": "USP Group",
+          "settings": {
+            "usp_group": "homepage"
+          },
+          "blocks": {
+            "usp": {
+              "type": "_usp",
+              "static": true,
+              "settings": {
+                "usp_size": "small"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": []
+        },
+        "product_text_icon_KQ8BJ9": {
+          "type": "_product-text-icon",
+          "name": "Text & Icon Banner",
+          "settings": {
+            "image_size": 150,
+            "image_size_mobile": 150,
+            "style_selector": "theme",
+            "section_styling": "secondary",
+            "background_color": "linear-gradient(#ffffff, #ffffff)",
+            "text_color": "#393939",
+            "remove_padding": false,
+            "add_border_bottom": false
+          },
+          "blocks": {
+            "image_9jJnca": {
+              "type": "_image",
+              "name": "Image",
+              "settings": {
+                "image": "shopify://shop_images/quickfire-logo.svg",
+                "preserve_image_dimensions": true,
+                "image_height": 40,
+                "image_link": ""
+              },
+              "blocks": {}
+            },
+            "inline_richtext_V6abY3": {
+              "type": "inline_richtext",
+              "name": "Inline Richtext",
+              "settings": {
+                "inline_richtext": "Banner text to go here. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                "text_size": "caption-text"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "image_9jJnca",
+            "inline_richtext_V6abY3"
+          ]
+        },
+        "product_information_WFBpHh": {
+          "type": "_product-information",
+          "name": "Product Information",
+          "settings": {},
+          "blocks": {
+            "accordion_yVwdTh": {
+              "type": "_accordion",
+              "name": "Accordion",
+              "settings": {
+                "heading": "Variant Specific Field",
+                "heading_type": "h2",
+                "heading_size": "heading-h3",
+                "content_type": "liquid",
+                "richtext_content": "",
+                "liquid_content": "{%- unless product.has_only_default_variant -%}{{ product.selected_or_first_available_variant.title }}{%- endunless -%}",
+                "open_default": true,
+                "id_attribute": ""
+              },
+              "blocks": {}
+            },
+            "accordion_KeEBU6": {
+              "type": "_accordion",
+              "name": "Accordion",
+              "settings": {
+                "heading": "Description",
+                "heading_type": "h2",
+                "heading_size": "heading-h3",
+                "content_type": "richtext",
+                "richtext_content": "{{ closest.product.description }}",
+                "liquid_content": "",
+                "open_default": false,
+                "id_attribute": "description-read-more"
+              },
+              "blocks": {}
+            },
+            "accordion_wLkYRV": {
+              "type": "_accordion",
+              "name": "Accordion",
+              "settings": {
+                "heading": "Delivery",
+                "heading_type": "h2",
+                "heading_size": "heading-h3",
+                "content_type": "richtext",
+                "richtext_content": "<p>Delivery Information</p>",
+                "liquid_content": "",
+                "open_default": false,
+                "id_attribute": ""
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "accordion_yVwdTh",
+            "accordion_KeEBU6",
+            "accordion_wLkYRV"
+          ]
+        },
+        "product_complementary_products_nHzkXL": {
+          "type": "_product-complementary-products",
+          "name": "Complementary Products",
+          "settings": {
+            "heading": "Why Not Add",
+            "product_list": "{{ closest.product.metafields[\"shopify--discovery--product_recommendation\"].complementary_products.value }}",
+            "add_border_bottom": false
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "product_title_p3Bxkj",
+        "product_price_eti3bj",
+        "product_collection_links_XGXj4z",
+        "product_description_YwJcVY",
+        "product_variant_selectors_GWTq3R",
+        "product_selling_plan_selector_dmncFQ",
+        "product_submit_bQTTGM",
+        "product_payment_icons_3a7fFn",
+        "product_usp_group_awWDpe",
+        "product_text_icon_KQ8BJ9",
+        "product_information_WFBpHh",
+        "product_complementary_products_nHzkXL"
+      ],
+      "settings": {
+        "block_spacing": "g-4",
+        "block_spacing_mobile": "to-sm-g-3",
+        "desktop_gallery_style": "slider",
+        "thumb_positioning": "left",
+        "show_out_of_stock_settings": true,
+        "show_recommendations_slider": true,
+        "recommendations_heading": "You May Also Like",
+        "show_oos": false,
+        "style_selector": "theme",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)",
+        "text_color": "#393939",
+        "background_image_type": "none",
+        "background_image_theme": "1",
+        "form_input_bg_color": "#ffffff",
+        "form_input_text_color": "",
+        "form_submit_style": "button-1"
+      }
+    },
+    "recommendations_qPhbHg": {
+      "type": "recommendations",
+      "blocks": {
+        "section-content": {
+          "type": "section-content",
+          "static": true,
+          "settings": {
+            "content_spacing": "g-1"
+          },
+          "blocks": {
+            "heading_3yED6f": {
+              "type": "heading",
+              "name": "Heading",
+              "settings": {
+                "heading": "You May Also Like",
+                "heading_type": "h2",
+                "heading_size": "heading-h2"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "heading_3yED6f"
+          ]
+        },
+        "section-navigation": {
+          "type": "section-navigation",
+          "static": true,
+          "settings": {},
+          "blocks": {
+            "slider_navigation_arrows_yBGCbA": {
+              "type": "_slider-navigation-arrows",
+              "name": "slider Navigation Arrows",
+              "settings": {},
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "slider_navigation_arrows_yBGCbA"
+          ]
+        }
+      },
+      "name": "Recommendations",
+      "settings": {
+        "style_selector": "theme",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "page_width": "page-width",
+        "vertical_spacing": "vertical-padding",
+        "lazy_images": false
+      }
+    },
+    "text_media_TTHXBV": {
+      "type": "text-media",
+      "blocks": {
+        "section_content_jQ8trw": {
+          "type": "section-content",
+          "settings": {
+            "content_spacing": "g-3"
+          },
+          "blocks": {
+            "heading_LHacDY": {
+              "type": "heading",
+              "name": "Heading",
+              "settings": {
+                "heading": "",
+                "heading_type": "h2",
+                "heading_size": "heading-h1"
+              },
+              "blocks": {}
+            },
+            "heading_8BWdex": {
+              "type": "heading",
+              "name": "Heading",
+              "settings": {
+                "heading": "Extra Product Information",
+                "heading_type": "h2",
+                "heading_size": "heading-h1"
+              },
+              "blocks": {}
+            },
+            "richtext_WjD8x3": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "richtext": "<p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p><p><br/>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p><p><br/>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p>"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "heading_LHacDY",
+            "heading_8BWdex",
+            "richtext_WjD8x3"
+          ]
+        }
+      },
+      "block_order": [
+        "section_content_jQ8trw"
+      ],
+      "name": "Text Media",
+      "settings": {
+        "content_type": "image",
+        "html_embed_content": "",
+        "image": "shopify://shop_images/pexels-ekrulila-3804415.jpg",
+        "image_display": "cover",
+        "lazy_load": true,
+        "video_type": "shopify",
+        "video_url": "https://www.youtube.com/watch?v=XXXXXXXX",
+        "video_display": "object-contain",
+        "controls_type": "default",
+        "autoplay": false,
+        "muted": true,
+        "loop": true,
+        "preload": true,
+        "style_selector": "custom",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 100%)",
+        "text_color": "#ffffff",
+        "background_image_type": "theme",
+        "background_image_theme": "1",
+        "container_style_selector": "theme",
+        "container_section_styling": "third",
+        "container_background_color": "linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)",
+        "container_text_color": "#393939",
+        "container_background_image_type": "theme",
+        "container_background_image_theme": "2",
+        "remove_text_padding": false,
+        "vertical_text_alignment": "align-end",
+        "horizontal_layout": "section-text-left",
+        "vertical_layout": "text-bottom",
+        "page_width": "page-width",
+        "vertical_spacing": "vertical-padding",
+        "custom_spacing": false,
+        "top_spacing": 120,
+        "bottom_spacing": 120,
+        "top_spacing_mobile": 60,
+        "bottom_spacing_mobile": 60,
+        "id_text": ""
+      }
+    },
+    "faq_group_rERmHC": {
+      "type": "faq-group",
+      "blocks": {
+        "section-content": {
+          "type": "section-content",
+          "static": true,
+          "settings": {
+            "content_spacing": "g-1"
+          },
+          "blocks": {
+            "heading_A9jkWd": {
+              "type": "heading",
+              "name": "Heading",
+              "settings": {
+                "heading": "FAQS",
+                "heading_type": "h2",
+                "heading_size": "heading-h1"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "heading_A9jkWd"
+          ]
+        },
+        "section-navigation": {
+          "type": "section-navigation",
+          "static": true,
+          "settings": {},
+          "blocks": {
+            "links_container_f4U6Fh": {
+              "type": "links-container",
+              "name": "Links Container",
+              "settings": {
+                "content_spacing": "g-1"
+              },
+              "blocks": {
+                "link_Dtm6kN": {
+                  "type": "link",
+                  "settings": {
+                    "link_text": "View all faqs",
+                    "link": "shopify://pages/faqs",
+                    "link_title": "View all faqs",
+                    "link_style": "button-1",
+                    "external_link": false
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "link_Dtm6kN"
+              ]
+            }
+          },
+          "block_order": [
+            "links_container_f4U6Fh"
+          ]
+        }
+      },
+      "name": "FAQ Group",
+      "settings": {
+        "faq_group_metaobject": "test-1",
+        "style_selector": "theme",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "heading_color": "#000000",
+        "page_width": "page-width--narrow",
+        "vertical_spacing": "",
+        "custom_spacing": false,
+        "top_spacing": 120,
+        "bottom_spacing": 120,
+        "top_spacing_mobile": 60,
+        "bottom_spacing_mobile": 60,
+        "id_text": ""
+      }
+    }
+  },
+  "order": [
+    "main",
+    "recommendations_qPhbHg",
+    "text_media_TTHXBV",
+    "faq_group_rERmHC"
+  ]
+}

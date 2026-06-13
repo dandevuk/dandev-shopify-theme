@@ -1,0 +1,30 @@
+{%- render 'collection-card', card_style: block.settings.card_style -%}
+{% schema %}
+{
+  "name": "Collection Card",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "card_style",
+      "label": "Card Style",
+      "options": [
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "rectangle",
+          "label": "Rectangle"
+        }
+      ],
+      "default": "square"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Card"
+    }
+  ]
+}
+{% endschema %}

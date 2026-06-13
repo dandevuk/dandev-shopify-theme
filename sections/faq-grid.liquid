@@ -1,0 +1,527 @@
+{%- liquid
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  #
+  #   -== Overview ==-
+  #       This section uses Fuse.JS to search through FAQs.
+  #
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  # Faqs Metaobject
+  assign faq_groups = section.settings.faq_groups
+
+  assign faqs = faq_groups | map: 'knowledgebase_faq'
+
+  assign search_prompt_t = 'general.search.search_prompt' | t
+  assign placeholder_text = section.settings.placeholder_text | default: search_prompt_t
+
+  # STYLING
+  assign style_selector = section.settings.style_selector
+  assign section_styling = section.settings.section_styling
+  assign background_color = section.settings.background_color
+  assign text_color = section.settings.text_color
+
+  assign faq_style_selector = section.settings.faq_style_selector
+  assign faq_section_styling = section.settings.faq_section_styling
+  assign faq_background_color = section.settings.faq_background_color
+  assign faq_text_color = section.settings.faq_text_color
+
+  # LAYOUT
+  assign text_alignment = section.settings.text_alignment
+  assign vertical_spacing = section.settings.vertical_spacing
+  assign custom_spacing = section.settings.custom_spacing
+  assign top_spacing = section.settings.top_spacing
+  assign bottom_spacing = section.settings.bottom_spacing
+  assign top_spacing_mobile = section.settings.top_spacing_mobile
+  assign bottom_spacing_mobile = section.settings.bottom_spacing_mobile
+  assign page_width = section.settings.page_width
+
+  # ID Attribute
+  assign id_text = section.settings.id_text | strip
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-%}
+<div
+  class="section-container {% unless custom_spacing %}{{ vertical_spacing }}{% else %}custom-spacing{% endunless %} {{ text_alignment }} {{ section_styling }}"
+  style="
+    {%- if custom_spacing -%}
+      {%- if vertical_spacing == 'vertical-padding' -%}
+        padding-top: {{ top_spacing }}px; padding-bottom: {{ bottom_spacing }}px;--mobile-padding-top: {{ top_spacing_mobile }}px; --mobile-padding-bottom: {{ bottom_spacing_mobile }}px;
+      {%- elsif vertical_spacing == 'vertical-margin' -%}
+        margin-top: {{ top_spacing }}px; margin-bottom: {{ bottom_spacing }}px;--mobile-margin-top: {{ top_spacing_mobile }}px; --mobile-margin-bottom: {{ bottom_spacing_mobile }}px;
+      {%- elsif vertical_spacing == 'vertical-margin vertical-padding' -%}
+        padding-top: {{ top_spacing }}px; padding-bottom: {{ bottom_spacing }}px; margin-top: {{ top_spacing }}px; margin-bottom: {{ bottom_spacing }}px; --mobile-padding-top: {{ top_spacing_mobile }}px; --mobile-padding-bottom: {{ bottom_spacing_mobile }}px; --mobile-margin-top: {{ top_spacing_mobile }}px; --mobile-margin-bottom: {{ bottom_spacing_mobile }}px;
+      {%- endif -%}
+    {%- endif -%}
+    {% if style_selector == 'custom' %}
+      background: {{ background_color }}; color: {{ text_color }};
+    {% endif %}
+  "
+  {% if id_text != blank %}
+    id="{{ id_text }}"
+  {% endif %}
+>
+  <div class="{{ page_width }} relative">
+    {%- render 'breadcrumbs', padding: false -%}
+    <div class="faqs-header w-100 relative mb-8">
+      <div class="header-content flex-start flex-col align-center gap-sm relative w-100 m-in-auto text-center page-width--narrow">
+        {% content_for 'block', type: 'heading', id: 'heading' %}
+        {% content_for 'block', type: 'richtext', id: 'text' %}
+
+        <div class="search-wrapper w-100 flex-center g-3 align-center mt-4 flex-wrap">
+          <div class="search-input-wrapper w-100 relative">
+            <input
+              type="search"
+              id="fuse-search"
+              class="w-100"
+              placeholder="{{ placeholder_text }}"
+              style="padding: 8px 16px;border-radius: 20px;"
+            >
+            <span
+              id="fuse-submit"
+              class="cursor-pointer absolute flex-center align-center h-100 border-radius-circle"
+              style=" width:28px; height: 28px;background-color: var(--brand-color-2);color: #fff;"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="15"
+                height="15"
+                viewBox="0 0 15 15"
+                fill="none"
+              >
+                <path d="M4.46736 11.0565L0.761718 14.4521M2.99405 7.14415C2.99405 10.2878 5.40448 12.8362 8.37789 12.8362C11.3513 12.8362 13.7617 10.2878 13.7617 7.14415C13.7617 4.00054 11.3513 1.45215 8.37789 1.45215C5.40448 1.45215 2.99405 4.00054 2.99405 7.14415Z" stroke="currentColor" stroke-linecap="round"/>
+              </svg>
+            </span>
+          </div>
+
+          <span id="reset-search" class="cursor-pointer underline">
+            {{- 'general.search.reset' | t -}}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="faqs-grid-container">
+      <div class="faqs-wrapper active grid-section">
+        {%- for faq_group in faq_groups -%}
+          <div
+            class="faq-grid-block p-4 border-radius-large span-6 section-container {{ faq_section_styling }}"
+            {% if faq_style_selector == 'custom' %}
+              style="background: {{ faq_background_color }}; color: {{ faq_text_color }};"
+            {% endif %}
+          >
+            {%- render 'faq-block', faqs_group: faq_group, title: faq_group.group_name -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <div class="faqs-search-container hidden">
+      <div class="flex-col">
+        <div
+          class="searched-faqs p-3 border-radius-large {{ faq_section_styling }}"
+          {% if faq_style_selector == 'custom' %}
+            style="background: {{ faq_background_color }}; color: {{ faq_text_color }};"
+          {% endif %}
+        >
+          {%- for faq in faqs -%}
+            {%- for f in faq.value -%}
+              {%- liquid
+                assign faq_question = f.question
+                assign faq_content = f.answer | metafield_tag
+              -%}
+              <div
+                data-faq-category="{{- faq.name | handleize -}}"
+                data-faq-question="{{- faq_question -}}"
+              >
+                {%- render 'accordion-item',
+                  question: faq_question,
+                  content: faq_content,
+                  faq_mode: true
+                -%}
+              </div>
+            {%- endfor -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .fuse-faqs-search .faq-grid-block:has(.faq-group-content:empty) {
+    display: none;
+  }
+
+  .fuse-faqs-search .faqs-header .header-content .search-input-wrapper {
+    max-width: 389px;
+  }
+
+  .fuse-faqs-search .faq-grid-block,
+  .fuse-faqs-search .searched-faqs {
+    border: 1px solid var(--brand-color-5);
+  }
+
+  .fuse-faqs-search .faqs-header .header-content .search-input-wrapper #fuse-search::-ms-clear,
+  .fuse-faqs-search .faqs-header .header-content .search-input-wrapper #fuse-search::-ms-reveal {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  .fuse-faqs-search
+    .faqs-header
+    .header-content
+    .search-input-wrapper
+    #fuse-search::-webkit-search-decoration,
+  .fuse-faqs-search
+    .faqs-header
+    .header-content
+    .search-input-wrapper
+    #fuse-search::-webkit-search-cancel-button,
+  .fuse-faqs-search
+    .faqs-header
+    .header-content
+    .search-input-wrapper
+    #fuse-search::-webkit-search-results-button,
+  .fuse-faqs-search
+    .faqs-header
+    .header-content
+    .search-input-wrapper
+    #fuse-search::-webkit-search-results-decoration {
+    display: none;
+  }
+
+  .fuse-faqs-search .faqs-header .header-content .search-input-wrapper #fuse-search::placeholder {
+    color: var(--text-color);
+  }
+
+  .fuse-faqs-search .faqs-header .header-content .search-input-wrapper #fuse-submit {
+    top: 50%;
+    right: 4px;
+    width: 28px;
+    padding: 8px;
+    transform: translateY(-50%);
+  }
+
+  .fuse-faqs-search .faqs-header .header-content .search-input-wrapper #fuse-submit svg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+  }
+
+  .fuse-faqs-search .faqs-header .rte {
+    max-width: 530px;
+  }
+
+  .fuse-faqs-search .accordion .chevron {
+    min-width: 16px;
+    max-width: 16px;
+  }
+
+  @media screen and (max-width: 767.98px) {
+    .fuse-faqs-search .accordion .chevron {
+      min-width: 18px;
+      max-width: 18px;
+    }
+  }
+
+  @media screen and (max-width: 767.98px) {
+    .fuse-faqs-search .faqs-wrapper {
+      gap: 0;
+    }
+    .fuse-faqs-search .faqs-grid-container {
+      width: calc(
+        100% +
+          clamp(
+            var(--page-width-padding-mobile),
+            calc(var(--padding-intercept) + var(--padding-slope) * 1vw),
+            var(--page-width-padding)
+          ) *
+          2
+      );
+      margin-inline: calc(
+        -1 *
+          clamp(
+            var(--page-width-padding-mobile),
+            calc(var(--padding-intercept) + var(--padding-slope) * 1vw),
+            var(--page-width-padding)
+          )
+      );
+    }
+    .fuse-faqs-search .faqs-grid-container .faq-grid-block {
+      border: none;
+    }
+  }
+{% endstylesheet %}
+
+<script type="module">
+  import { initFAQSearch } from '@theme/faq-search';
+  document.addEventListener('DOMContentLoaded', initFAQSearch);
+</script>
+
+{%- schema -%}
+{
+  "name": "FAQ Grid",
+  "tag": "section",
+  "class": "fuse-faqs-search",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "metaobject_list",
+      "id": "faq_groups",
+      "label": "FAQ Groups",
+      "metaobject_type": "faq_group"
+    },
+    {
+      "type": "text",
+      "id": "placeholder_text",
+      "label": "Search Bar Placeholder Text"
+    },
+    {
+      "type": "header",
+      "content": "Section Styling"
+    },
+    {
+      "type": "select",
+      "id": "style_selector",
+      "label": "Styling Type",
+      "options": [
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "theme"
+    },
+    {
+      "type": "select",
+      "id": "section_styling",
+      "label": "Section style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "third",
+          "label": "Third"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ section.settings.style_selector == 'theme' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "background_color",
+      "label": "Background Colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Colour",
+      "default": "#393939",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "FAQ Styling"
+    },
+    {
+      "type": "select",
+      "id": "faq_style_selector",
+      "label": "Styling Type",
+      "options": [
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "theme"
+    },
+    {
+      "type": "select",
+      "id": "faq_section_styling",
+      "label": "Section style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "third",
+          "label": "Third"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ section.settings.faq_style_selector == 'theme' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "faq_background_color",
+      "label": "Background Colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ section.settings.faq_style_selector == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "faq_text_color",
+      "label": "Text Colour",
+      "default": "#393939",
+      "visible_if": "{{ section.settings.faq_style_selector == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "Left"
+        },
+        {
+          "value": "text-center",
+          "label": "Centre"
+        }
+      ],
+      "default": "text-left"
+    },
+    {
+      "type": "select",
+      "id": "page_width",
+      "label": "Page Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Default"
+        },
+        {
+          "value": "page-width--narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "page-width--wide",
+          "label": "Wide"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "select",
+      "id": "vertical_spacing",
+      "label": "Vertical Spacing",
+      "options": [
+        {
+          "value": "vertical-margin",
+          "label": "Margin"
+        },
+        {
+          "value": "vertical-padding",
+          "label": "Padding"
+        },
+        {
+          "value": "vertical-margin vertical-padding",
+          "label": "Margin and Padding"
+        },
+        {
+          "value": "",
+          "label": "None"
+        }
+      ],
+      "default": "vertical-margin",
+      "info": "This uses the global spacing settings from the theme settings to ensure consistent spacing between sections. If you want to use custom spacing, please check the 'Custom Spacing' option."
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_spacing",
+      "label": "Custom Spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "top_spacing",
+      "label": "Top Spacing",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 120,
+      "visible_if": "{{ section.settings.custom_spacing == true }}"
+    },
+    {
+      "type": "range",
+      "id": "bottom_spacing",
+      "label": "Bottom Spacing",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 120,
+      "visible_if": "{{ section.settings.custom_spacing == true }}"
+    },
+    {
+      "type": "range",
+      "id": "top_spacing_mobile",
+      "label": "Mobile Top Spacing",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 60,
+      "visible_if": "{{ section.settings.custom_spacing == true }}"
+    },
+    {
+      "type": "range",
+      "id": "bottom_spacing_mobile",
+      "label": "Mobile Bottom Spacing",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 60,
+      "visible_if": "{{ section.settings.custom_spacing == true }}"
+    },
+    {
+      "type": "header",
+      "content": "Targeting"
+    },
+    {
+      "type": "text",
+      "id": "id_text",
+      "label": "ID Attribute",
+      "info": "Add an optional ID to the section for advanced targeting with anchor links and CSS."
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ Grid",
+      "category": "FAQs"
+    }
+  ]
+}
+{%- endschema -%}

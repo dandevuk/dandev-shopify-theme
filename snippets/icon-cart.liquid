@@ -1,0 +1,21 @@
+{%- liquid
+  if svg_width == blank
+    assign svg_width = 12
+  endif
+  if svg_height == blank
+    assign svg_height = 13
+  endif
+-%}
+<svg
+  quick-shop-icon
+  xmlns="http://www.w3.org/2000/svg"
+  width="{{ svg_width }}px"
+  height="{{ svg_height }}px"
+  viewBox="0 0 13 14"
+  fill="none"
+>
+  <path d="M3.05789 0.754883L1.26074 3.15464V11.5547C1.26074 11.873 1.38697 12.1782 1.61166 12.4033C1.83635 12.6284 2.14109 12.7548 2.45884 12.7548H10.8444C11.1621 12.7548 11.4669 12.6284 11.6915 12.4033C11.9162 12.1782 12.0425 11.873 12.0425 11.5547V3.15464L10.2453 0.754883H3.05789Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M1.26074 3.15527H12.0425" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M6.65137 6.15479V9.75477" stroke="currentColor" stroke-linecap="round"/>
+  <path d="M4.85449 7.95508H8.44826" stroke="currentColor" stroke-linecap="round"/>
+</svg>

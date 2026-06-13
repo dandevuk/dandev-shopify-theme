@@ -1,0 +1,132 @@
+{%- liquid
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  #
+  #   -== Overview ==-
+  #       This snippet renders Product Badges from the Product Badge MetaObject.
+  #       The product has a Metafield Product Badge MetaObject Reference that allows
+  #       the client to determine the order and what badges to add to a product.
+  #
+  #           * Metafield Definition: product_data.product_badges
+  #
+  #
+  #       There are however some badges still dynamically rendered from the theme and
+  #       these badges can be toggled globally in Theme Settings.
+  #
+  #           * Theme Settings: Theme Settings -> Product Badges
+  #
+  #
+  #   -== Parameters ==-
+  #       * product   -   The Product you want to retrieve the badges for.
+  #       * limit     -   A custom limit to the maximum amount of product badges to render.
+  #
+  #
+  #   -== Default Theme Badge Types ==-
+  #       These are the default theme badges in order of what will appear first, Custom
+  #       MetaObject badges are output first before rendering any theme badges:
+  #           1. Sale
+  #           2. Low Stock
+  #           3. New
+  #           4. Out of Stock
+  #
+  #
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  #
+  #   -== Snippet Variables ==-
+  assign default_badge_count = 0 | plus: 0
+  assign badge_count = 0 | plus: 0
+  assign badge_limit = limit | default: 4
+
+  #       Product Metafield [MetaObject Reference]
+  assign product_badge_metafield = product.metafields.product_data.product_badges.value
+
+  #       Count Product MetaObject Badges
+  assign product_badge_metafield_count = 0 | plus: 0
+  for product_badge in product_badge_metafield
+    if product_badge.text != blank
+      assign product_badge_metafield_count = product_badge_metafield_count | plus: 1
+    endif
+  endfor
+
+  #   -== Theme Settings ==-
+  assign show_sale = settings.show_sale_badge
+  assign sale_text = 'products.product.badges.sale' | t
+
+  # assign show_new_arrival = settings.show_new_arrival_badge
+  # assign new_arrival_text = 'products.product.badges.new_arrival' | t
+
+  assign show_oos = settings.show_oos_badge
+  assign oos_text = 'products.product.badges.out_of_stock' | t
+  #
+  #
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  #   THEME DEFAULT BADGES (DYNAMIC)
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  #   -== OUT OF STOCK BADGE ==-
+  assign out_of_stock = false
+  unless product.available
+    assign out_of_stock = true
+    assign default_badge_count = default_badge_count | plus: 1
+  endunless
+
+  #   -== SALE BADGE ==-
+  assign on_sale = false
+  if product.compare_at_price > product.price
+    assign on_sale = true
+    assign default_badge_count = default_badge_count | plus: 1
+  endif
+-%}
+
+{%- if default_badge_count > 0 or product_badge_metafield_count > 0 -%}
+  <div
+    class="badge-container flex flex-col g-1 {{ settings.badge_position }}"
+    data-product-id="{{ product.id }}"
+    data-metafield-count="{{- product_badge_metafield_count -}}"
+    style="--indentation: {{ settings.badge_indentation }}px;"
+  >
+    {%- comment -%} METAOBJECT BADGES {%- endcomment -%}
+    {%- for product_badge in product_badge_metafield limit: badge_limit -%}
+      {%- liquid
+        assign text = product_badge.text
+        assign background = product_badge.background | prepend: 'background: ' | append: ';'
+        assign colour = product_badge.colour | prepend: 'color: ' | append: ';'
+
+        assign styles = background | append: colour
+      -%}
+      {%- if text != blank -%}
+        {%- assign badge_count = badge_count | plus: 1 -%}
+        <div class="product-badge badge-1" style="{{- styles -}}">{{- text -}}</div>
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- comment -%} DEFAULT THEME BADGES {%- endcomment -%}
+    {%- if badge_count < badge_limit and show_sale != false and on_sale == true -%}
+      {%- assign badge_count = badge_count -%}
+      <div class="product-badge discount-badge badge-1">{{- sale_text -}}</div>
+    {%- endif -%}
+
+    {%- if badge_count < badge_limit and show_oos != false and out_of_stock == true -%}
+      {%- assign badge_count = badge_count -%}
+      <div class="product-badge oos-badge badge-2">{{- oos_text -}}</div>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{%- stylesheet -%}
+  .product-badges.top-left {
+    top: var(--indentation);
+    left: var(--indentation);
+  }
+  .product-badges.top-right {
+    top: var(--indentation);
+    right: var(--indentation);
+  }
+  .product-badges.bottom-left {
+    bottom: var(--indentation);
+    left: var(--indentation);
+  }
+  .product-badges.bottom-right {
+    bottom: var(--indentation);
+    right: var(--indentation);
+  }
+{%- endstylesheet -%}

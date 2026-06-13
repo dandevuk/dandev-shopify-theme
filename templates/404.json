@@ -1,0 +1,184 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "404",
+      "blocks": {
+        "section-content": {
+          "type": "section-content",
+          "static": true,
+          "settings": {
+            "content_spacing": "g-2"
+          },
+          "blocks": {
+            "heading_7Rtkte": {
+              "type": "heading",
+              "name": "Heading",
+              "settings": {
+                "heading": "Page Not Found",
+                "heading_type": "h2",
+                "heading_size": "heading-h1"
+              },
+              "blocks": {}
+            },
+            "richtext_WVF8T4": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "richtext": "<p>Sorry this page does not exist.</p>"
+              },
+              "blocks": {}
+            },
+            "links_container_pKdVCV": {
+              "type": "links-container",
+              "name": "Links Container",
+              "settings": {
+                "content_spacing": "g-1"
+              },
+              "blocks": {
+                "link_L7WrLm": {
+                  "type": "link",
+                  "settings": {
+                    "link_text": "Go Back to the store",
+                    "link": "shopify://collections/all",
+                    "link_title": "View all our collections",
+                    "link_style": "button-1",
+                    "external_link": false
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "link_L7WrLm"
+              ]
+            },
+            "searchbar_8REUVU": {
+              "type": "searchbar",
+              "name": "Search Bar",
+              "settings": {
+                "placeholder_text": "Search..."
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "heading_7Rtkte",
+            "richtext_WVF8T4",
+            "links_container_pKdVCV",
+            "searchbar_8REUVU"
+          ]
+        }
+      },
+      "settings": {
+        "content_alignment": "center",
+        "text_alignment": "center",
+        "page_width": "page-width",
+        "vertical_spacing": "vertical-padding",
+        "style_selector": "theme",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)",
+        "text_color": "#65bbe5",
+        "overlay_type": "custom",
+        "overlay_styling": "primary",
+        "overlay_color": "linear-gradient(180deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1) 98%)"
+      }
+    },
+    "slider_GPTrEc": {
+      "type": "slider",
+      "blocks": {
+        "slider_products_tnWgcA": {
+          "type": "_slider-products",
+          "settings": {
+            "block_collection": "best-sellers",
+            "block_products": [],
+            "show_advanced_settings": false,
+            "slider_overflow": "mobile-slider-overflow",
+            "custom_layout": false,
+            "loop": false,
+            "centered_slides": "none",
+            "initial_slide": 0,
+            "autoplay": false,
+            "autoplay_delay": 3,
+            "navigation_display": "desktop-navigation",
+            "navigation_style": "default",
+            "pagination_display": "desktop",
+            "scrollbar_display": "none"
+          },
+          "blocks": {
+            "product-card": {
+              "type": "_product-card",
+              "static": true,
+              "settings": {
+                "show_quickview_button": true
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": []
+        },
+        "heading": {
+          "type": "heading",
+          "static": true,
+          "settings": {
+            "heading": "Featured Products",
+            "heading_type": "h2",
+            "heading_size": "heading-h1"
+          },
+          "blocks": {}
+        },
+        "richtext": {
+          "type": "richtext",
+          "static": true,
+          "settings": {
+            "richtext": "<p>Add text here</p>"
+          },
+          "blocks": {}
+        },
+        "link": {
+          "type": "link",
+          "static": true,
+          "settings": {
+            "link_text": "Link Text",
+            "link": "",
+            "link_title": "Link Title",
+            "link_style": "button-1",
+            "external_link": false
+          },
+          "blocks": {}
+        },
+        "slider-navigation-arrows": {
+          "type": "_slider-navigation-arrows",
+          "static": true,
+          "settings": {},
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "slider_products_tnWgcA"
+      ],
+      "name": "Product Card Slider",
+      "settings": {
+        "style_selector": "theme",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "background_image_type": "none",
+        "background_image_theme": "1",
+        "page_width": "page-width",
+        "vertical_spacing": "vertical-margin"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "slider_GPTrEc"
+  ]
+}

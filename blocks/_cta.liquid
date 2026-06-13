@@ -1,0 +1,105 @@
+{%- liquid
+  assign cta_class = ''
+  if block.settings.in_mega_menu
+    assign cta_class = 'mega-menu-cta'
+  endif
+-%}
+{%- render 'cta',
+  cta: block.settings.cta,
+  use_data_src: block.settings.in_mega_menu,
+  shopify_attributes: block.shopify_attributes,
+  style: block.settings.style,
+  heading_size: block.settings.heading_size,
+  class: cta_class,
+  in_mega_menu: block.settings.in_mega_menu
+-%}
+
+{% schema %}
+{
+  "name": "CTA",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "metaobject",
+      "id": "cta",
+      "label": "CTA Metaobject",
+      "metaobject_type": "cta"
+    },
+    {
+      "type": "checkbox",
+      "id": "in_mega_menu",
+      "label": "In Mega Menu",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading Size",
+      "options": [
+        {
+          "value": "heading-h1",
+          "label": "Extra Large"
+        },
+        {
+          "value": "heading-h2",
+          "label": "Large"
+        },
+        {
+          "value": "heading-h3",
+          "label": "Medium"
+        },
+        {
+          "value": "heading-h4",
+          "label": "Regular"
+        },
+        {
+          "value": "heading-h5",
+          "label": "Small"
+        },
+        {
+          "value": "heading-h6",
+          "label": "Extra Small"
+        }
+      ],
+      "default": "heading-h4"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        {
+          "value": "banner",
+          "label": "Background image and centred content"
+        },
+        {
+          "value": "image_card",
+          "label": "Background image and content bottom left"
+        },
+        {
+          "value": "card_1",
+          "label": "Image with content underneath white background"
+        },
+        {
+          "value": "card_2",
+          "label": "Image with content underneath warm grey background"
+        }
+      ],
+      "default": "image_card"
+    }
+  ],
+  "presets": [
+    {
+      "name": "CTA"
+    }
+  ]
+}
+{% endschema %}

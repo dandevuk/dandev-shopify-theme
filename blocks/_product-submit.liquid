@@ -1,0 +1,63 @@
+{%- liquid
+  assign additional_classes = ''
+  if block.settings.add_border_bottom
+    assign additional_classes = 'border-bottom pb-3'
+  endif
+-%}
+{%- render 'product-submit-wrapper',
+  show_quantity: block.settings.show_quantity,
+  show_wishlist_button: block.settings.show_wishlist_button,
+  additional_classes: additional_classes,
+  add_to_cart_style: block.settings.add_to_cart_style,
+  shopify_attributes: block.shopify_attributes
+-%}
+
+{% schema %}
+{
+  "name": "Submit Form",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "add_to_cart_style",
+      "label": "Add to Cart Button Style",
+      "options": [
+        {
+          "value": "button-1",
+          "label": "Button 1"
+        },
+        {
+          "value": "button-2",
+          "label": "Button 2"
+        },
+        {
+          "value": "button-3",
+          "label": "Button 3"
+        },
+        {
+          "value": "button-4",
+          "label": "Button 4"
+        }
+      ],
+      "default": "button-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quantity",
+      "label": "Show Quantity Selector",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "add_border_bottom",
+      "label": "Add Border Bottom",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Submit Form"
+    }
+  ]
+}
+{% endschema %}

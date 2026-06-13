@@ -1,0 +1,434 @@
+{%- liquid
+  # STYLING
+  assign style_selector = section.settings.style_selector
+  assign section_styling = section.settings.section_styling
+  assign background_color = section.settings.background_color
+  assign text_color = section.settings.text_color
+
+  # LAYOUT
+  assign vertical_layout = section.settings.vertical_layout
+  assign vertical_spacing = section.settings.vertical_spacing
+  assign custom_spacing = section.settings.custom_spacing
+  assign top_spacing = section.settings.top_spacing
+  assign bottom_spacing = section.settings.bottom_spacing
+  assign top_spacing_mobile = section.settings.top_spacing_mobile
+  assign bottom_spacing_mobile = section.settings.bottom_spacing_mobile
+
+  # CONTACT FORM
+  assign style_selector_form = section.settings.style_selector_form
+  assign section_styling_form = section.settings.section_styling_form
+  assign background_color_form = section.settings.background_color_form
+  assign text_color_form = section.settings.text_color_form
+
+  # ID Attribute
+  assign id_text = section.settings.id_text | strip
+-%}
+
+<div
+  class="{{ section_styling }} {% unless custom_spacing %}{{ vertical_spacing }}{% else %}custom-spacing{% endunless %} contact-form-page"
+  {% if id_text != blank %}
+    id="{{ id_text }}"
+  {% endif %}
+  style="
+    {%- if custom_spacing -%}
+      {%- if vertical_spacing == 'vertical-padding' -%}
+        padding-top: {{ top_spacing }}px; padding-bottom: {{ bottom_spacing }}px;--mobile-padding-top: {{ top_spacing_mobile }}px; --mobile-padding-bottom: {{ bottom_spacing_mobile }}px;
+      {%- elsif vertical_spacing == 'vertical-margin' -%}
+        margin-top: {{ top_spacing }}px; margin-bottom: {{ bottom_spacing }}px;--mobile-margin-top: {{ top_spacing_mobile }}px; --mobile-margin-bottom: {{ bottom_spacing_mobile }}px;
+      {%- elsif vertical_spacing == 'vertical-margin vertical-padding' -%}
+        padding-top: {{ top_spacing }}px; padding-bottom: {{ bottom_spacing }}px; margin-top: {{ top_spacing }}px; margin-bottom: {{ bottom_spacing }}px; --mobile-padding-top: {{ top_spacing_mobile }}px; --mobile-padding-bottom: {{ bottom_spacing_mobile }}px; --mobile-margin-top: {{ top_spacing_mobile }}px; --mobile-margin-bottom: {{ bottom_spacing_mobile }}px;
+      {%- endif -%}
+    {%- endif -%}
+    {% if style_selector == 'custom' %}
+      background: {{ background_color }}; color: {{ text_color }};
+    {% endif %}
+  "
+>
+  <div class="contact-form-wrapper align-start flex-between flex-wrap {% if vertical_layout == 'text-bottom' -%}to-sm-flex-col-reverse{% else %}to-sm-flex-col{% endif -%}">
+    <div class="page-width no-text-margins w-50 to-md-w-100 to-md-mb-4">
+      {%- render 'breadcrumbs' -%}
+
+      <div class="flex flex-col g-5">
+        {% content_for 'blocks' %}
+      </div>
+    </div>
+
+    <div
+      class="section-container form w-50 to-md-w-100 {{ section_styling_form }}"
+      {% if style_selector_form == 'custom' %}
+        style="background: {{ background_color_form }}; color: {{ text_color_form }};"
+      {% endif %}
+    >
+      {% form 'contact', class: 'contact--form flex flex-col g-3' %}
+        {%- if form.errors -%}
+          <div class="form-errors">
+            <img
+              src="{{ "icon-error.svg" |  asset_url }}"
+              width="50"
+              height="50"
+              alt="Error"
+              loading="lazy"
+              decoding="async"
+            >
+
+            <h2 class="form__message" id="RecoverEmail-email-error" tabindex="-1" autofocus>
+              <span class="visually-hidden">{{ 'contact.form.error' | t }}</span>
+              <strong>{{ 'contact.form.error' | t }}:</strong>
+            </h2>
+
+            {{ form.errors | default_errors }}
+          </div>
+        {%- endif -%}
+
+        <div class="nature-of-enquiry input-group flex flex-col g-1">
+          <label for="nature-of-enquiry" class="flex flex-between g-2"
+            ><span>{{ 'contact.form.nature_of_enquiry' | t }}*</span
+            ><span>*{{ 'contact.form.required_fields' | t }}</span></label
+          >
+          <input
+            type="text"
+            name="contact[nature_of_enquiry]"
+            id="nature-of-enquiry"
+            placeholder="{{ 'contact.form.placeholders.nature_of_enquiry' | t }}"
+            value="{{- customer.nature_of_enquiry -}}"
+            required
+          >
+        </div>
+
+        <div class="first-name input-group flex flex-col g-1">
+          <label for="full-name">{{ 'contact.form.name' | t }}*</label>
+          <input
+            type="text"
+            name="contact[full_name]"
+            id="full-name"
+            placeholder="{{ 'contact.form.placeholders.name' | t }}"
+            value="{{- customer.name -}}"
+            required
+          >
+        </div>
+
+        <div class="phone input-group flex flex-col g-1">
+          <label for="phone">{{ 'contact.form.phone' | t }}</label>
+          <input
+            type="tel"
+            name="contact[phone]"
+            id="phone"
+            placeholder="{{ 'contact.form.placeholders.phone' | t }}"
+            value="{{- customer.phone -}}"
+          >
+        </div>
+
+        <div class="email input-group flex flex-col g-1">
+          <label for="email">{{ 'contact.form.email' | t }}*</label>
+          <input
+            type="email"
+            name="contact[email]"
+            id="email"
+            placeholder="{{ 'contact.form.placeholders.email' | t }}"
+            value="{{- customer.email | default: form.email -}}"
+            required
+          >
+        </div>
+
+        <div class="message input-group flex flex-col g-1">
+          <label for="message">{{ 'contact.form.message' | t }}*</label>
+          <textarea
+            name="contact[body]"
+            rows="5"
+            id="message"
+            placeholder="{{ 'contact.form.placeholders.message' | t }}"
+            value="{{- form.body -}}"
+            required
+          ></textarea>
+        </div>
+
+        <label class="field__label flex g-3">
+          <input
+            type="checkbox"
+            name="contact[marketing]"
+            class="relative"
+          >
+          {{ 'contact.form.checkboxes.marketing' | t }}
+        </label>
+
+        <div class="input-group">
+          <input type="submit" class="button-1" value="Send Message">
+        </div>
+
+        {%- if form.posted_successfully? -%}
+          <div class="form-status form-success flex align-center g-4" autofocus>
+            <img
+              src="{{ "icon-success.svg" |  asset_url }}"
+              width="50"
+              height="50"
+              alt="Success"
+              loading="lazy"
+              decoding="async"
+            >
+
+            <span class="form-success--text">
+              {{ 'contact.form.post_success' | t }}
+            </span>
+          </div>
+        {%- endif -%}
+      {% endform %}
+    </div>
+  </div>
+</div>
+
+{%- stylesheet -%}
+  .contact-form .form-success {
+    scroll-margin-top: 170px;
+  }
+  .contact-form .contact-form-wrapper .form {
+    padding: 76px 95px;
+  }
+
+  @media screen and (max-width: 767.98px) {
+    .contact-form .contact-form-wrapper .form {
+      padding: var(--content-spacing-10)
+        clamp(
+          var(--page-width-padding-mobile),
+          calc(var(--padding-intercept) + var(--padding-slope) * 1vw),
+          var(--page-width-padding)
+        );
+    }
+  }
+{%- endstylesheet -%}
+
+<script
+  src="{{ 'shopify-chat-toggle.js' | asset_url }}"
+  type="module"
+></script>
+
+{% schema %}
+{
+  "name": "Contact Form",
+  "tag": "section",
+  "class": "contact-form padding--standard",
+  "blocks": [
+    { "type": "section-content" },
+    { "type": "contact-details" },
+    { "type": "_social-links" }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "select",
+      "id": "style_selector",
+      "label": "Styling Type",
+      "options": [
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "theme"
+    },
+    {
+      "type": "select",
+      "id": "section_styling",
+      "label": "Section style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ section.settings.style_selector == 'theme' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "background_color",
+      "label": "Background Colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Colour",
+      "default": "#393939",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "vertical_layout",
+      "label": "Mobile Text Position",
+      "options": [
+        {
+          "value": "text-bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "text-top",
+          "label": "Top"
+        }
+      ],
+      "default": "text-bottom"
+    },
+    {
+      "type": "select",
+      "id": "vertical_spacing",
+      "label": "Vertical Spacing",
+      "options": [
+        {
+          "value": "vertical-margin",
+          "label": "Margin"
+        },
+        {
+          "value": "vertical-padding",
+          "label": "Padding"
+        },
+        {
+          "value": "vertical-margin vertical-padding",
+          "label": "Margin and Padding"
+        },
+        {
+          "value": "",
+          "label": "None"
+        }
+      ],
+      "default": "vertical-margin",
+      "info": "This uses the global spacing settings from the theme settings to ensure consistent spacing between sections. If you want to use custom spacing, please check the 'Custom Spacing' option."
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_spacing",
+      "label": "Custom Spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "top_spacing",
+      "label": "Top Spacing",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 120,
+      "visible_if": "{{ section.settings.custom_spacing == true }}"
+    },
+    {
+      "type": "range",
+      "id": "bottom_spacing",
+      "label": "Bottom Spacing",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 120,
+      "visible_if": "{{ section.settings.custom_spacing == true }}"
+    },
+    {
+      "type": "range",
+      "id": "top_spacing_mobile",
+      "label": "Mobile Top Spacing",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 60,
+      "visible_if": "{{ section.settings.custom_spacing == true }}"
+    },
+    {
+      "type": "range",
+      "id": "bottom_spacing_mobile",
+      "label": "Mobile Bottom Spacing",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 60,
+      "visible_if": "{{ section.settings.custom_spacing == true }}"
+    },
+    {
+      "type": "header",
+      "content": "Contact Form"
+    },
+    {
+      "type": "select",
+      "id": "style_selector_form",
+      "label": "Styling Type",
+      "options": [
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "theme"
+    },
+    {
+      "type": "select",
+      "id": "section_styling_form",
+      "label": "Section style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "third",
+          "label": "Third"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ section.settings.style_selector_form == 'theme' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "background_color_form",
+      "label": "Background Colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ section.settings.style_selector_form == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color_form",
+      "label": "Text Colour",
+      "default": "#393939",
+      "visible_if": "{{ section.settings.style_selector_form == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Targeting"
+    },
+    {
+      "type": "text",
+      "id": "id_text",
+      "label": "ID Attribute",
+      "info": "Add an optional ID to the section for advanced targeting with anchor links and CSS."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact Form",
+      "category": "Forms"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,284 @@
+{%- comment -%}
+  =======================================================
+  Line item property input
+
+  Cart.js looks for inputs with the class 'property' and add this as a key-value pair object to the add.js POST API call
+
+  Key is the input name
+  Value is the input value
+
+  <label for="test-line-item">Test line item</label>
+  <input class="property" type="text" name="property" value="" id="test-line-item">
+
+  These will display in the cart item
+
+  Key: Value
+
+  To hide from the cart item prepend an underscore to the input name
+  <label for="test-line-item">Test line item</label>
+  <input class="property" type="text" name="_property" value="" id="test-line-item">
+
+  =======================================================
+{%- endcomment -%}
+{% comment %}
+  <div class="line-item-properties">
+    <div>
+      <label for="test-line-item">Test line item</label><br>
+      <input class="property" type="text" name="property" value="" id="test-line-item">
+    </div>
+
+    <div>
+      <label for="test-hidden-line-item">Test hidden line item</label><br>
+      <input class="property" type="text" name="_hidden property" value="" id="test-hidden-line-item">
+    </div>
+  </div>
+{% endcomment %}
+
+{%- liquid
+  if product == blank
+    assign product = closest.product
+  endif
+
+  if product == blank and section.settings.product != blank
+    assign product = section.settings.product
+  endif
+
+  if product != blank and product.variants.size == 0 and product.handle != blank
+    assign product = all_products[product.handle]
+  endif
+
+  if add_to_cart_style == blank
+    assign add_to_cart_style = 'button-2'
+  endif
+
+  assign classes = 'product-submit-container flex flex-col g-2'
+
+  assign first_or_selected_variant = product.selected_or_first_available_variant
+  if product.selected_variant != blank
+    assign first_or_selected_variant = product.selected_variant
+  endif
+
+  assign qty_default = first_or_selected_variant.quantity_rule.min | default: 1
+
+  assign variant_section_id = section_id | default: section.id
+
+  assign active_selling_plan_allocation = nil
+  if product.selected_selling_plan != blank
+    for allocation in first_or_selected_variant.selling_plan_allocations
+      if allocation.selling_plan.id == product.selected_selling_plan.id
+        assign active_selling_plan_allocation = allocation
+        break
+      endif
+    endfor
+  endif
+
+  assign display_price = first_or_selected_variant.price
+  if active_selling_plan_allocation != blank
+    assign display_price = active_selling_plan_allocation.price
+  endif
+-%}
+
+{%- capture pre_order_state -%}
+  {%- render 'variant-pre-order-state', variant: first_or_selected_variant -%}
+{%- endcapture -%}
+{%- assign pre_order_parts = pre_order_state | strip | split: '|' -%}
+{%- liquid
+  assign is_pre_order = false
+  if pre_order_parts[0] == 'true'
+    assign is_pre_order = true
+  endif
+  assign expected_despatch_date = pre_order_parts[1]
+  assign despatch_date = pre_order_parts[2]
+
+  if is_pre_order
+    assign submit_button_text = 'products.product.pre_order' | t
+    assign submit_aria_label = 'products.product.pre_order_aria_label' | t: title: product.title
+  else
+    assign submit_button_text = 'products.product.add_to_cart' | t
+    assign submit_aria_label = 'products.product.add_to_cart_aria_label' | t: title: product.title
+  endif
+-%}
+
+{%- form 'product', product, class: classes, data-product-id: product.id -%}
+  <input
+    type="hidden"
+    value="{{ first_or_selected_variant.id }}"
+    name="id"
+    id="product-id-{{ variant_section_id }}-{{ product.id }}"
+  >
+  {%- if product.selling_plan_groups.size > 0 and is_pre_order == false -%}
+    <input
+      type="hidden"
+      name="selling_plan"
+      value="{% if active_selling_plan_allocation %}{{ active_selling_plan_allocation.selling_plan.id }}{% endif %}"
+      data-selling-plan-input
+    >
+  {%- endif -%}
+  <div
+    class="product-submit-container flex flex-col g-2 {{ additional_classes }}"
+    {{ shopify_attributes }}
+  >
+
+    {%- if is_pre_order and despatch_date != blank and first_or_selected_variant.available -%}
+      <div
+        class="pre-order-banner section-container secondary border-radius flex flex-center align-center w-100 text-center p-2"
+        data-pre-order-banner
+      >
+        <p class="mb-0 bold">
+          {{- 'products.product.expected_delivery' | t: date: despatch_date -}}
+        </p>
+      </div>
+      <input type="hidden" property name="_pre_order" value="true">
+      <input type="hidden" property name="_expected_despatch_date" value="{{ expected_despatch_date }}">
+    {%- elsif is_pre_order and first_or_selected_variant.available -%}
+      <input type="hidden" property name="_pre_order" value="true">
+    {%- endif -%}
+    <div class="product-submit-wrapper flex flex-between flex-wrap g-3 to-sm-flex-between to-sm-flex-wrap">
+      {%- if first_or_selected_variant.available -%}
+        {%- unless hide_quantity == true -%}
+          <div class="quantity-total-wrapper flex flex-between flex-wrap g-3">
+            <div class="quantity-wrapper flex flex-between">
+              {%- render 'quantity-selector', product: product -%}
+            </div>
+          </div>
+        {%- endunless -%}
+      {%- endif -%}
+
+      {% comment %} <input add-to-cart type="submit" class="button-1" value="{{- add_to_cart_text -}}"> {% endcomment %}
+      {%- if first_or_selected_variant.available -%}
+        <label class="{{ add_to_cart_style }} to-sm-w-100 flex align-center g-1" add-to-cart-label>
+          {%- render 'icon-cart', svg_width: '16', svg_height: '18' %}
+          <input
+            class="cursor-pointer w-max"
+            type="submit"
+            value="{{ submit_button_text }}"
+            add-to-cart
+            aria-label="{{ submit_aria_label }}"
+            data-section-id="{{ section.id }}"
+            data-id="{{ first_or_selected_variant.id }}"
+            data-default-variant="{%- if product.has_only_default_variant -%}true{% endif %}"
+            data-product-handle="{{ product.handle }}"
+            data-quantity="{{ qty_default }}"
+          >
+          <span
+            data-variant-price-submit
+            data-price="{{ display_price }}"
+            >- {{ display_price | money -}}
+          </span>
+        </label>
+      {%- else -%}
+        <label
+          class="{{ add_to_cart_style }} disabled to-sm-w-100 flex align-center g-1"
+          add-to-cart-label
+        >
+          <input
+            class="cursor-pointer w-max"
+            type="submit"
+            value="{{ 'products.product.sold_out' | t }}"
+            add-to-cart
+            aria-label="Sold out disabled button"
+            data-section-id="{{ section.id }}"
+            data-id="{{ first_or_selected_variant.id }}"
+            data-default-variant="{%- if product.has_only_default_variant -%}true{% endif %}"
+            data-product-handle="{{ product.handle }}"
+            data-quantity="{{ qty_default }}"
+            disabled
+          >
+        </label>
+      {%- endif -%}
+
+      {%- comment -%} Wishlist button {%- endcomment -%}
+
+      {%- unless hide_wishlist_button -%}
+        <div class="wishlist-container flex align-center">
+          {%- render 'wishlist-button', product: product, wishlist_icon: 'outline' -%}
+        </div>
+      {%- endunless -%}
+    </div>
+    {%- unless card -%}
+      {%- if shop.metafields.stock.low_stock_trigger != blank
+        and shop.metafields.stock.low_stock_trigger > 0
+        and first_or_selected_variant.available
+      -%}
+        <div low-stock-container class="flex flex-center g-2 align-center w-100 text-center w-100">
+          {%- for variant in product.variants -%}
+            {%- if variant.inventory_quantity <= shop.metafields.stock.low_stock_trigger
+              and variant.inventory_quantity != 0
+              and variant.inventory_management == 'shopify'
+            -%}
+              <div
+                class="low-stock-icon flex border-radius-circle relative"
+                low-stock-icon
+                style="width:15px;height:15px;background:var(--brand-color-2);"
+              ></div>
+              <span data-variant-id="{{ variant.id }}" low-stock-number>
+                {{-
+                  'products.product.only_left'
+                  | t: inventory_quantity: variant.inventory_quantity
+                -}}
+              </span>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    {%- endunless -%}
+  </div>
+{%- endform -%}
+
+{%- if product.has_only_default_variant == false
+  and first_or_selected_variant.available == false
+  and card != true
+-%}
+  {%- render 'klaviyo-bis-form', product: product -%}
+{%- endif -%}
+
+{%- stylesheet -%}
+  @media only screen and (min-width: 768px) {
+    .product-submit-wrapper label {
+      flex: 1;
+    }
+  }
+
+  .product-submit-wrapper label input {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--text--color-secondary);
+    font-size: 16px;
+  }
+
+  .product-submit-wrapper label input:focus-visible,
+  .product-submit-wrapper label input:focus {
+    outline: none;
+  }
+
+  .product-submit-wrapper label.disabled {
+    cursor: not-allowed;
+    opacity: 0.8;
+  }
+
+  .product-submit-wrapper label.disabled input:disabled {
+    pointer-events: none;
+  }
+
+  .product-submit-wrapper label.disabled svg {
+    display: none;
+  }
+
+  .product-submit-container .low-stock-icon {
+    outline: 4px solid #0003;
+  }
+
+  @media only screen and (max-width: 767.98px) {
+    .product-submit-wrapper .quantity-total-wrapper {
+      order: 1;
+    }
+    .product-submit-wrapper label {
+      order: 3;
+    }
+    .product-submit-wrapper .wishlist-container {
+      order: 2;
+    }
+  }
+{%- endstylesheet -%}

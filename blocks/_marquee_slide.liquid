@@ -1,0 +1,20 @@
+<div
+  class="marquee-slide text-center flex align-center g-3 pt-1 pb-1 flex-1 white-space-nowrap"
+  {{ block.shopify_attributes }}
+>
+  {% content_for 'block', type: 'inline_richtext', id: 'inline_richtext' %}
+  <div class="marquee-slide-spacer relative border-radius-center ar-1"></div>
+</div>
+
+{% schema %}
+{
+  "name": "Marquee Slide",
+  "tag": null,
+  "settings": [],
+  "presets": [
+    {
+      "name": "Marquee Slide"
+    }
+  ]
+}
+{% endschema %}

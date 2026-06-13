@@ -1,0 +1,174 @@
+{%- liquid
+  assign cta_link = cta.collection_link.value.url | default: cta.product_link.value.url | default: cta.page_link.value.url | default: cta.url.value | append: ''
+  assign cta_link_2 = cta.collection_link_2.value.url | default: cta.product_link_2.value.url | default: cta.page_link_2.value.url | default: cta.url_2.value | append: ''
+
+  if cta_link contains shop.domain
+    assign cta_link = cta_link | remove: 'https://' | remove: 'http://' | remove: shop.domain
+  endif
+  if cta_link_2 contains shop.domain
+    assign cta_link_2 = cta_link_2 | remove: 'https://' | remove: 'http://' | remove: shop.domain
+  endif
+
+  assign lazy = true
+
+  if lazy_loading == false
+    assign lazy = false
+  endif
+
+  assign style = style | default: 'image_card'
+
+  assign overlay_styling = cta.overlay
+  if overlay_styling == 'Theme Style 1'
+    assign overlay_styling = 'gradient-bg'
+  elsif overlay_styling == 'Theme Style 2'
+    assign overlay_styling = 'gradient-bg-alt'
+  elsif overlay_styling == 'Theme Style 3'
+    assign overlay_styling = 'gradient-bg-alt'
+  else
+    assign overlay_styling = blank
+  endif
+
+  assign image_data_src = ''
+  if use_data_src == true and cta.image != blank
+    assign image_data_src = cta.image | image_url: width: 700
+  endif
+
+  assign cta_inline_style = ''
+  if order != blank
+    assign cta_inline_style = cta_inline_style | append: 'order:' | append: order | append: ';'
+  endif
+  if grid_span != blank and class != 'mega-menu-cta' and in_mega_menu != true
+    assign cta_inline_style = cta_inline_style | append: 'grid-column: span ' | append: grid_span | append: ';'
+  endif
+-%}
+
+{%- unless cta == blank -%}
+  {%- if style == 'banner' or style == 'image_card' -%}
+    <div class="cta flex relative border-radius overflow-hidden h-100 {% if style == 'banner' %}flex-center align-center container-v-padding container-h-padding{% else %}align-end{% endif %} {{ class }}"
+      {% if cta_inline_style != blank %}
+        style="{{ cta_inline_style }}"
+      {% endif %}
+      {% if shopify_attributes != blank %}
+        {{ shopify_attributes }}
+      {% endif %}
+    >
+      {%- if cta.image != blank -%}
+        {%- render 'image',
+          image: cta.image,
+          max_width: 700,
+          use_placeholder: false,
+          lazy: lazy,
+          class: 'object-cover absolute inset-0 z-0',
+          image_data_src: image_data_src,
+          context_text: cta.heading
+        -%}
+      {%- endif -%}
+
+      {%- if overlay_styling != blank -%}
+        <div class="absolute inset-0 z-0 {{ overlay_styling }}"></div>
+      {%- endif -%}
+
+      <div
+        class="cta-content flex flex-col relative z-10 text-color-alternate {% if style == 'banner' %}text-center g-5{% else %}g-2 p-5{% endif %}"
+      >
+        {%- if cta.subheading != blank -%}
+          <div class="caption-text uppercase body-font">{{- cta.subheading -}}</div>
+        {%- endif -%}
+
+        {%- if cta.heading != blank -%}
+          <h2 class="m-0 {% if heading_size != blank %}{{ heading_size }}{% elsif style == 'banner' %}heading-h2{% else %}heading-h4{% endif %}">{{- cta.heading -}}</h2>
+        {%- endif -%}
+
+        {%- if cta.text != blank -%}
+          <div>{{- cta.text | metafield_tag -}}</div>
+        {%- endif -%}
+
+        {%- if cta_link != blank and cta.link_text != blank or cta_link_2 != blank and cta.link_text_2 != blank -%}
+          <div class="cta-links flex flex-wrap g-2 {% if style == 'banner' %}flex-center{% endif %}">
+            {%- if cta_link != blank and cta.link_text != blank -%}
+              <a
+                href="{{ cta_link }}"
+                class="button-{{ cta.link_style | remove: 'Theme Style ' }}"
+                title="{% if cta.link_label != blank %}{{ cta.link_label }}{% else %}{{ cta.link_text }}{% endif %}"
+              >
+                {{- cta.link_text -}}
+              </a>
+            {%- endif -%}
+            {%- if cta_link_2 != blank and cta.link_text_2 != blank -%}
+              <a
+                href="{{ cta_link_2 }}"
+                class="button-{{ cta.link_style_2 | remove: 'Theme Style ' }}"
+                title="{% if cta.link_label_2 != blank %}{{ cta.link_label_2 }}{% else %}{{ cta.link_text_2 }}{% endif %}"
+              >
+                {{- cta.link_text_2 -}}
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- else -%}
+    <div class="cta cta-card flex flex-col relative border-radius overflow-hidden h-100 {{ class }}"
+      {% if cta_inline_style != blank %}
+        style="{{ cta_inline_style }}"
+      {% elsif custom_span != true and grid_span != blank and class != 'mega-menu-cta' and in_mega_menu != true %}
+        style="grid-column: span {{ grid_span }};"
+      {% endif %}
+      {% if shopify_attributes != blank %}
+        {{ shopify_attributes }}
+      {% endif %}
+    >
+      {%- if cta.image != blank -%}
+        <div class="cta-image-container flex-1 overflow-hidden relative ">
+          {%- render 'image',
+            image: cta.image,
+            max_width: 700,
+            use_placeholder: false,
+            lazy: lazy,
+            class: 'object-cover absolute inset-0 z-0',
+            image_data_src: image_data_src,
+            context_text: cta.heading
+          -%}
+        </div>
+      {%- endif -%}
+      <div
+        class="cta-content flex flex-col relative z-10 g-2 pt-5 pb-5 section-container {% if style == 'card_2' %}p-5 secondary{% endif %}"
+      >
+        {%- if cta.subheading != blank -%}
+          <h4 class="caption-text uppercase body-font">{{- cta.subheading -}}</h4>
+        {%- endif -%}
+
+        {%- if cta.heading != blank -%}
+          <h3 class="m-0 heading-h4">{{- cta.heading -}}</h3>
+        {%- endif -%}
+
+        {%- if cta.text != blank -%}
+          <div>{{- cta.text | metafield_tag -}}</div>
+        {%- endif -%}
+
+        {%- if cta_link != blank and cta.link_text != blank or cta_link_2 != blank and cta.link_text_2 != blank -%}
+          <div class="cta-links flex flex-wrap g-2">
+            {%- if cta_link != blank and cta.link_text != blank -%}
+              <a
+                href="{{ cta_link }}"
+                class="button-{{ cta.link_style | remove: 'Theme Style ' }}"
+                title="{% if cta.link_label != blank %}{{ cta.link_label }}{% else %}{{ cta.link_text }}{% endif %}"
+              >
+                {{- cta.link_text -}}
+              </a>
+            {%- endif -%}
+            {%- if cta_link_2 != blank and cta.link_text_2 != blank -%}
+              <a
+                href="{{ cta_link_2 }}"
+                class="button-{{ cta.link_style_2 | remove: 'Theme Style ' }}"
+                title="{% if cta.link_label_2 != blank %}{{ cta.link_label_2 }}{% else %}{{ cta.link_text_2 }}{% endif %}"
+              >
+                {{- cta.link_text_2 -}}
+              </a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+{%- endunless -%}

@@ -1,0 +1,607 @@
+{%- capture mega_menu %}
+  {% content_for 'block', type: "_mega-menu", id: "mega-menu" %}
+{%- endcapture -%}
+
+<header
+  data-header-layout
+  data-fixed="{% if page.template != "index" %}false{% else %}true{% endif %}"
+>
+  <section class="header flex-center w-100 flex-wrap relative">
+    <div class="header-wrapper page-width--wide w-100 flex-between g-3 py-1">
+      <div class="mobile-control mt-2 mb-2 min-w-max" id="open-mobile-menu">
+        <button
+          class="burger openMenu flex-center p-0"
+          data-hover="anim-grow"
+          aria-label="{{ 'sections.header.open_menu' | t }}"
+        >
+          {{ 'icon-mobile-burger.svg' | inline_asset_content }}
+        </button>
+        <button
+          class="cross closeMenu flex-center p-0"
+          data-hover="anim-grow"
+          aria-label="{{ 'sections.header.close_menu' | t }}"
+        >
+          {{ 'icon-mobile-close.svg' | inline_asset_content }}
+        </button>
+      </div>
+      <a
+        href="{{ routes.root_url }}"
+        class="logo-container flex-center align-center w-auto h-100"
+        aria-label="{{ 'sections.header.link_to' | t }} {{ shop.name }}"
+      >
+        {%- if section.settings.logo != blank -%}
+          <div class="store-logo flex-center align-center w-auto" style="max-height: 45px;">
+            {%- render 'image',
+              image: section.settings.logo,
+              max_width: 200,
+              use_placeholder: true,
+              lazy: false,
+              class: 'object-contain'
+            -%}
+          </div>
+        {%- elsif shop.brand.logo != blank -%}
+          <div class="store-logo flex-center align-center">
+            {%- render 'image',
+              image: shop.brand.logo,
+              max_width: 200,
+              use_placeholder: true,
+              lazy: false,
+              class: 'object-contain'
+            -%}
+          </div>
+        {%- endif -%}
+      </a>
+
+      <div class="header-container-left h-100 flex align-center">
+        {%- if section.settings.mega_menu_position == 'inside_header' -%}
+          {{ mega_menu }}
+        {%- endif -%}
+      </div>
+
+      <div class="header-container-right flex align-center mt-3 mb-3">
+        <div class="header-icons flex mb-0">
+          {%- if localization.available_countries.size > 1 -%}
+            <button
+              class="flex-center border-radius-circle p-0"
+              aria-label="{{ 'location_selector.open_location_selector' | t }}"
+              data-modal-trigger="location-selector-id"
+            >
+              {{ 'icon-globe-small.svg' | inline_asset_content }}
+            </button>
+          {%- endif -%}
+
+          <button
+            class="action-button search inline-flex flex-center border-radius-circle p-0"
+            aria-label="{{ 'sections.header.open_search' | t }}"
+            open-predictive-search
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="28"
+              height="26"
+              viewBox="0 0 28 26"
+              fill="none"
+              class="icon"
+            >
+              <path d="M21.2901 19.3403L26.6414 24.5535M23.163 12.1367C23.163 18.1044 18.1317 22.9421 11.9252 22.9421C5.71863 22.9421 0.687256 18.1044 0.687256 12.1367C0.687256 6.16905 5.71863 1.3313 11.9252 1.3313C18.1317 1.3313 23.163 6.16905 23.163 12.1367Z" stroke="currentColor" stroke-linecap="round"/>
+            </svg>
+          </button>
+
+          {%- render 'wishlist-icon' -%}
+
+          <a
+            class="account inline-flex flex-center border-radius-circle p-0"
+            title="My Account"
+            data-hover="anim-grow"
+            aria-label="{{ 'sections.header.go_to_account' | t }}"
+            href="{{ routes.account_url }}"
+          >
+            {{ 'icon-header-account.svg' | inline_asset_content }}
+            <span class="hidden">{{ 'sections.header.my_account' | t }}</span>
+          </a>
+          {%- if settings.side_cart and template != 'cart' -%}
+            <button
+              class="basket openSideCart relative inline-flex flex-center border-radius-circle p-0 header__cart"
+              data-hover="anim-grow"
+              href="{{ routes.cart_url }}"
+              aria-label="{{ 'sections.header.open_basket' | t }}"
+              data-open-cart
+              data-sidecart-tab="cart"
+              data-cart-hover
+              aria-controls="CartDrawer"
+              aria-expanded="false"
+              title="{{ 'sections.header.open_basket' | t }}"
+            >
+              <span class="header__cart-icon" aria-hidden="true">
+                {{- 'icon-header-cart.svg' | inline_asset_content -}}
+              </span>
+              <sup
+                data-cart-count
+                class="cart-count{% if cart.item_count == 0 %} empty-cart{% endif %} absolute border-radius-circle flex-center align-center"
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                {{ cart.item_count }}
+              </sup>
+            </button>
+          {%- endif -%}
+        </div>
+        <div class="mobile-control hidden align-center g-2 min-w-max">
+          <button
+            class="action-button search inline-flex relative flex-center border-radius-circle p-0 w-100 h-100"
+            aria-label="{{ 'sections.header.open_search' | t }}"
+            open-predictive-search
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="28"
+              height="26"
+              viewBox="0 0 28 26"
+              fill="none"
+              class="icon"
+            >
+              <path d="M21.2901 19.3403L26.6414 24.5535M23.163 12.1367C23.163 18.1044 18.1317 22.9421 11.9252 22.9421C5.71863 22.9421 0.687256 18.1044 0.687256 12.1367C0.687256 6.16905 5.71863 1.3313 11.9252 1.3313C18.1317 1.3313 23.163 6.16905 23.163 12.1367Z" stroke="currentColor" stroke-linecap="round"/>
+            </svg>
+          </button>
+          {%- render 'wishlist-icon' -%}
+          <a
+            class="account inline-flex flex-center border-radius-circle p-0 w-100 h-100"
+            title="My Account"
+            data-hover="anim-grow"
+            aria-label="{{ 'sections.header.go_to_account' | t }}"
+            href="{{ routes.account_url }}"
+          >
+            {{ 'icon-header-account.svg' | inline_asset_content }}
+            <span class="hidden">{{ 'sections.header.my_account' | t }}</span>
+          </a>
+          {%- if settings.side_cart and template != 'cart' -%}
+            <button
+              class="basket openSideCart relative inline-flex flex-center w-100 h-100 border-radius-circle p-0 header__cart"
+              data-hover="anim-grow"
+              href="{{ routes.cart_url }}"
+              aria-label="{{ 'sections.header.open_basket' | t }}"
+              data-open-cart
+              data-sidecart-tab="cart"
+              data-cart-hover
+              aria-controls="CartDrawer"
+              aria-expanded="false"
+              title="{{ 'sections.header.open_basket' | t }}"
+            >
+              <span class="header__cart-icon" aria-hidden="true">
+                {{- 'icon-header-cart.svg' | inline_asset_content -}}
+              </span>
+              <sup
+                data-cart-count
+                class="cart-count{% if cart.item_count == 0 %} empty-cart{% endif %} absolute border-radius-circle flex-center align-center"
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                {{ cart.item_count }}
+              </sup>
+            </button>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+
+    {%- if section.settings.mega_menu_position == 'below_header' -%}
+      {{ mega_menu }}
+    {%- endif -%}
+
+    {%- render 'predictive-search' -%}
+  </section>
+
+  {% comment %}
+    <div class="predictive-search-form mobile w-100 h-100 flex-start align-center relative" open-predictive-search>
+        <span class="flex-center align-center"> {{ 'general.search.search_prompt' | t }}</span>
+        <button type="submit" id="search-submit" class="predictive-search-form__submit h-100 absolute flex-center align-center p-0" value="">
+            {{ 'icon-search.svg' | inline_asset_content }}
+        </button>
+    </div>
+  {% endcomment %}
+
+  {% content_for 'block', type: '_mobile-mega-menu', id: 'mobile-mega-menu' %}
+</header>
+
+{% stylesheet %}
+  /* -----------------------
+    MEGA MENU STICKY
+  ----------------------- */
+
+  /* -----------------------
+    HEADER BASE
+  ----------------------- */
+  .header {
+    z-index: 999;
+    box-shadow: 0 0 10px #00000029;
+    background-color: var(--body-background-color);
+  }
+
+  .header:has(.under-header) .predictive-search-results::before {
+    top: 139px;
+  }
+
+  /* Used only during JS measurement; not visible. */
+  .header .header-wrapper.header-layout--measuring {
+    flex-wrap: nowrap;
+  }
+
+  .header .header-wrapper.header-layout--measuring > .logo-container,
+  .header .header-wrapper.header-layout--measuring > .header-container-left,
+  .header .header-wrapper.header-layout--measuring > .header-container-right {
+    flex-shrink: 0;
+  }
+
+  /* Match header-layout.js (992px): hide burger on desktop before JS runs */
+  @media screen and (min-width: 992px) {
+    [data-header-layout]:not(.mobile) .header .header-wrapper .mobile-control {
+      display: none !important;
+    }
+  }
+
+  /* Mobile/tablet layout without waiting for JS */
+  @media screen and (max-width: 991.98px) {
+    [data-header-layout] .header .header-wrapper {
+      justify-content: flex-start;
+    }
+
+    [data-header-layout] .header .header-wrapper .mobile-control {
+      display: flex !important;
+      gap: 0 20px;
+    }
+
+    [data-header-layout] .header .header-container-left {
+      display: none;
+    }
+
+    [data-header-layout] .header .header-wrapper .header-icons {
+      display: none;
+    }
+
+    [data-header-layout] .header .header-container-right {
+      margin-top: var(--content-spacing-2);
+      margin-bottom: var(--content-spacing-2);
+    }
+
+    [data-header-layout] .header .header-wrapper .store-logo {
+      flex-grow: unset;
+      flex-basis: unset;
+      height: 36px;
+    }
+
+    [data-header-layout] .header .header-wrapper .header-container-right {
+      gap: 0 15px;
+      margin-left: unset;
+    }
+  }
+
+  header.mobile .header .header-wrapper {
+    justify-content: flex-start;
+  }
+
+  header.mobile .header .header-wrapper .mobile-control {
+    display: flex !important;
+    gap: 0 20px;
+  }
+
+  header.mobile .header .header-container-left {
+    display: none;
+  }
+
+  header.mobile .header .header-container-right {
+    margin-top: var(--content-spacing-2);
+    margin-bottom: var(--content-spacing-2);
+  }
+
+  /* -----------------------
+    STORE LOGO
+  ----------------------- */
+  .header .header-wrapper .store-logo {
+    height: 45px;
+  }
+
+  .header .header-wrapper .store-logo.mobile {
+    display: none;
+  }
+
+  header.mobile .header .header-wrapper .store-logo {
+    flex-grow: unset;
+    flex-basis: unset;
+    height: 36px;
+  }
+
+  /* -----------------------
+    HEADER ICONS
+  ----------------------- */
+  .header .header-wrapper .header-icons {
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0 20px;
+    height: 20px;
+  }
+
+  .header .header-wrapper .header-icons button,
+  .header .header-wrapper .header-icons localization-form,
+  .header .header-wrapper .header-icons a:not(.localization) {
+    width: auto;
+    height: 20px;
+    cursor: pointer;
+    aspect-ratio: 1;
+  }
+
+  .header .header-wrapper .header-icons button svg,
+  .header .header-wrapper .header-icons a svg {
+    object-fit: contain;
+    object-position: center;
+    pointer-events: none;
+    header a sup {
+      position: absolute;
+      top: -0.5rem;
+      left: 100%;
+      max-width: var(--page-margin);
+      overflow: hidden;
+      font-size: 0.75rem;
+    }
+  }
+  header a sup.empty-cart {
+    display: none;
+  }
+
+  .header .header-wrapper .header-icons .basket .cart-count {
+    top: -7px;
+    right: -11px;
+    width: 17px;
+    height: 17px;
+    padding-top: 2px;
+    background-color: var(--brand-color-2);
+    color: var(--text-color-alternate);
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .header .header-wrapper .header-icons .basket .cart-count.empty-cart {
+    display: none;
+  }
+
+  header.mobile .header .header-wrapper .header-icons {
+    display: none;
+  }
+
+  /* -----------------------
+    HEADER SEARCH BAR
+  ----------------------- */
+  .header .header-wrapper .header-search-bar-wrapper {
+    display: none;
+    width: clamp(125px, 100%, 180px);
+  }
+
+  .header .header-wrapper .header-search-bar-wrapper.active {
+    display: flex;
+  }
+
+  header.mobile .header .header-wrapper .header-search-bar-wrapper {
+    position: absolute;
+    bottom: -56px;
+    left: 0;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 10px 20px;
+    border-top: solid 1px #eee;
+    background: white;
+  }
+
+  /* -----------------------
+    MOBILE CONTROL
+  ----------------------- */
+  .header .header-wrapper .mobile-control {
+    border: none;
+    outline: none;
+    background: transparent;
+    appearance: none;
+  }
+
+  .header .header-wrapper .mobile-control .openMenu svg {
+    height: 20px;
+  }
+
+  .header .header-wrapper .mobile-control .openMenu {
+    transform: rotateY(180deg);
+  }
+
+  .header .header-wrapper .mobile-control.active .openMenu {
+    display: none;
+  }
+
+  .header .header-wrapper .mobile-control .closeMenu {
+    display: none;
+  }
+
+  .header .header-wrapper .mobile-control.active .closeMenu {
+    display: flex;
+  }
+
+  .header .header-wrapper .mobile-control .cart-count {
+    top: -7px;
+    right: -11px;
+    width: 17px;
+    height: 17px;
+    padding-top: 2px;
+    background-color: var(--brand-color-2);
+    color: var(--text-color-alternate);
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .header .header-wrapper .mobile-control .cart-count.empty-cart {
+    display: none;
+  }
+
+  /* -----------------------
+    HEADER CONTAINER RIGHT
+  ----------------------- */
+  .header .header-wrapper .header-container-right {
+    flex-grow: 1;
+    flex-basis: 0;
+    justify-content: end;
+    gap: 20px;
+  }
+
+  @media (max-width: 1350px) {
+    .header .header-wrapper .header-container-right {
+      margin-left: 20px;
+    }
+  }
+
+  header.mobile .header .header-wrapper .header-container-right {
+    gap: 0 15px;
+    margin-left: unset;
+  }
+
+  /* -----------------------
+    WISHLIST TRIGGERS
+  ----------------------- */
+  .wishlist-triggers {
+    z-index: 100;
+    width: 22px;
+    height: 20px;
+    cursor: pointer;
+  }
+
+  .wishlist-triggers.card {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+
+  .wishlist-triggers qf-wishlist-item-trigger,
+  .wishlist-triggers qf-wishlist-item-remove,
+  .wishlist-triggers .qf-wishlist-loader {
+    display: flex;
+    width: 22px;
+    height: 20px;
+    opacity: 1;
+  }
+
+  .wishlist-triggers qf-wishlist-item-trigger img,
+  .wishlist-triggers qf-wishlist-item-remove img,
+  .wishlist-triggers .qf-wishlist-loader img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+    transition: 0.3s all;
+  }
+
+  .wishlist-triggers qf-wishlist-item-trigger:hover img,
+  .wishlist-triggers qf-wishlist-item-remove:hover img,
+  .wishlist-triggers .qf-wishlist-loader:hover img {
+    transform: scale(1.1);
+  }
+
+  .wishlist-triggers qf-wishlist-item-remove {
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  .wishlist-triggers qf-wishlist-item-trigger[data-in-wishlist='true'] {
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  .wishlist-triggers qf-wishlist-item-trigger[data-in-wishlist='true'] + qf-wishlist-item-remove {
+    width: 22px;
+    height: 20px;
+    pointer-events: all;
+    opacity: 1;
+  }
+
+  .wishlist-triggers .qf-wishlist-loader {
+    pointer-events: auto;
+  }
+
+  .wishlist-triggers.form .qf-wishlist-loader {
+    position: relative;
+    top: -10px;
+  }
+
+  .wishlist-triggers:has(.qf-wishlist-loader) qf-wishlist-item-trigger,
+  .wishlist-triggers:has(.qf-wishlist-loader) qf-wishlist-item-remove {
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  body .header-outer-shopify-wrapper.scrolled-past {
+    position: fixed;
+    top: 0;
+    z-index: 99;
+  }
+
+  .header-outer-shopify-wrapper {
+    top: 0;
+    transition: all 150ms ease-in-out;
+  }
+
+  .header-outer-shopify-wrapper.fixed {
+    position: fixed;
+    z-index: 99;
+  }
+
+  .header-outer-shopify-wrapper:hover .header {
+    background-color: var(--body-background-color) !important;
+    color: var(--text-color) !important;
+  }
+
+  .header-outer-shopify-wrapper:hover .header svg {
+    color: var(--text-color) !important;
+  }
+
+  /* body:not(:has(.hero)):has(.header-outer-shopify-wrapper) {
+    padding-top: calc(68px + var(--announcement-bar-height, 0px));
+  }
+
+  @media screen and (max-width: 768px) {
+    body:not(:has(.hero)):has(.header-outer-shopify-wrapper) {
+      padding-top: calc(52px + var(--announcement-bar-height, 0px));
+    }
+  } */
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Header",
+  "tag": "section",
+  "class": "header-outer-shopify-wrapper w-100 left-0",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo Picker",
+      "info": "The header logo uses the logo set in the brand settings by default. If you want to use a different logo for the header, you can upload it here."
+    },
+    {
+      "type": "select",
+      "id": "mega_menu_position",
+      "label": "Mega Menu Position",
+      "options": [
+        {
+          "value": "inside_header",
+          "label": "Inside Header"
+        },
+        {
+          "value": "below_header",
+          "label": "Below Header"
+        }
+      ],
+      "default": "inside_header"
+    }
+  ]
+}
+{% endschema %}

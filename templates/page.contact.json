@@ -1,0 +1,269 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "contact_form_z7x8tj": {
+      "type": "contact-form",
+      "blocks": {
+        "section_content_JCF8RK": {
+          "type": "section-content",
+          "name": "Section Content",
+          "settings": {
+            "content_spacing": "g-3"
+          },
+          "blocks": {
+            "heading_hWekDY": {
+              "type": "heading",
+              "settings": {
+                "heading": "{{ closest.page.title }}",
+                "heading_type": "h2",
+                "heading_size": "heading-h1"
+              },
+              "blocks": {}
+            },
+            "richtext_eezVk8": {
+              "type": "richtext",
+              "settings": {
+                "richtext": "<p>Have a question about your order or our products? Contact the team we’re here to help with friendly and fast support.</p>"
+              },
+              "blocks": {}
+            },
+            "links_container_ziMbAJ": {
+              "type": "links-container",
+              "name": "Links Container",
+              "settings": {
+                "content_spacing": "g-1"
+              },
+              "blocks": {
+                "link_aFiGEg": {
+                  "type": "link",
+                  "settings": {
+                    "link_text": "FAQs",
+                    "link": "shopify://pages/faqs",
+                    "link_title": "FAQs page",
+                    "link_style": "button-1",
+                    "external_link": false
+                  },
+                  "blocks": {}
+                },
+                "link_PKcYRN": {
+                  "type": "link",
+                  "settings": {
+                    "link_text": "Returns",
+                    "link": "shopify://pages/returns",
+                    "link_title": "Return information",
+                    "link_style": "button-2",
+                    "external_link": false
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "link_aFiGEg",
+                "link_PKcYRN"
+              ]
+            }
+          },
+          "block_order": [
+            "heading_hWekDY",
+            "richtext_eezVk8",
+            "links_container_ziMbAJ"
+          ]
+        },
+        "contact_details_LcFydF": {
+          "type": "contact-details",
+          "name": "Contact Details",
+          "settings": {
+            "svg_colors": true,
+            "svg_color": "#000000"
+          },
+          "blocks": {
+            "contact_phone_URdzjC": {
+              "type": "_contact-phone",
+              "name": "Phone Number",
+              "settings": {
+                "phone": ""
+              },
+              "blocks": {}
+            },
+            "contact_email_aQV6Gi": {
+              "type": "_contact-email",
+              "name": "Email Address",
+              "settings": {
+                "email": ""
+              },
+              "blocks": {}
+            },
+            "contact_address_XbqJWq": {
+              "type": "_contact-address",
+              "name": "Address",
+              "settings": {
+                "address": ""
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "contact_phone_URdzjC",
+            "contact_email_aQV6Gi",
+            "contact_address_XbqJWq"
+          ]
+        },
+        "social_links_jVrr3D": {
+          "type": "_social-links",
+          "name": "Social Links",
+          "settings": {
+            "size": "medium",
+            "svg_colors": true,
+            "svg_color": "#000000",
+            "svg_color_hover": "#1d1d1d"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "section_content_JCF8RK",
+        "contact_details_LcFydF",
+        "social_links_jVrr3D"
+      ],
+      "name": "Contact Form",
+      "settings": {
+        "style_selector": "theme",
+        "section_styling": "secondary",
+        "background_color": "linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)",
+        "text_color": "#393939",
+        "vertical_layout": "text-top",
+        "vertical_spacing": "",
+        "style_selector_form": "theme",
+        "section_styling_form": "third",
+        "background_color_form": "linear-gradient(#ffffff, #ffffff)",
+        "text_color_form": "#393939",
+        "id_text": ""
+      }
+    },
+    "text_media_mJG37M": {
+      "type": "text-media",
+      "blocks": {
+        "section_content_qdaxPG": {
+          "type": "section-content",
+          "settings": {
+            "content_spacing": "g-2"
+          },
+          "blocks": {
+            "heading_DwkDd9": {
+              "type": "heading",
+              "name": "Heading",
+              "settings": {
+                "heading": "Visit the our shop",
+                "heading_type": "h2",
+                "heading_size": "heading-h1"
+              },
+              "blocks": {}
+            },
+            "richtext_CTjYfL": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "richtext": "<p>Visit the shop to explore all our product in person.</p>"
+              },
+              "blocks": {}
+            },
+            "spacer_h4j9CY": {
+              "type": "spacer",
+              "name": "Spacer",
+              "settings": {
+                "spacer_size": "mt-1"
+              },
+              "blocks": {}
+            },
+            "contact_details_ryPjkW": {
+              "type": "contact-details",
+              "name": "Contact Details",
+              "settings": {
+                "svg_colors": false,
+                "svg_color": ""
+              },
+              "blocks": {
+                "contact_phone_jHxyq9": {
+                  "type": "_contact-phone",
+                  "name": "Phone Number",
+                  "settings": {
+                    "phone": ""
+                  },
+                  "blocks": {}
+                },
+                "contact_email_3ENAcQ": {
+                  "type": "_contact-email",
+                  "name": "Email Address",
+                  "settings": {
+                    "email": ""
+                  },
+                  "blocks": {}
+                },
+                "contact_address_Uie4cH": {
+                  "type": "_contact-address",
+                  "name": "Address",
+                  "settings": {
+                    "address": "<p>99 The Street, London, N6 1TQ</p>"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "contact_phone_jHxyq9",
+                "contact_email_3ENAcQ",
+                "contact_address_Uie4cH"
+              ]
+            }
+          },
+          "block_order": [
+            "heading_DwkDd9",
+            "richtext_CTjYfL",
+            "spacer_h4j9CY",
+            "contact_details_ryPjkW"
+          ]
+        }
+      },
+      "block_order": [
+        "section_content_qdaxPG"
+      ],
+      "name": "Text Media",
+      "settings": {
+        "content_type": "html",
+        "html_embed_content": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2480.7171494349545!2d-0.11097472294493443!3d51.555085407218066!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48761b7645295e3b%3A0x3600713c8382cf90!2sEmirates%20Stadium!5e0!3m2!1sen!2suk!4v1763115287052!5m2!1sen!2suk\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>",
+        "image_display": "contain",
+        "lazy_load": true,
+        "style_selector": "custom",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 100%)",
+        "text_color": "#ffffff",
+        "background_image_type": "theme",
+        "background_image_theme": "2",
+        "container_style_selector": "custom",
+        "container_section_styling": "primary",
+        "container_background_color": "linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 100%)",
+        "container_text_color": "#ffffff",
+        "container_background_image_type": "none",
+        "container_background_image_theme": "1",
+        "remove_text_padding": true,
+        "vertical_text_alignment": "align-center",
+        "horizontal_layout": "section-text-left",
+        "vertical_layout": "text-bottom",
+        "page_width": "page-width",
+        "vertical_spacing": "vertical-padding",
+        "id_text": ""
+      }
+    }
+  },
+  "order": [
+    "contact_form_z7x8tj",
+    "text_media_mJG37M"
+  ]
+}

@@ -1,0 +1,134 @@
+<div
+  class="item side-cart-item cart-page flex g-1 pb-1 align-start"
+  data-cart-line
+  data-variant-key="{{ item.key }}"
+  data-variant-id="{{ item.variant_id }}"
+  data-product-id="{{ item.product_id }}"
+  data-add-on-uuid="{{ add_on_uuid }}"
+  data-cart-line-item
+>
+  <div class="image-info-wrapper flex g-2 align-start">
+    <div
+      class="img-wrapper relative flex-center align-center overflow-hidden border-radius"
+      aria-hidden="false"
+    >
+      {%- if item.image -%}
+        {%- assign img_alt = item.image.alt | default: item.product.title -%}
+        {{-
+          item
+          | image_url: width: 180, height: 183, format: 'jpg'
+          | image_tag:
+            alt: img_alt,
+            srcset: null,
+            loading: 'lazy',
+            decoding: 'async',
+            class: 'w-100 h-100 object-cover'
+        -}}
+      {%- elsif settings.product_fallback -%}
+        {%- assign img_alt = settings.product_fallback.alt | default: item.product.title -%}
+        {{-
+          settings.product_fallback
+          | image_url: width: 180, height: 183, format: 'jpg'
+          | image_tag:
+            alt: img_alt,
+            srcset: null,
+            loading: 'lazy',
+            decoding: 'async',
+            class: 'w-100 h-100 object-cover'
+        -}}
+      {%- else -%}
+        {{- 'product-1' | placeholder_svg_tag -}}
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div
+    class="quantity-remove-wrapper flex flex-between relative g-1 w-100"
+    style="border-bottom:none;"
+    data-cart-line-inner
+  >
+    <div class="info-wrapper flex flex-col flex-1 g-1 w-100">
+      <div class="flex flex-row flex-between">
+        <div class="title heading-h3">
+          <a
+            href="{{ item.url }}"
+            class="product-link no-decoration vertical-clamp-two"
+            data-product-handle="{{ item.handle }}"
+            aria-label="{{- item.title | prepend: 'Link to ' -}}"
+          >
+            {{- item.title -}}
+          </a>
+        </div>
+
+        <div class="remove-wishlist-wrapper flex align-center g-3">
+          <div
+            cart-remove-item
+            class="remove-button flex w-100 align-center cursor-pointer"
+            aria-hidden="false"
+          >
+            {%- render 'cart-item-remove', item: item -%}
+          </div>
+        </div>
+      </div>
+
+      {%- unless item.product.has_only_default_variant -%}
+        <div class="variant-title caption-text">
+          {{- item.variant.title -}}
+        </div>
+      {%- endunless -%}
+
+      {%- render 'line-item-properties', item: item, list_item_class: 'flex align-center flex-wrap' -%}
+
+      {%- if item.selling_plan_allocation != blank -%}
+        <div class="selling-plan caption-text">
+          <span>{{ item.selling_plan_allocation.selling_plan.name }}</span>
+        </div>
+      {%- endif -%}
+      <div class="price flex flex-row flex-between align-end w-100">
+        <div
+          class="quantity"
+          data-cart-quantity-wrapper
+        >
+          {%- render 'quantity-selector', item: item, key: key -%}
+        </div>
+
+        {%- if item.variant.compare_at_price > item.variant.price -%}
+          <span class="final-price flex align-center g-2">
+            {{ 'icon-sale-tag.svg' | inline_asset_content }}
+            <span class="bold">{{- item.variant.price | money -}}</span>
+            <span class="strikethrough">{{- item.variant.compare_at_price | money -}}</span>
+          </span>
+
+          {%- for discount in item.discounts -%}
+            {%- if discount.title != blank and forloop.first -%}
+              <div class="discount caption-text">
+                <span>{{ discount.title }}</span>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          <span class="bold">{{- item.final_line_price | money -}}</span>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+{% stylesheet %}
+  /* .side-cart-item {
+  border-bottom: 1px solid var(--brand-color-5);
+} */
+  .img-wrapper {
+    border: 1px solid var(--brand-color-5);
+  }
+  .remove-button button {
+    max-width: 18px;
+    padding: 0;
+    cursor: pointer;
+  }
+  .remove-button button:hover svg path {
+    fill: var(--button-3-color);
+  }
+  .strikethrough {
+    color: var(--brand-color-2);
+  }
+{% endstylesheet %}

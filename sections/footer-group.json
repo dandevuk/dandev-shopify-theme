@@ -1,0 +1,111 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "footer",
+  "name": "t:general.footer",
+  "sections": {
+    "newsletter_JXQnGY": {
+      "type": "newsletter",
+      "blocks": {
+        "heading_X4BznW": {
+          "type": "heading",
+          "name": "Heading",
+          "settings": {
+            "heading": "Sign up to our newsletter",
+            "heading_type": "h2",
+            "heading_size": "heading-h2"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": ["heading_X4BznW"],
+      "name": "Newsletter Sign Up",
+      "settings": {
+        "custom_form": "",
+        "style_selector": "theme",
+        "section_styling": "third",
+        "background_color": "linear-gradient(180deg, rgba(255, 0, 0, 1), rgba(255, 255, 255, 1) 100%)",
+        "text_color": "#393939",
+        "text_alignment": "to-md-text-left",
+        "page_width": "page-width",
+        "vertical_spacing": "vertical-padding",
+        "id_text": ""
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "footer_accordion_item_X73fRn": {
+          "type": "_footer-accordion-item",
+          "name": "Accordion Menu",
+          "settings": {
+            "title": "Collections",
+            "footer_links": "collections"
+          },
+          "blocks": {}
+        },
+        "footer_accordion_item_LmpxqT": {
+          "type": "_footer-accordion-item",
+          "name": "Accordion Menu",
+          "settings": {
+            "title": "Information",
+            "footer_links": "footer"
+          },
+          "blocks": {}
+        },
+        "footer_accordion_item_gfJpeH": {
+          "type": "_footer-accordion-item",
+          "name": "Accordion Menu",
+          "settings": {
+            "title": "Menu",
+            "footer_links": "customer-account-main-menu"
+          },
+          "blocks": {}
+        },
+        "social-links": {
+          "type": "_social-links",
+          "static": true,
+          "settings": {
+            "size": "medium",
+            "svg_colors": true,
+            "svg_color": "#ffffff",
+            "svg_color_hover": ""
+          },
+          "blocks": {}
+        },
+        "section-navigation": {
+          "type": "_payment-icons",
+          "static": true,
+          "settings": {
+            "add_border_bottom": false
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "footer_accordion_item_X73fRn",
+        "footer_accordion_item_LmpxqT",
+        "footer_accordion_item_gfJpeH"
+      ],
+      "settings": {
+        "logo": "shopify://shop_images/qf-logo.svg",
+        "style_selector": "theme",
+        "section_styling": "third",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "background_image_type": "theme",
+        "background_image_theme": "2",
+        "text_alignment": "text-left",
+        "page_width": "page-width"
+      }
+    }
+  },
+  "order": ["newsletter_JXQnGY", "footer"]
+}

@@ -1,0 +1,224 @@
+{%- doc -%}
+  Renders a custom option dropdown for product variant options.
+
+  @param {product} product - Product object
+  @param {object} option - Option from product.options_with_values
+  @param {string} section_id - Unique section or context id for input names/ids
+  @param {number} option_position - 1-based option index (forloop.index)
+  @param {boolean} [card] - When true, shows the option name in the toggle label
+  @param {boolean} [variant_picker] - When true, outputs data-option-value-id for variant-option-picker
+{%- enddoc -%}
+
+{%- liquid
+  assign card = card | default: false
+  assign variant_picker = variant_picker | default: false
+  assign option_index = option_position | minus: 1
+  assign selected_value = option.values.first
+  assign selected_option_value = product.selected_or_first_available_variant.options[option_index]
+
+  if variant_picker
+    for option_value in option.values
+      if option_value.selected
+        assign selected_value = option_value
+      endif
+    endfor
+  elsif selected_option_value
+    assign selected_value = selected_option_value
+  endif
+-%}
+
+<custom-option-dropdown
+  class="custom-dropdown relative"
+  data-option="{{ option_position }}"
+>
+  <button
+    type="button"
+    class="dropdown-toggle flex flex-between align-center w-100 cursor-pointer p-1"
+    style="border: 1px solid var(--brand-color-5); border-radius: 100px; background: #FFF;"
+    data-option="{{ option_position }}"
+  >
+    <div class="selected-option">
+      <span class="bold {% unless card %}hidden{% endunless %} to-sm-inline-flex custom-select-option-name">
+        {{- option.name }}:</span
+      >
+      <span class="selected-text">{{ selected_value }}</span>
+    </div>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="12"
+      height="8"
+      viewBox="0 0 15 8"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path d="M13.6508 0.658905L7.26097 7.46851L0.871094 0.658905" stroke="var(--brand-color-2)" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+  <div
+    class="dropdown-options absolute w-100 hidden border-radius shadow overflow-auto"
+    style="z-index: 1000; border: 1px solid var(--brand-color-5, #1D1D1D); border-top: none; border-radius: 0 0 5px 5px; background: #FBFBFB;"
+  >
+    {%- for value in option.values -%}
+      {%- if variant_picker -%}
+        {%- liquid
+          assign option_value = value
+          assign option_exists = false
+          if option_value.variant != blank
+            assign option_exists = true
+          endif
+          capture input_id
+            echo section_id
+            echo '-'
+            echo option.position
+            echo '-'
+            echo forloop.index0
+          endcapture
+        -%}
+        <div class="variant-wrapper relative{% unless option_exists %} unavailable-combination{% endunless %}{% if option_exists and option_value.available == false %} out-of-stock{% endif %}">
+          <input
+            class="visually-hidden{% unless option_exists %} disabled{% endunless %}"
+            type="radio"
+            name="{{ option.name }}-{{ option.position }}-{{ section_id }}"
+            value="{{ option_value | escape }}"
+            id="{{ input_id }}"
+            data-product-url="{{ option_value.product_url }}"
+            data-option-value-id="{{ option_value.id }}"
+            data-option-available="{{ option_value.available }}"
+            data-option-exists="{% if option_exists %}true{% else %}false{% endif %}"
+            {% unless option_exists %}
+              aria-disabled="true"
+            {% endunless %}
+            {% if option_value.variant.id %}
+              data-variant-id="{{ option_value.variant.id }}"
+            {% endif %}
+            {% if option_value.selected %}
+              checked
+            {% endif %}
+          >
+          <label class="cursor-pointer w-100 block p-1 dropdown" for="{{ input_id }}">
+            <span class="bold">{{ option.name }}:</span> {{ option_value }}
+          </label>
+        </div>
+      {%- else -%}
+        {%- liquid
+          assign is_selected = false
+          if product.selected_or_first_available_variant.options[option_index] == value
+            assign is_selected = true
+          endif
+        -%}
+        <div class="variant-wrapper relative">
+          <input
+            class="visually-hidden"
+            type="radio"
+            name="{{ option.name | escape }}-{{ product.id }}-{{ section_id }}"
+            value="{{ value | escape }}"
+            data-index="{{ forloop.index0 }}"
+            data-value="{{ value | escape | downcase }}"
+            id="{{ option.name | escape }}-{{ value | escape }}-{{ product.id }}-{{ section_id }}"
+            {% if is_selected %}
+              checked
+            {% endif %}
+          >
+          <label
+            class="cursor-pointer w-100 block p-1 dropdown"
+            for="{{ option.name | escape }}-{{ value | escape }}-{{ product.id }}-{{ section_id }}"
+          >
+            <span class="bold">{{ option.name }}:</span> {{ value }}
+          </label>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</custom-option-dropdown>
+
+{%- stylesheet -%}
+  custom-option-dropdown.custom-dropdown {
+    z-index: 10;
+  }
+
+  custom-option-dropdown.custom-dropdown.dropdown-open {
+    z-index: 1000;
+  }
+
+  custom-option-dropdown .dropdown-toggle {
+    transition: all 0.3s ease;
+  }
+
+  custom-option-dropdown .dropdown-toggle:hover {
+    filter: brightness(0.95);
+  }
+
+  custom-option-dropdown .dropdown-toggle.open {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  custom-option-dropdown .dropdown-toggle svg {
+    transition: transform 0.3s ease;
+  }
+
+  custom-option-dropdown .dropdown-toggle.open svg {
+    transform: rotateX(180deg);
+  }
+
+  custom-option-dropdown .dropdown-options {
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    max-height: 200px;
+  }
+
+  custom-option-dropdown .dropdown-options.open {
+    z-index: 1001 !important;
+    display: block !important;
+  }
+
+  custom-option-dropdown .dropdown-options .variant-wrapper {
+    border-bottom: 1px solid #eee;
+  }
+
+  custom-option-dropdown .dropdown-options .variant-wrapper:last-child {
+    border-bottom: none;
+  }
+
+  custom-option-dropdown .dropdown-options .variant-wrapper label {
+    margin: 0;
+    transition: background-color 0.2s ease;
+  }
+
+  custom-option-dropdown .dropdown-options .variant-wrapper:hover label {
+    background-color: #f0f0f0;
+  }
+
+  custom-option-dropdown .dropdown-options .variant-wrapper input:checked + label {
+    background-color: var(--brand-color-2);
+    color: var(--text-color-alternate);
+  }
+
+  custom-option-dropdown .dropdown-options .variant-wrapper.out-of-stock label {
+    position: relative;
+    background-color: var(--variant-out-of-stock-bg, #ececec);
+    color: var(--variant-out-of-stock-text, #5a5a5a);
+  }
+
+  custom-option-dropdown .dropdown-options .variant-wrapper.out-of-stock label::after {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    left: 12px;
+    height: 1px;
+    background-color: var(--variant-out-of-stock-text, #5a5a5a);
+    content: '';
+    transform: translateY(-50%);
+  }
+
+  custom-option-dropdown .dropdown-options .variant-wrapper.unavailable-combination label {
+    background-color: var(--variant-unavailable-bg, #ececec);
+    color: var(--variant-unavailable-text, #5a5a5a);
+  }
+
+  custom-option-dropdown .dropdown-options .variant-wrapper.unavailable-combination {
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+{%- endstylesheet -%}

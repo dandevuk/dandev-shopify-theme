@@ -1,0 +1,99 @@
+<product-card
+  class="product-card-quick-add flex flex-col g-2 to-sm-flex-col h-100"
+  data-product-handle="{{- prod.handle -}}"
+  data-variant-id="{{ prod.selected_or_first_available_variant.id }}"
+  data-product-id="{{- prod.id -}}"
+>
+  <div
+    class="image-wrapper ar-1 w-100 h-100 border-radius overflow-hidden max-h-max relative"
+    style="border: 1px solid var(--brand-color-5);background-color: #fff;"
+  >
+    {%- liquid
+      if prod.featured_image != blank
+        assign image = prod.featured_image
+      elsif settings.product_fallback != blank
+        assign image = settings.product_fallback
+      endif
+    -%}
+    {%- render 'image',
+      image: image,
+      max_width: 400,
+      format: 'jpg',
+      use_placeholder: true,
+      lazy: true,
+      class: 'object-cover primary-image',
+      context_text: prod.title
+    -%}
+    <div class="absolute wishlist-container flex align-center z-1" style="top: 8px; right: 8px;">
+      {%- render 'wishlist-button', product: prod -%}
+    </div>
+  </div>
+  {%- assign variant_dom_section_id = 'quick-add-card-' | append: prod.id -%}
+  <main-product
+    data-section-id="{{ section.id }}"
+    data-product-id="{{ prod.id }}"
+    data-product-url="{{ prod.url }}"
+    data-quick-add-card="true"
+    class="product-form flex flex-col g-2 flex-1"
+  >
+    {%- capture form_content -%}
+      <a href="{{ prod.selected_or_first_available_variant.url }}" class="no-decoration">
+        {%- render 'product-title', product: prod, tag: 'h3', style: 'heading-h3' -%}
+      </a>
+      {%- render 'variant-selector',
+        product: prod,
+        section_id: variant_dom_section_id,
+        option_type: 'select',
+        gap: 'g-1',
+        color_swatch_size: '24',
+        card: true
+      -%}
+      {%- render 'selling-plan-selector', product: prod, section_id: variant_dom_section_id, option_type: 'select' -%}
+      {%- render 'product-variant-prices', product: prod, price_format: 'variant_price' -%}
+      {%- render 'product-submit-wrapper',
+        product: prod,
+        section_id: variant_dom_section_id,
+        hide_wishlist_button: true,
+        card: true
+      -%}
+    {%- endcapture -%}
+    {%- render 'product-form',
+      product: prod,
+      content: form_content,
+      section_id: section_id,
+      enable_history: false,
+      gap: 'g-1'
+    -%}
+  </main-product>
+  {%- render 'quickview-button', class: 'hidden to-sm-flex' -%}
+</product-card>
+
+{%- stylesheet -%}
+  .product-card-quick-add [wishlist-button] {
+    width: 33px;
+    height: 33px;
+  }
+  .product-card-quick-add .product-submit-wrapper {
+    gap: var(--content-spacing-2);
+  }
+
+  @media only screen and (max-width: 767.98px) {
+    .product-card-quick-add .product-submit-container {
+      display: none;
+    }
+    .product-card-quick-add .quickview-selects {
+      display: none;
+    }
+    .product-card-quick-add .variant-price-wrapper * {
+      font-size: 14px !important;
+      font-weight: 500;
+    }
+    .product-card-quick-add .product-title {
+      font-size: 15px;
+      line-height: 105%;
+    }
+    .product-card-quick-add .variant-radios {
+      gap: var(--content-spacing-1);
+    }
+  }
+{%- endstylesheet -%}

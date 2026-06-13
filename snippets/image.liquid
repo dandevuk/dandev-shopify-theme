@@ -1,0 +1,321 @@
+{%- comment -%}
+  Renders a responsive image using a <picture> tag when both desktop and mobile images are provided.
+  Supports separate focal points, responsive srcsets, and image performance optimizations like preload and lazy loading.
+
+  @param {image} image - The desktop image
+  @param {image} image_mobile - Optional. The mobile image
+  @param {number} max_width - The max width for the desktop image (default: 1000)
+  @param {number} mobile_width - Optional. The max width for the mobile image (default: 600)
+  @param {string} alt - Optional. The alt text for the image
+  @param {string} format - Optional. Alias for image_format (e.g., 'jpg', 'webp')
+  @param {string} image_format - Optional. CDN format (e.g., 'webp', 'avif', 'jpg')
+  @param {string} class - Optional. The CSS class applied to the <img> element
+  @param {boolean} preload_hint - Optional. When false, skips preload on eager images (default: true)
+  @param {boolean} fetchpriority_high - Optional. When true, sets fetchpriority="high" without preload
+  @param {boolean} lazy - Optional. If true, sets loading="lazy" and decoding="async"
+  @param {string} context_text - Optional. Text near the image; if it matches the alt, the image is treated as decorative
+
+  @example
+  {%- render 'image',
+      image: block.settings.image,
+      image_mobile: block.settings.image_mobile,
+      max_width: 1000,
+      mobile_width: 600,
+      class: 'responsive-image',
+      use_placeholder: true,
+      lazy: true
+  -%}
+{%- endcomment -%}
+
+{%- liquid
+  assign context_text = context_text | default: ''
+  assign alt_image_source = image | default: image_mobile
+
+  if alt == blank and alt_image_source
+    assign alt = alt_image_source.alt
+  endif
+
+  if alt == blank and alt_image_source
+    assign fallback_url = alt_image_source | image_url: width: 10
+    assign fallback_name = fallback_url | split: '/' | last | split: '?' | first | split: '.' | first
+    assign fallback_name = fallback_name | replace: '-', ' ' | replace: '_', ' ' | strip
+    if fallback_name == blank
+      assign fallback_name = 'Image'
+    endif
+    assign alt = fallback_name
+  endif
+
+  assign normalized_alt = alt | default: '' | strip_html | downcase | strip
+  assign normalized_alt = normalized_alt | replace: '&amp;', 'and' | replace: '&', 'and'
+  assign normalized_alt = normalized_alt | replace: '-', '' | replace: '_', '' | replace: ',', '' | replace: '.', '' | replace: '!', '' | replace: '?', '' | replace: ':', '' | replace: ';', '' | replace: '(', '' | replace: ')', '' | replace: '[', '' | replace: ']', '' | replace: '{', '' | replace: '}', '' | replace: '/', '' | replace: '\\', '' | replace: '"', '' | replace: "'", ''
+  assign normalized_alt = normalized_alt | replace: ' ', ''
+
+  assign normalized_context = context_text | default: '' | strip_html | downcase | strip
+  assign normalized_context = normalized_context | replace: '&amp;', 'and' | replace: '&', 'and'
+  assign normalized_context = normalized_context | replace: '-', '' | replace: '_', '' | replace: ',', '' | replace: '.', '' | replace: '!', '' | replace: '?', '' | replace: ':', '' | replace: ';', '' | replace: '(', '' | replace: ')', '' | replace: '[', '' | replace: ']', '' | replace: '{', '' | replace: '}', '' | replace: '/', '' | replace: '\\', '' | replace: '"', '' | replace: "'", ''
+  assign normalized_context = normalized_context | replace: ' ', ''
+
+  assign redundant_alt = false
+  if normalized_alt != blank and normalized_context != blank and normalized_alt == normalized_context
+    assign alt = ''
+    assign redundant_alt = true
+  endif
+
+  assign max_width = max_width | plus: 0 | default: 1000
+  assign mobile_width = mobile_width | plus: 0 | default: 600
+  assign image_format = image_format | default: format | default: ''
+  if preload_hint == false
+    assign preload_hint = false
+  else
+    assign preload_hint = true
+  endif
+  if fetchpriority_high
+    assign fetchpriority_high = true
+  else
+    assign fetchpriority_high = false
+  endif
+  assign use_modern_picture = false
+  if image_format == 'webp' or image_format == 'avif'
+    assign use_modern_picture = true
+  endif
+  assign widths = '100,200,300,400,600,800,1000,1200,1400,1600,2000' | split: ','
+
+  assign object_position = ''
+  if image.presentation.focal_point or image_mobile.presentation.focal_point
+    assign object_position = '--object-position-desktop: ' | append: image.presentation.focal_point | append: '; --object-position-mobile: ' | append: image_mobile.presentation.focal_point | append: ';'
+  endif
+
+  assign desktop_srcset = ''
+  assign fallback_srcset = ''
+  assign mobile_srcset = ''
+  assign mobile_fallback_srcset = ''
+
+  if image != blank
+    assign desktop_srcset = ''
+    for width in widths
+      assign w = width | plus: 0
+      if w <= max_width
+        if image_format != blank
+          assign src = image | image_url: width: w, format: image_format
+        else
+          assign src = image | image_url: width: w
+        endif
+        assign desktop_srcset = desktop_srcset | append: src | append: ' ' | append: w | append: 'w'
+        unless forloop.last
+          assign desktop_srcset = desktop_srcset | append: ', '
+        endunless
+      endif
+    endfor
+
+    if use_modern_picture
+      for width in widths
+        assign w = width | plus: 0
+        if w <= max_width
+          assign src = image | image_url: width: w
+          assign fallback_srcset = fallback_srcset | append: src | append: ' ' | append: w | append: 'w'
+          unless forloop.last
+            assign fallback_srcset = fallback_srcset | append: ', '
+          endunless
+        endif
+      endfor
+    endif
+  endif
+
+  if image_mobile != blank
+    assign mobile_srcset = ''
+    for width in widths
+      assign w = width | plus: 0
+      if w <= mobile_width
+        if image_format != blank
+          assign src = image_mobile | image_url: width: w, format: image_format
+        else
+          assign src = image_mobile | image_url: width: w
+        endif
+        assign mobile_srcset = mobile_srcset | append: src | append: ' ' | append: w | append: 'w'
+        unless forloop.last
+          assign mobile_srcset = mobile_srcset | append: ', '
+        endunless
+      endif
+    endfor
+
+    if use_modern_picture
+      for width in widths
+        assign w = width | plus: 0
+        if w <= mobile_width
+          assign src = image_mobile | image_url: width: w
+          assign mobile_fallback_srcset = mobile_fallback_srcset | append: src | append: ' ' | append: w | append: 'w'
+          unless forloop.last
+            assign mobile_fallback_srcset = mobile_fallback_srcset | append: ', '
+          endunless
+        endif
+      endfor
+    endif
+  endif
+-%}
+
+{%- if image and image_mobile -%}
+  <picture
+    style="display:flex;"
+    {% if itemprop != blank %}
+      itemprop="{{ itemprop }}"
+    {% endif %}
+  >
+    {%- if use_modern_picture -%}
+      <source
+        type="image/{{ image_format }}"
+        media="(min-width: 768px)"
+        srcset="{{ desktop_srcset }}"
+        sizes="{{ max_width }}px"
+      >
+      <source
+        media="(min-width: 768px)"
+        srcset="{{ fallback_srcset }}"
+        sizes="{{ max_width }}px"
+      >
+      <source
+        type="image/{{ image_format }}"
+        media="(max-width: 767px)"
+        srcset="{{ mobile_srcset }}"
+        sizes="{{ mobile_width }}px"
+      >
+    {%- else -%}
+      <source
+        media="(min-width: 768px)"
+        srcset="{{ desktop_srcset }}"
+        sizes="{{ max_width }}px"
+        width="{{ image.width }}"
+        height="{{ image.height }}"
+      >
+    {%- endif -%}
+    {%- liquid
+      assign sizes = '(max-width: 767px) ' | append: mobile_width | append: 'px, ' | append: mobile_width | append: 'px'
+      assign mobile_render_srcset = mobile_srcset
+      if use_modern_picture
+        assign mobile_render_srcset = mobile_fallback_srcset
+      endif
+      if lazy
+        capture mobile_img
+          echo image_mobile | image_url: width: mobile_width | image_tag: alt: alt, class: class, style: object_position, srcset: mobile_render_srcset, sizes: sizes, lazy: true, decoding: 'async', width: image_mobile.width, height: image_mobile.height
+        endcapture
+      elsif preload_hint
+        capture mobile_img
+          if image_format != blank
+            echo image_mobile | image_url: width: mobile_width, format: image_format | image_tag: alt: alt, class: class, style: object_position, format: image_format, srcset: mobile_srcset, sizes: sizes, preload: true, fetchpriority: 'high', width: image_mobile.width, height: image_mobile.height
+          else
+            echo image_mobile | image_url: width: mobile_width | image_tag: alt: alt, class: class, style: object_position, srcset: mobile_srcset, sizes: sizes, preload: true, fetchpriority: 'high', width: image_mobile.width, height: image_mobile.height
+          endif
+        endcapture
+      elsif fetchpriority_high
+        capture mobile_img
+          echo image_mobile | image_url: width: mobile_width | image_tag: alt: alt, class: class, style: object_position, srcset: mobile_render_srcset, sizes: sizes, fetchpriority: 'high', width: image_mobile.width, height: image_mobile.height
+        endcapture
+      else
+        capture mobile_img
+          echo image_mobile | image_url: width: mobile_width | image_tag: alt: alt, class: class, style: object_position, srcset: mobile_render_srcset, sizes: sizes, width: image_mobile.width, height: image_mobile.height
+        endcapture
+      endif
+      if redundant_alt
+        assign mobile_img = mobile_img | replace_first: '<img', '<img role="presentation" aria-hidden="true"'
+      endif
+      echo mobile_img
+    -%}
+  </picture>
+
+{%- elsif image -%}
+  {%- liquid
+    assign responsive_sizes = '(max-width: 767px) 100vw, ' | append: max_width | append: 'px'
+    assign render_srcset = desktop_srcset
+    if use_modern_picture
+      assign render_srcset = fallback_srcset
+    endif
+    if image_data_src != blank
+      if image_format != blank
+        assign url = image | image_url: width: max_width, format: image_format
+      else
+        assign url = image | image_url: width: max_width
+      endif
+      capture manual_img
+        echo '<img'
+        if redundant_alt
+          echo ' role="presentation" aria-hidden="true"'
+        endif
+        echo ' data-src="' | append: url | append: '" data-sizes="' | append: responsive_sizes | append: '" ' | append: ' alt="' | append: alt | append: '" class="' | append: class | append: '" style="' | append: object_position | append: '">'
+      endcapture
+      if use_modern_picture
+        echo '<picture><source type="image/' | append: image_format | append: '" srcset="' | append: desktop_srcset | append: '" sizes="' | append: responsive_sizes | append: '">'
+      endif
+      echo manual_img
+      if use_modern_picture
+        echo '</picture>'
+      endif
+    elsif lazy
+      capture desktop_img
+        echo image | image_url: width: max_width | image_tag: alt: alt, class: class, style: object_position, srcset: render_srcset, sizes: responsive_sizes, lazy: true, decoding: 'async', itemprop: itemprop, width: image.width, height: image.height
+      endcapture
+      if redundant_alt
+        assign desktop_img = desktop_img | replace_first: '<img', '<img role="presentation" aria-hidden="true"'
+      endif
+      if use_modern_picture
+        echo '<picture><source type="image/' | append: image_format | append: '" srcset="' | append: desktop_srcset | append: '" sizes="' | append: responsive_sizes | append: '">'
+      endif
+      echo desktop_img
+      if use_modern_picture
+        echo '</picture>'
+      endif
+    elsif preload_hint
+      capture desktop_img
+        if image_format != blank
+          echo image | image_url: width: max_width, format: image_format | image_tag: alt: alt, class: class, style: object_position, format: image_format, srcset: desktop_srcset, sizes: responsive_sizes, preload: true, fetchpriority: 'high', itemprop: itemprop, width: image.width, height: image.height
+        else
+          echo image | image_url: width: max_width | image_tag: alt: alt, class: class, style: object_position, srcset: desktop_srcset, sizes: responsive_sizes, preload: true, fetchpriority: 'high', itemprop: itemprop, width: image.width, height: image.height
+        endif
+      endcapture
+      if redundant_alt
+        assign desktop_img = desktop_img | replace_first: '<img', '<img role="presentation" aria-hidden="true"'
+      endif
+      if use_modern_picture
+        echo '<picture><source type="image/' | append: image_format | append: '" srcset="' | append: desktop_srcset | append: '" sizes="' | append: responsive_sizes | append: '">'
+      endif
+      echo desktop_img
+      if use_modern_picture
+        echo '</picture>'
+      endif
+    elsif fetchpriority_high
+      capture desktop_img
+        echo image | image_url: width: max_width | image_tag: alt: alt, class: class, style: object_position, srcset: render_srcset, sizes: responsive_sizes, fetchpriority: 'high', itemprop: itemprop, width: image.width, height: image.height
+      endcapture
+      if redundant_alt
+        assign desktop_img = desktop_img | replace_first: '<img', '<img role="presentation" aria-hidden="true"'
+      endif
+      if use_modern_picture
+        echo '<picture><source type="image/' | append: image_format | append: '" srcset="' | append: desktop_srcset | append: '" sizes="' | append: responsive_sizes | append: '">'
+      endif
+      echo desktop_img
+      if use_modern_picture
+        echo '</picture>'
+      endif
+    else
+      capture desktop_img
+        if image_format != blank
+          echo image | image_url: width: max_width, format: image_format | image_tag: alt: alt, class: class, style: object_position, format: image_format, srcset: desktop_srcset, sizes: responsive_sizes, itemprop: itemprop, width: image.width, height: image.height
+        else
+          echo image | image_url: width: max_width | image_tag: alt: alt, class: class, style: object_position, srcset: desktop_srcset, sizes: responsive_sizes, itemprop: itemprop, width: image.width, height: image.height
+        endif
+      endcapture
+      if redundant_alt
+        assign desktop_img = desktop_img | replace_first: '<img', '<img role="presentation" aria-hidden="true"'
+      endif
+      if use_modern_picture
+        echo '<picture><source type="image/' | append: image_format | append: '" srcset="' | append: desktop_srcset | append: '" sizes="' | append: responsive_sizes | append: '">'
+      endif
+      echo desktop_img
+      if use_modern_picture
+        echo '</picture>'
+      endif
+    endif
+  -%}
+{%- else -%}
+  {%- if use_placeholder -%}
+    {{ 'lifestyle-1' | placeholder_svg_tag }}
+  {%- endif -%}
+{%- endif -%}

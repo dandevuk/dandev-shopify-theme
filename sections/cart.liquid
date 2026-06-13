@@ -1,0 +1,446 @@
+{%- liquid
+  #   -== Section Translations ==-
+  assign heading_t = 'general.cart.heading' | t
+  assign empty_cart_t = 'general.cart.empty_cart' | t
+  assign cart_total_t = 'general.cart.cart_total' | t
+  assign checkout_t = 'general.cart.checkout' | t
+  assign continue_shopping_t = 'general.cart.continue_shopping' | t
+  assign return_t = 'general.cart.return' | t
+  assign item_t = 'general.cart.line_items.item' | t
+  assign items_t = 'general.cart.line_items.items' | t
+  #
+  #   -== Section Variables ==-
+  assign num_items = cart.items | size
+  assign cart_count = cart.items | size
+  assign cart_count_items = cart.items | pluralize: item_t, items_t
+
+  #       Heading Text
+  assign cart_count_heading = cart_count | append: ' ' | append: cart_count_items
+-%}
+
+<section id="cart-container" class="cart-page" data-cart-page data-cart-container>
+  {% comment %} Heading Container {% endcomment %}
+  <div class="heading-wrapper page-width flex-start align-start flex-col">
+    {%- render 'breadcrumbs' -%}
+    <div class="title-counter flex align-center">
+      <h1 class="cart__title mb-0 heading-h1">{{- heading_t -}}</h1>
+      {%- if cart_count > 0 -%}
+        <div
+          class="cart-counter mt-0 heading-h1"
+          data-cart-count
+          data-count="{{ cart_count }}"
+        >
+          (
+          {{- cart_count_heading -}}
+          )
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div
+    class="cart-status page-width visually-hidden"
+    data-cart-errors
+    aria-live="polite"
+    role="status"
+    hidden
+  ></div>
+
+  {%- if num_items > 0 -%}
+    <div class="cart page-width flex" style="height: 100%;" data-cart-content data-cart-page-inner>
+      <div class="items-wrapper" style=" position: relative;flex: 1;" data-cart-items-wrapper>
+        {% comment %} Cart Items Container {% endcomment %}
+        {%- unless cart.item_count == 0 -%}
+          <div
+            class="items flex-center align-center flex-col"
+            data-cart-items
+            data-items-count="{{ cart.item_count }}"
+          >
+            {%- for item in cart.items -%}
+              {%- render 'cart-item', item: item -%}
+            {%- endfor -%}
+          </div>
+
+        {%- else -%}
+          <p>{{- empty_cart_t -}}</p>
+        {%- endunless -%}
+      </div>
+
+      {% comment %}  Cart Summary {% endcomment %}
+      <div class="cart-details relative">
+        <div class="cart-details__inner border-radius p-3 pb-4 sticky flex-center align-center flex-col">
+          <h2 class="cart-details__title mb-3 heading-h4 w-100 flex-between">
+            {{- 'general.cart.cart_summary' | t -}}
+          </h2>
+          {%- if localization.market.metafields.custom.free_shipping_cart_total != blank
+            or settings.free_delivery != blank
+          -%}
+            <div
+              free-delivery-status
+              class="free-delivery-status flex-center align-center w-100 border-radius flex-col g-1 p-2 text-center"
+            >
+              {% comment %} Icon placeholder removed during migration {% endcomment %}
+              {%- assign free_delivery_amount = settings.free_delivery -%}
+              {%- if free_delivery_amount != blank -%}
+                {%- assign free_delivery_amount = free_delivery_amount | times: 100 -%}
+              {%- elsif localization.market.metafields.custom.free_shipping_cart_total != blank -%}
+                {%- assign market_data = localization.market.metafields.custom.free_shipping_cart_total
+                  | json
+                -%}
+                {%- assign free_delivery_amount = market_data
+                  | split: 'amount":'
+                  | last
+                  | split: '}'
+                  | first
+                  | times: 1.0
+                -%}
+              {%- endif -%}
+
+              {%- assign cart_total = cart.items_subtotal_price -%}
+              {%- if free_delivery_amount != blank and free_delivery_amount != 0 -%}
+                {%- assign free_delivery_progress = cart_total
+                  | times: 100
+                  | divided_by: free_delivery_amount
+                -%}
+              {%- else -%}
+                {%- assign free_delivery_progress = 0 -%}
+              {%- endif -%}
+
+              {%- if free_delivery_progress > 100 -%}
+                {%- assign free_delivery_progress = 100 -%}
+              {%- endif -%}
+              {%- if free_delivery_progress < 0 -%}
+                {%- assign free_delivery_progress = 0 -%}
+              {%- endif -%}
+              <div
+                class="free-delivery-progress-bar w-100 relative border-radius"
+                aria-hidden="true"
+              >
+                <div
+                  class="free-delivery-progress absolute top-0 left-0 h-100 border-radius"
+                  style="width: {{ free_delivery_progress }}%"
+                ></div>
+
+                <div
+                  class="free-delivery-knob absolute"
+                  style="left: calc({{ free_delivery_progress }}% - 14px)"
+                  aria-hidden="true"
+                >
+                  <div class="free-delivery-knob-inner">
+                    {% comment %}
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="12" viewBox="0 0 20 12" fill="none" aria-hidden="true" focusable="false">
+                        <path d="M0 8h2v2H0v-2zM3 8h4v2H3V8zM8 6h6l3 3v1H8V6z" fill="#1D1D1D"/>
+                        <rect x="2" y="3" width="6" height="3" rx="0.5" fill="#1D1D1D"/>
+                      </svg>
+                    {% endcomment %}
+                    {{ 'icon-truck.svg' | inline_asset_content }}
+                  </div>
+                </div>
+              </div>
+
+              <span
+                class="free-delivery-text heading-h5 uppercase"
+                role="status"
+                aria-live="polite"
+              >
+                {%- if free_delivery_amount != blank -%}
+                  {%- if cart_total < free_delivery_amount -%}
+                    {% assign spend_more = free_delivery_amount | minus: cart_total -%}
+                    {{ spend_more | money }}
+                    {{ 'general.side_cart.side_cart_messages.free_delivery_progress' | t }}
+                  {%- else -%}
+                    {{ 'general.side_cart.side_cart_messages.free_delivery_reached' | t }}
+                  {%- endif -%}
+                {%- endif -%}
+              </span>
+            </div>
+          {%- endif -%}
+          <div class="total-wrapper w-100 flex-between align-start">
+            <p class="heading-h4">{{- cart_total_t -}}</p>
+            <span
+              class="total heading-h4"
+              data-cart-subtotal="{{ cart.items_subtotal_price }}"
+              data-cart-subtotal-display
+            >
+              {{- cart.items_subtotal_price | money -}}
+            </span>
+          </div>
+          <a
+            href="{{ routes.root_url }}checkout"
+            class="checkout-btn button-1 w-100 flex-center mt-3"
+            aria-label="{{- checkout_t -}}"
+          >
+            {{- checkout_t -}}
+          </a>
+          {%- if additional_checkout_buttons -%}
+            <div class="mt-3">
+              {{ content_for_additional_checkout_buttons }}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  {%- else -%}
+    <div class="page-width no-items">
+      <div class="cart-no-items">
+        <h1 class="cart-no-items__title" style="text-align: center;">
+          {{- empty_cart_t -}}
+        </h1>
+        <a class="button-2" href="{{ routes.root_url }}collections/all">
+          {{- continue_shopping_t -}}
+        </a>
+        <a class="back-link" href="javascript:history.back()">{{- return_t -}}</a>
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+{% stylesheet %}
+  /* -----------------------
+    Cart Section Styles
+  ----------------------- */
+
+  body {
+    overflow-x: hidden;
+  }
+
+  #cart-container {
+    padding-bottom: var(--spacing-sections-desktop);
+    background: var(--body-background-color, #fff);
+  }
+
+  /* Small devices */
+  @media (max-width: 640px) {
+    #cart-container {
+      padding-bottom: var(--spacing-sections-mobile);
+    }
+  }
+
+  /* -----------------------
+    Heading Wrapper
+  ----------------------- */
+  #cart-container .heading-wrapper {
+    gap: 10px;
+    margin-bottom: 45px;
+  }
+
+  #cart-container .heading-wrapper .title-counter {
+    gap: 10px;
+  }
+
+  #cart-container .heading-wrapper .cart__title {
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  @media (max-width: 640px) {
+    #cart-container .heading-wrapper {
+      margin-bottom: 20px;
+    }
+  }
+
+  #cart-container .heading-wrapper .cart-counter {
+    color: var(--text-primary-color);
+    font-size: 44px;
+    font-weight: 400;
+  }
+
+  /* -----------------------
+    Cart Layout
+  ----------------------- */
+  #cart-container .cart {
+    gap: 30px;
+  }
+
+  @media (max-width: 1024px) {
+    #cart-container .cart {
+      flex-flow: column nowrap;
+    }
+  }
+
+  /* Items wrapper */
+  #cart-container .cart .items-wrapper {
+    /* background: #ffffff; */
+  }
+
+  /* -----------------------
+    Cart Details
+  ----------------------- */
+  #cart-container .cart-details {
+    box-sizing: border-box;
+    width: 380px;
+    min-width: 200px;
+    margin-left: auto;
+    padding: 0 0 40px;
+  }
+
+  @media (max-width: 1024px) {
+    #cart-container .cart-details {
+      width: 100%;
+      margin-bottom: 2rem;
+    }
+  }
+
+  #cart-container .cart-details__inner {
+    top: 8rem;
+    border: 1px solid var(--brand-color-5, #e9e9e9);
+
+    /* gap: 15px; */
+    background-color: var(--text-color-alternate);
+  }
+
+  #cart-container .cart-details .checkout-btn {
+    box-sizing: border-box;
+    border-color: var(--brand-color-3);
+    background-color: var(--brand-color-3);
+  }
+
+  /* Shared title, subtotal, total wrappers */
+  #cart-container .cart-details__title,
+  #cart-container .cart-details .sub-total-wrapper,
+  #cart-container .cart-details .total-wrapper {
+    align-items: baseline;
+    gap: 10px;
+    color: var(--text-primary-color);
+  }
+
+  /* Total wrapper */
+  #cart-container .cart-details .total-wrapper {
+    font-weight: bold;
+  }
+
+  #cart-container .cart-details .total-wrapper .heading-h4 {
+    margin-block: 0;
+  }
+
+  /* -----------------------
+    Cart Item Styles
+  ----------------------- */
+
+  #cart-container .items:first-child {
+    padding-top: 22px;
+    border-top: 1px solid;
+    border-color: var(--brand-color-5);
+  }
+
+  #cart-container .item.side-cart-item,
+  #cart-container .items > div:not([data-variant-id]) {
+    position: relative;
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid;
+    border-color: var(--brand-color-5);
+  }
+
+  /* Base divider setup (but not active yet) */
+  #cart-container .items > div::after {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: var(--brand-color-5);
+    content: '';
+    pointer-events: none;
+    opacity: 0; /* default hidden */
+  }
+
+  /* Add the border only when the next sibling is NOT a non-variant item */
+  #cart-container .item.side-cart-item[data-variant-id]:has(+ .item[data-variant-id]) {
+    margin-bottom: 30px; /* increase space */
+    padding-bottom: 30px;
+  }
+
+  #cart-container .personalised {
+    margin-right: auto;
+  }
+
+  #cart-container .item {
+    gap: 32px;
+    width: 100%;
+  }
+
+  #cart-container .item .title {
+    margin-bottom: 0;
+  }
+
+  #cart-container .item .quantity-remove-wrapper {
+    align-self: stretch;
+  }
+
+  #cart-container .item .img-wrapper {
+    width: 100%;
+    max-width: 180px;
+  }
+
+  #cart-container .item .info-wrapper {
+    height: 100%;
+  }
+
+  #cart-container .item .info-wrapper .price {
+    margin-top: auto;
+    font-size: 18px;
+  }
+
+  /* -----------------------
+    Empty Cart Styles
+  ----------------------- */
+  .cart-no-items {
+    text-align: center;
+  }
+
+  .cart-no-items__title {
+    margin: 30px 0;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  @media (min-width: 640px) {
+    .cart-no-items__title {
+      margin: 30px 0;
+      font-size: 30px;
+      font-weight: 600;
+      text-align: center;
+    }
+  }
+
+  .cart-no-items a {
+    display: block;
+    margin: 0 auto;
+  }
+
+  .cart-no-items .back-link {
+    margin-top: 1rem;
+    color: #000;
+    font-size: 14px;
+    text-decoration: underline;
+  }
+
+  /* -----------------------
+    Free shipping
+  ----------------------- */
+
+  #cart-container .free-delivery-status {
+    margin-bottom: 33px;
+    border: 1px solid var(--brand-color-6, #b4b4b4);
+  }
+{% endstylesheet %}
+
+{%- schema -%}
+{
+  "name": "Cart",
+  "settings": [
+    {
+      "type": "text",
+      "id": "back_text",
+      "label": "Continue Shopping Text",
+      "default": "Continue Shopping"
+    },
+    {
+      "type": "url",
+      "id": "back_link",
+      "label": "Continue Shopping Link"
+    }
+  ]
+}
+{%- endschema -%}

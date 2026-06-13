@@ -1,0 +1,54 @@
+{%- if request.page_type == 'index' and section.settings.image != blank -%}
+  {%- liquid
+    assign layout_style = section.settings.layout_style | default: 'full-width'
+    assign hero_max_width = 1600
+    if layout_style == 'side-by-side'
+      assign hero_max_width = 1000
+    endif
+  -%}
+  {%- render 'lcp-image-preload',
+    image: section.settings.image,
+    image_mobile: section.settings.mobile_image,
+    max_width: hero_max_width,
+    mobile_width: 600,
+    image_format: 'webp'
+  -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "LCP preload",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Preloads the homepage hero image from the document head. Use the same image and layout as the homepage hero section."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Hero image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile hero image"
+    },
+    {
+      "type": "select",
+      "id": "layout_style",
+      "label": "Hero layout",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full width"
+        },
+        {
+          "value": "side-by-side",
+          "label": "Side by side"
+        }
+      ],
+      "default": "full-width"
+    }
+  ]
+}
+{% endschema %}

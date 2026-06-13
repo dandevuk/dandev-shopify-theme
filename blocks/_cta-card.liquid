@@ -1,0 +1,58 @@
+{%- liquid
+  assign card_class = block.settings.width
+-%}
+{%- render 'cta',
+  cta: block.settings.cta,
+  class: card_class,
+  custom_span: true,
+  style: 'card_1',
+  shopify_attributes: block.shopify_attributes
+-%}
+
+{% schema %}
+{
+  "name": "CTA Card",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "metaobject",
+      "id": "cta",
+      "label": "CTA Metaobject",
+      "metaobject_type": "cta"
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width (Desktop)",
+      "options": [
+        {
+          "value": "span-4",
+          "label": "33%"
+        },
+        {
+          "value": "span-6",
+          "label": "50%"
+        },
+        {
+          "value": "span-12",
+          "label": "100%"
+        }
+      ],
+      "default": "span-4"
+    }
+  ],
+  "presets": [
+    {
+      "name": "CTA Card"
+    }
+  ]
+}
+{% endschema %}

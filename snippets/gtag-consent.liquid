@@ -1,0 +1,68 @@
+{% comment %}
+  Initializes dataLayer and gtag early and sets default consent values before GTM or gtag.js loads.
+  Google Tag Manager will read and replay anything pushed to the dataLayer when it loads.
+  The default consent values deny all marketing and analytics tracking until the actual consent status is known.
+  The 'wait_for_update' flag tells GTM to delay consent-based tag firing briefly (500ms) in case updated consent is applied shortly after.
+
+  Once the Shopify Customer Privacy API is available,
+  we check the user’s consent status and push an updated consent configuration to gtag.
+  We also subscribe to changes, so if the user updates their preferences (e.g. via a banner), we respond in real time.
+{% endcomment %}
+
+{% if position == 'top' %}
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      analytics_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      functionality_storage: 'granted',
+      security_storage: 'granted',
+      wait_for_update: 500,
+    });
+  </script>
+{% elsif position == 'bottom' %}
+  <script>
+    window.Shopify.loadFeatures(
+      [
+        {
+          name: 'consent-tracking-api',
+          version: '0.1',
+        },
+      ],
+      (error) => {
+        if (error) {
+          console.warn('Consent tracking API failed to load', error);
+          return;
+        }
+
+        document.addEventListener('visitorConsentCollected', () => {
+          updateConsent();
+        });
+
+        updateConsent();
+
+        function updateConsent() {
+          try {
+            gtag('consent', 'update', {
+              ad_storage: Shopify.customerPrivacy.marketingAllowed() ? 'granted' : 'denied',
+              analytics_storage: Shopify.customerPrivacy.analyticsProcessingAllowed()
+                ? 'granted'
+                : 'denied',
+              ad_user_data: Shopify.customerPrivacy.saleOfDataAllowed() ? 'granted' : 'denied',
+              ad_personalization: Shopify.customerPrivacy.preferencesProcessingAllowed()
+                ? 'granted'
+                : 'denied',
+            });
+          } catch (e) {
+            console.warn('[GTM] Failed to update consent', e);
+          }
+        }
+      },
+    );
+  </script>
+{% endif %}

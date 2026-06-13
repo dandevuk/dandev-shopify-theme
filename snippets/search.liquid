@@ -1,0 +1,48 @@
+<form
+  class="form-search-bar flex-center flex-col align-start relative"
+  action="{{ routes.search_url }}"
+  {{ shopify_attributes }}
+>
+  <label for="header-search" class="visually-hidden">{{ 'general.search.search' | t }}</label>
+  <input
+    type="text"
+    placeholder="{{ placeholder }}"
+    name="q"
+    value="{{ search.terms | escape }}"
+    class="{% unless predictive_search == false %}search-trigger{% endunless %} {{ class }} relativer w-100"
+    id="header-search"
+  >
+  <input type="hidden" name="type" value="product">
+  <div class="submit-group absolute flex-center align-center">
+    <label for="submit_search" class="flex-center align-center">
+      <span class="visually-hidden">{{ 'general.search.search' | t }}</span>
+      {% comment %} <img src="{{ 'icon-search.svg' | asset_url }}" class="icon" height="19" width="19" alt="Search" loading="lazy" decoding="async"> {% endcomment %}
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="15"
+        height="15"
+        viewBox="0 0 15 15"
+        fill="none"
+      >
+        <path d="M4.46736 11.0565L0.761718 14.4521M2.99405 7.14415C2.99405 10.2878 5.40448 12.8362 8.37789 12.8362C11.3513 12.8362 13.7617 10.2878 13.7617 7.14415C13.7617 4.00054 11.3513 1.45215 8.37789 1.45215C5.40448 1.45215 2.99405 4.00054 2.99405 7.14415Z" stroke="currentColor" stroke-linecap="round"></path>
+      </svg>
+      <input
+        type="submit"
+        id="submit_search"
+        value=""
+        class="w-100 z-1 h-100 cursor-pointer absolute p-0 b-rad-0 top-0 right-0"
+      >
+    </label>
+  </div>
+</form>
+
+{% stylesheet %}
+  .main-404-section .form-search-bar input[type='text'] {
+    cursor: text !important;
+  }
+
+  .form-search-bar .submit-group label input[type='submit'] {
+    border: none;
+    background: none;
+  }
+{% endstylesheet %}

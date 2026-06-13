@@ -1,0 +1,417 @@
+{%- liquid
+  # CONTENT
+  assign image = section.settings.image
+
+  # LAYOUT
+  assign layout_style = section.settings.layout_style
+  assign text_alignment = section.settings.text_alignment
+  assign truncate_text = section.settings.truncate_text
+  assign truncate_lines = section.settings.truncate_lines
+
+  # STYLING
+  assign style_selector = section.settings.style_selector
+  assign section_styling = section.settings.section_styling
+  assign overlay_type = section.settings.overlay_type
+  assign overlay_styling = section.settings.overlay_styling
+  assign overlay_background = section.settings.overlay_color
+  assign background_color = section.settings.background_color
+  assign text_color = section.settings.text_color
+-%}
+
+<div
+  class="page-header-wrapper section-container {{ section_styling }} {{ layout_style }}"
+  {% if style_selector == 'custom' %}
+    style="background: {{ background_color }}; color: {{ text_color }};"
+  {% endif %}
+>
+  <div class="page-header-container overflow-hidden margin-auto relative">
+    {%- if layout_style == 'full-width' and image != blank -%}
+      <div class="absolute inset-0 w-100 h-100 z-0">
+        {%- render 'image',
+          image: image,
+          max_width: 2000,
+          use_placeholder: false,
+          lazy: false,
+          class: 'object-cover'
+        -%}
+      </div>
+    {%- endif -%}
+    {%- if layout_style == 'full-width' and overlay_type != 'none' -%}
+      <div
+        class="absolute inset-0 h-100 w-100 overlay {% if overlay_styling == 'primary' %}gradient-bg{% elsif overlay_styling == 'secondary' %}gradient-bg-alt{% endif %}"
+        {% if section.settings.overlay_type == 'custom' %}
+          style="background: {{ overlay_background }};"
+        {% endif %}
+      ></div>
+    {%- endif -%}
+    <div
+      class="relative page-width"
+      {% if layout_style == 'full-width' %}
+        style="padding-bottom: 80px;"
+      {% endif %}
+    >
+      {%- if layout_style == 'full-width' -%}
+        <div class="breadcrumbs relative z-1">
+          {%- render 'breadcrumbs' -%}
+        </div>
+      {%- endif -%}
+      <div class="page-header-grid grid-section">
+        <div
+          class="content no-text-margins z-3 span-6 relative {% if layout_style == 'side-by-side' %}container-v-padding{% endif %} {% if text_alignment == 'center' %}span-centre text-center{% endif %} {% if truncate_text %}truncate-text{% endif %}"
+          {% if truncate_text %}
+            style="--webkit-line-clamp: {{ truncate_lines }};"
+          {% endif %}
+        >
+          {%- if layout_style == 'side-by-side' -%}
+            <div class="breadcrumbs absolute w-max z-1 text-left top-0 left-0 text-left">
+              {%- render 'breadcrumbs' -%}
+            </div>
+          {%- endif -%}
+          {% content_for 'blocks' %}
+        </div>
+        {%- if image != blank -%}
+          <div class="media {% if layout_style == 'side-by-side' %}span-6{% else %}absolute inset-0{% endif %} h-100 w-100 z-0">
+            <div class="media-item">
+              <div class="media-wrapper relative w-100 h-100 overflow-hidden">
+                <div class="media-container absolute inset-0 h-100 w-100">
+                  {%- if layout_style == 'side-by-side' -%}
+                    {%- render 'image',
+                      image: image,
+                      max_width: 1000,
+                      use_placeholder: false,
+                      lazy: false
+                    -%}
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- stylesheet -%}
+  .page-header .page-header-container .page-header-grid .media .media-item {
+    width: 100%;
+    height: 100%;
+  }
+
+  @media only screen and (max-width: 767.98px) {
+    .page-header .page-header-container .page-header-grid .content {
+      order: 2;
+    }
+    .page-header .page-header-container .page-header-grid .media {
+      order: 1;
+      aspect-ratio: 3/2;
+    }
+    .page-header .page-header-container .page-header-grid .media .media-item {
+      position: relative;
+      left: calc(-1 * var(--page-width-padding));
+      width: calc(100% + (var(--page-width-padding) * 2));
+    }
+  }
+
+  @media only screen and (min-width: 768px) {
+    .page-header
+      .side-by-side
+      .page-header-container
+      .page-header-grid
+      .media
+      .media-item
+      .media-wrapper {
+      width: calc((100vw / 2) - (var(--page-width-padding) - 58px));
+    }
+  }
+
+  .page-header
+    .page-header-container
+    .page-header-grid
+    .media
+    .media-item
+    .media-wrapper
+    .media-container
+    picture,
+  .page-header
+    .page-header-container
+    .page-header-grid
+    .media
+    .media-item
+    .media-wrapper
+    .media-container
+    img,
+  .page-header
+    .page-header-container
+    .page-header-grid
+    .media
+    .media-item
+    .media-wrapper
+    .media-container
+    svg,
+  .page-header
+    .page-header-container
+    .page-header-grid
+    .media
+    .media-item
+    .media-wrapper
+    .media-container
+    video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--object-position);
+  }
+
+  @media only screen and (max-width: 767.98px) {
+    .page-header
+      .page-header-container
+      .page-header-grid
+      .media
+      .media-item
+      .media-wrapper
+      .media-container
+      picture,
+    .page-header
+      .page-header-container
+      .page-header-grid
+      .media
+      .media-item
+      .media-wrapper
+      .media-container
+      img,
+    .page-header
+      .page-header-container
+      .page-header-grid
+      .media
+      .media-item
+      .media-wrapper
+      .media-container
+      svg,
+    .page-header
+      .page-header-container
+      .page-header-grid
+      .media
+      .media-item
+      .media-wrapper
+      .media-container
+      video {
+      left: 0;
+      width: 100%;
+      transform: unset;
+    }
+  }
+
+  .page-header .full-width .content {
+    z-index: 1;
+  }
+
+  .page-header .full-width .content.truncate-text .rte {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--webkit-line-clamp);
+    line-clamp: var(--webkit-line-clamp);
+  }
+
+  .page-header .full-width .content.span-centre {
+    text-align: center;
+  }
+  .page-header .full-width .content.span-centre a {
+    display: block;
+    margin-inline: auto;
+  }
+
+  @media only screen and (min-width: 768px) {
+    .page-header .full-width .content.span-centre {
+      grid-column: 4 / 10;
+      padding-inline: 0;
+    }
+  }
+{%- endstylesheet -%}
+
+{% schema %}
+{
+  "name": "Page Header",
+  "tag": "section",
+  "class": "page-header overflow-hidden isolate",
+  "max_blocks": 1,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "select",
+      "id": "style_selector",
+      "label": "Styling Type",
+      "options": [
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "theme"
+    },
+    {
+      "type": "select",
+      "id": "section_styling",
+      "label": "Section Style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "third",
+          "label": "Third"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ section.settings.style_selector == 'theme' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "background_color",
+      "label": "Background Colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Colour",
+      "default": "#393939",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "overlay_type",
+      "label": "Overlay Type",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ section.settings.layout_style == 'full-width' }}"
+    },
+    {
+      "type": "select",
+      "id": "overlay_styling",
+      "label": "Overlay Style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "third",
+          "label": "Third"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ section.settings.overlay_type == 'theme' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "overlay_color",
+      "label": "Overlay Colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ section.settings.overlay_type == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout_style",
+      "label": "Layout Style",
+      "options": [
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        },
+        {
+          "value": "side-by-side",
+          "label": "Side by Side"
+        }
+      ],
+      "default": "full-width"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centre"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "checkbox",
+      "id": "truncate_text",
+      "label": "Truncate Text",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "truncate_lines",
+      "label": "Truncate by number of lines",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 3,
+      "visible_if": "{{ section.settings.truncate_text == true }}"
+    }
+  ],
+  "blocks": [{ "type": "section-content" }],
+  "enabled_on": {
+    "templates": ["page", "blog", "list-collections"]
+  },
+  "presets": [
+    {
+      "name": "Page Header",
+      "category": "Content"
+    }
+  ]
+}
+{% endschema %}

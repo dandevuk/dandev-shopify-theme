@@ -1,0 +1,71 @@
+{%- liquid
+  assign heading_type = block.settings.heading_type
+  assign heading_size = block.settings.heading_size
+-%}
+<{{ heading_type }} class="{{ heading_size }} relative" {{ block.shopify_attributes }}>
+  {{ block.settings.heading }}
+</{{ heading_type }}>
+
+{% schema %}
+{
+  "name": "Heading",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_type",
+      "label": "Select",
+      "options": [
+        {
+          "value": "h1",
+          "label": "H1"
+        },
+        {
+          "value": "h2",
+          "label": "H2"
+        },
+        {
+          "value": "h3",
+          "label": "H3"
+        }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading Size",
+      "options": [
+        {
+          "value": "heading-h0",
+          "label": "Extra Large"
+        },
+        {
+          "value": "heading-h1",
+          "label": "Large"
+        },
+        {
+          "value": "heading-h2",
+          "label": "Medium"
+        },
+        {
+          "value": "heading-h3",
+          "label": "Small"
+        }
+      ],
+      "default": "heading-h1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Heading"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,310 @@
+{%- liquid
+  assign blocks = section.blocks
+
+  # STYLING
+  assign style_selector = section.settings.style_selector
+  assign section_styling = section.settings.section_styling
+  assign background_color = section.settings.background_color
+  assign text_color = section.settings.text_color
+
+  # LAYOUT
+  assign vertical_spacing = section.settings.vertical_spacing
+  assign custom_spacing = section.settings.custom_spacing
+  assign top_spacing = section.settings.top_spacing
+  assign bottom_spacing = section.settings.bottom_spacing
+  assign top_spacing_mobile = section.settings.top_spacing_mobile
+  assign bottom_spacing_mobile = section.settings.bottom_spacing_mobile
+  assign page_width = section.settings.page_width
+
+  assign autoplay = section.settings.autoplay
+  assign marquee_autoplay = autoplay | times: 10 | prepend: '--animation-speed:' | append: 's;'
+
+  # Check Enough Slides to Loop
+  assign min_blocks = 4
+  assign repeat_times = min_blocks | plus: 0.0 | divided_by: blocks.size | ceil | at_least: 1 | at_most: 10
+-%}
+
+{%- if blocks.size > 0 -%}
+  <div
+    class="{% unless custom_spacing %}{{ vertical_spacing }}{% else %}custom-spacing{% endunless %}"
+    style="
+      {%- if custom_spacing -%}
+        {%- if vertical_spacing == 'vertical-padding' -%}
+          padding-top: {{ top_spacing }}px; padding-bottom: {{ bottom_spacing }}px;--mobile-padding-top: {{ top_spacing_mobile }}px; --mobile-padding-bottom: {{ bottom_spacing_mobile }}px;
+        {%- elsif vertical_spacing == 'vertical-margin' -%}
+          margin-top: {{ top_spacing }}px; margin-bottom: {{ bottom_spacing }}px;--mobile-margin-top: {{ top_spacing_mobile }}px; --mobile-margin-bottom: {{ bottom_spacing_mobile }}px;
+        {%- elsif vertical_spacing == 'vertical-margin vertical-padding' -%}
+          padding-top: {{ top_spacing }}px; padding-bottom: {{ bottom_spacing }}px; margin-top: {{ top_spacing }}px; margin-bottom: {{ bottom_spacing }}px; --mobile-padding-top: {{ top_spacing_mobile }}px; --mobile-padding-bottom: {{ bottom_spacing_mobile }}px; --mobile-margin-top: {{ top_spacing_mobile }}px; --mobile-margin-bottom: {{ bottom_spacing_mobile }}px;
+        {%- endif -%}
+      {%- endif -%}
+    "
+  >
+    <div
+      class="marquee section-container {{ section_styling }} {{ page_width }} flex-1 w-100 overflow-hidden isolate relative flex-start align-center g-3"
+      style=" {% if style_selector == 'custom' %}background: {{ background_color }}; color: {{ text_color }};--custom-text-color: {{ text_color }};{% endif %} {{- marquee_autoplay -}}"
+    >
+      {%- for i in (1..2) -%}
+        <div class="animation-container z-1 flex-start align-center g-3">
+          {%- for i in (1..repeat_times) -%}
+            {%- content_for 'blocks' -%}
+          {%- endfor -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  section.scrolling-marquee-section {
+    cursor: default;
+  }
+
+  section.scrolling-marquee-section:not(:has(.marquee-slide)) {
+    display: none !important;
+  }
+
+  section.scrolling-marquee-section:hover .marquee .animation-container {
+    animation-play-state: paused;
+  }
+
+  section.scrolling-marquee-section .marquee .marquee-slide {
+    transition: 0.15s ease-in-out 0.1s;
+    color: inherit;
+  }
+
+  section.scrolling-marquee-section .marquee .marquee-slide,
+  section.scrolling-marquee-section .marquee .marquee-slide > * {
+    margin-block: 0;
+  }
+
+  section.scrolling-marquee-section .marquee .marquee-slide .marquee-slide-spacer {
+    content: '';
+    background-color: var(--color);
+    width: 14px;
+    vertical-align: middle;
+  }
+
+  @media (max-width: 768px) {
+    section.scrolling-marquee-section .marquee .marquee-slide .marquee-slide-spacer {
+      width: 12px;
+    }
+  }
+
+  section.scrolling-marquee-section .marquee:hover .animation-container {
+    animation-play-state: paused;
+  }
+
+  section.scrolling-marquee-section .marquee .animation-container {
+    flex-flow: row nowrap;
+    animation-play-state: running;
+    animation: infiniteScroll 10s linear infinite;
+    animation-duration: var(--animation-speed);
+  }
+
+  section.scrolling-marquee-section .marquee .animation-container .marquee-slide > a {
+    color: inherit;
+    white-space: nowrap;
+  }
+
+  @keyframes infiniteScroll {
+    0% {
+      translate: 0% 0%;
+    }
+    100% {
+      translate: calc(-100% - 20px) 0%;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Scrolling Marquee",
+  "tag": "section",
+  "class": "scrolling-marquee-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "select",
+      "id": "style_selector",
+      "label": "Styling Type",
+      "options": [
+        {
+          "value": "theme",
+          "label": "Theme"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "theme"
+    },
+    {
+      "type": "select",
+      "id": "section_styling",
+      "label": "Section Style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "third",
+          "label": "Third"
+        },
+        {
+          "value": "fourth",
+          "label": "Fourth"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ section.settings.style_selector == 'theme' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "background_color",
+      "label": "Background Colour",
+      "default": "linear-gradient(#ffffff, #ffffff)",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Colour",
+      "default": "#393939",
+      "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "page_width",
+      "label": "Page Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Default"
+        },
+        {
+          "value": "page-width--narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "page-width--wide",
+          "label": "Wide"
+        },
+        {
+          "value": "page-width--full",
+          "label": "Full Width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "select",
+      "id": "vertical_spacing",
+      "label": "Vertical Spacing",
+      "options": [
+        {
+          "value": "vertical-margin",
+          "label": "Margin"
+        },
+        {
+          "value": "vertical-padding",
+          "label": "Padding"
+        },
+        {
+          "value": "vertical-margin vertical-padding",
+          "label": "Margin and Padding"
+        },
+        {
+          "value": "",
+          "label": "None"
+        }
+      ],
+      "default": "vertical-margin",
+      "info": "This uses the global spacing settings from the theme settings to ensure consistent spacing between sections. If you want to use custom spacing, please check the 'Custom Spacing' option."
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_spacing",
+      "label": "Custom Spacing",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "top_spacing",
+      "label": "Top Spacing",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 120,
+      "visible_if": "{{ section.settings.custom_spacing == true }}"
+    },
+    {
+      "type": "range",
+      "id": "bottom_spacing",
+      "label": "Bottom Spacing",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 120,
+      "visible_if": "{{ section.settings.custom_spacing == true }}"
+    },
+    {
+      "type": "range",
+      "id": "top_spacing_mobile",
+      "label": "Mobile Top Spacing",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 60,
+      "visible_if": "{{ section.settings.custom_spacing == true }}"
+    },
+    {
+      "type": "range",
+      "id": "bottom_spacing_mobile",
+      "label": "Mobile Bottom Spacing",
+      "min": 0,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "default": 60,
+      "visible_if": "{{ section.settings.custom_spacing == true }}"
+    },
+    {
+      "type": "header",
+      "content": "Behaviour Settings"
+    },
+    {
+      "type": "range",
+      "min": 6,
+      "max": 30,
+      "step": 2,
+      "unit": "s",
+      "id": "autoplay",
+      "label": "Autoplay Speed",
+      "default": 6
+    }
+  ],
+  "blocks": [{ "type": "_marquee_slide" }],
+  "presets": [
+    {
+      "name": "Scrolling Marquee",
+      "category": "Content"
+    }
+  ]
+}
+{% endschema %}

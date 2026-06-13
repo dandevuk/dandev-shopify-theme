@@ -1,0 +1,80 @@
+{%- liquid
+
+  if closest.article != blank
+    assign article = closest.article
+  endif
+
+  assign lazy = false
+  if section.index > 2
+    assign lazy = true
+  endif
+-%}
+<article
+  class="article-card flex flex-col g-3 relative h-100"
+  itemscope
+  itemtype="https://schema.org/BlogPosting"
+  itemid="{{ article.url }}"
+>
+  <a
+    href="{{ article.url }}"
+    class="article-card-image card-image border-radius overflow-hidden {% if card_style == 'square' %}ar-1{% else %}ar-16-9{% endif %}"
+    aria-label="{{ 'sections.header.link_to' | t }}: {{ article.title | strip_html }}"
+  >
+    {%- liquid
+      if article.image != blank
+        render 'image', image: article.image, max_width: 400, use_placeholder: true, lazy: lazy, itemprop: 'image', class: 'object-cover', context_text: article.title
+      elsif settings.article_fallback != blank
+        render 'image', image: settings.article_fallback, max_width: 400, use_placeholder: true, lazy: lazy, itemprop: 'image', class: 'object-cover', context_text: article.title
+      else
+        echo 'lifestyle-1' | placeholder_svg_tag
+      endif
+    -%}
+
+    {%- if slider == true -%}
+      <div class="slider-lazy-preloader"></div>
+    {%- endif -%}
+  </a>
+
+  <a href="{{ article.url }}" class="article-card-title vertical-clamp-one" itemprop="headline">
+    <span class="heading-h3">{{- article.title | strip_html -}}</span>
+  </a>
+
+  <div
+    class="article-card-author"
+    itemprop="author"
+    itemscope
+    itemtype="https://schema.org/Person"
+  >
+    <span itemprop="name">{{ article.author }}</span> -
+    <span itemprop="datePublished" datetime="{{ article.updated_at }}">
+      {{- article.updated_at | date: '%d/%m/%Y' -}}
+    </span>
+  </div>
+
+  <div class="article-card-excerpt vertical-clamp-two" itemprop="abstract">
+    {{- article.excerpt_or_content | strip_html -}}
+  </div>
+
+  <a href="{{ article.url }}" class="article-card-link button-2">
+    {{- 'blogs.article.read_full' | t -}}
+  </a>
+
+  {%- if article.tags.size > 0 -%}
+    {%- render 'article-tags', article: article, class: 'flex flex-col g-2 badge-container top-left', tag_class: 'badge-1', limit: 3, tag_links: false -%}
+  {%- endif -%}
+</article>
+
+{%- stylesheet -%}
+  .article-card:hover img {
+    transform: scale(1.05);
+  }
+
+  .article-card .article-card-image img {
+    transition: all 0.3s;
+  }
+
+  .article-card .article-card-tags {
+    top: 0;
+    left: 0;
+  }
+{%- endstylesheet -%}

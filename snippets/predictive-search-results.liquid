@@ -1,0 +1,438 @@
+{%- liquid
+  # - - - - - - - - - - - - - - - - - - - - - - -
+  #   Recommended Products [Theme Settings]
+  # - - - - - - - - - - - - - - - - - - - - - - -
+  assign search_recommended_products = settings.search_recommended_products
+  assign search_recommended_collection = settings.search_recommended_collection
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+  #   Recommended Links [Theme Settings]
+  # - - - - - - - - - - - - - - - - - - - - - - -
+  assign search_recommended_collections = settings.search_recommended_collections
+  assign search_recommended_articles = settings.search_recommended_articles
+  assign search_recommended_pages = settings.search_recommended_pages
+  assign search_recommended_useful_links = settings.search_recommended_links
+  # assign search_recent_searches = settings.search_recent_searches
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+  #   Search Translations
+  # - - - - - - - - - - - - - - - - - - - - - - -
+  #   * Note: Some variables are being accessed dynamically.
+  assign link_to_t = 'accessibility.link_messages.link_to'
+  assign search_heading_t = 'general.search.search' | t
+  assign no_results_general_t = 'general.search.no_results.general' | t
+  assign no_results_products_t = 'general.search.no_results.products' | t
+  assign no_results_heading_t = 'general.search.no_results.heading' | t
+  assign search_prompt_t = 'general.search.search_prompt' | t
+  assign browse_collections_t = 'general.search.browse_collections' | t
+  assign shop_all_products_t = 'general.search.shop_all_products' | t
+
+  # Recommended Headings
+  assign useful_links_recommended_heading_t = 'general.search.useful_links' | t
+  assign recent_searches_recommended_heading_t = 'general.search.recent_searches' | t
+  assign products_recommended_heading_t = 'general.search.recommended_products' | t
+  assign collections_recommended_heading_t = 'general.search.recommended_collections' | t
+  assign articles_recommended_heading_t = 'general.search.recommended_articles' | t
+  assign pages_recommended_heading_t = 'general.search.recommended_pages' | t
+
+  # Predictive Headings
+  assign products_heading_t = 'general.search.headings.products' | t
+  assign collections_heading_t = 'general.search.headings.collections' | t
+  assign articles_heading_t = 'general.search.headings.articles' | t
+  assign pages_heading_t = 'general.search.headings.pages' | t
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+  #   Button URLs
+  # - - - - - - - - - - - - - - - - - - - - - - -
+  assign predictive_search_url = routes.root_url | append: 'search?q=' | append: predictive_search.terms
+  assign shop_all_url = routes.root_url | append: 'collections/all'
+  assign browse_collections_url = routes.root_url | append: 'collections'
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+  #   Sidebar Variables
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  # Sidebar Resource Types [Predictive]
+  assign sidebar_predictive_resource_types = 'collections,pages,articles' | split: ','
+
+  # Sidebar Resource Types [Default]
+  assign sidebar_default_resource_types = 'collections,articles,pages,useful_links' | split: ','
+
+  # Sidebar Result Count Variables
+  assign sidebar_predictive_total_result_count = 0 | plus: 0
+  assign sidebar_default_total_result_count = 0 | plus: 0
+
+  # Sidebar Search Result Count [Predictive]
+  for resource_type in sidebar_predictive_resource_types
+    assign resource_results = predictive_search.resources[resource_type]
+    assign result_count = resource_results.size
+    assign sidebar_predictive_total_result_count = sidebar_predictive_total_result_count | plus: result_count
+  endfor
+
+  # Sidebar Recommended Result Count [Default]
+  if search_recommended_articles != blank or search_recommended_pages != blank or search_recommended_useful_links != blank or search_recommended_collections != blank
+    assign sidebar_default_total_result_count = sidebar_default_total_result_count | plus: search_recommended_articles.size | plus: search_recommended_page.size | plus: search_recommended_useful_links.size | plus: search_recommended_collections.count
+  endif
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  #   Predictive/Default Show/Hide Hierachy Rules
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  assign search_status = blank
+  assign sidebar_resource_types = blank
+
+  if predictive_search.performed
+    # Show Predictive Search Results
+    assign search_status = 'predictive'
+    assign sidebar_resource_types = sidebar_predictive_resource_types
+    assign resource_heading_var_prefix = '_heading_t'
+    assign sidebar_total_results_count = sidebar_predictive_total_result_count
+    assign filter_sidebar_objects = false
+
+    assign products_heading_t = products_heading_t
+    assign product_results = predictive_search.resources.products
+    assign product_results_count = product_results.size
+
+    # Show Default Products
+    if product_results_count == 0
+      assign products_heading_t = no_results_heading_t
+      assign product_results = search_recommended_products | default: search_recommended_collection.products
+      assign product_results_count = product_results.count
+    endif
+
+    # Show Default Sidebar
+    if sidebar_total_results_count == 0
+      assign sidebar_resource_types = sidebar_default_resource_types
+      assign resource_heading_var_prefix = '_recommended_heading_t'
+      assign resource_var = 'search_recommended_'
+      assign sidebar_total_results_count = sidebar_default_total_result_count
+      assign filter_sidebar_objects = true
+    endif
+
+  else
+    # Show Default Content as Fallback
+    assign sidebar_resource_types = sidebar_default_resource_types
+    assign resource_heading_var_prefix = '_recommended_heading_t'
+    assign resource_var = 'search_recommended_'
+    assign sidebar_total_results_count = sidebar_default_total_result_count
+    assign filter_sidebar_objects = true
+
+    # assign products_heading_t = products_recommended_heading_t
+    # assign product_results = search_recommended_products | default: search_recommended_collection.products
+    # assign product_results_count = product_results.count
+  endif
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+-%}
+
+{%- capture sidebar_content -%}
+  {%- for resource_type in sidebar_resource_types -%}
+    {%- liquid
+      assign resource_heading_var = resource_type | append: resource_heading_var_prefix
+      assign resource_heading = [resource_heading_var]
+
+      if filter_sidebar_objects == false
+        assign resource_results = predictive_search.resources[resource_type]
+        assign result_count = resource_results.size
+      else
+        assign recommended_resources_var = resource_var | append: resource_type
+        assign recommended_resources_object = [recommended_resources_var]
+
+        if resource_type == 'pages' or resource_type == 'useful_links'
+          assign resource_results = recommended_resources_object.links
+        elsif resource_type == 'articles'
+          assign resource_results = recommended_resources_object.articles
+        else
+          assign resource_results = recommended_resources_object
+        endif
+
+        assign result_count = resource_results.size | default: resource_results.count
+      endif
+    -%}
+
+    {%- if result_count > 0 -%}
+        {%- if resource_type == 'collections' -%}
+            {%- assign creator_handle_string = '' -%}
+            {%- assign standard_handle_string = '' -%}
+
+            {%- for collection in resource_results -%}
+            {%- if collection.metafields.collection_data.creator != blank -%}
+                {%- assign creator_handle_string = creator_handle_string | append: collection.handle | append: ',' -%}
+            {%- else -%}
+                {%- assign standard_handle_string = standard_handle_string | append: collection.handle | append: ',' -%}
+            {%- endif -%}
+            {%- endfor -%}
+
+            {%- assign creator_handles = creator_handle_string | split: ',' -%}
+            {%- assign standard_handles = standard_handle_string | split: ',' -%}
+
+            {%- if standard_handles.size > 0 and standard_handles.first != '' -%}
+            <ul class="sidebar-resource-group w-100 m-0 p-0 flex-start align-start flex-col g-0">
+                <div class="resource-heading heading-h3 resource-heading--collections w-100 text-left uppercase relative mb-2">
+                {{ resource_heading }}
+                {{ 'icon-chevron.svg' | inline_asset_content }}
+                </div>
+                <div class="resource-content w-100 flex-start align-start flex-col g-2 overflow-hidden {% if forloop.first %}accordion-open{% endif %}">
+                {%- for handle in standard_handles -%}
+                    {%- assign collection = collections[handle] -%}
+                    {%- if collection != blank -%}
+                    <li class="resource-list-item w-100 p-0 m-0 text-left">
+                        <a class="resource-link block w-100" href="{{ collection.url }}" aria-label="{{ collection.title }}">
+                        {{ collection.title }}
+                        </a>
+                    </li>
+                    {%- endif -%}
+                {%- endfor -%}
+                </div>
+            </ul>
+            {%- endif -%}
+        {%- else -%}
+            <ul class="sidebar-resource-group w-100 m-0 p-0 flex-start align-start flex-col g-0">
+            <div class="resource-heading heading-h3 {{ ' resource-heading--' | append: resource_type }} w-100 text-left uppercase relative mb-2">
+                {{ resource_heading }}
+                {{ 'icon-chevron.svg' | inline_asset_content }}
+            </div>
+            <div class="resource-content w-100 flex-start align-start flex-col g-2 overflow-hidden {% if forloop.first %}accordion-open{% endif %}">
+                {%- for resource in resource_results -%}
+                    <li class="resource-list-item w-100 p-0 m-0 text-left">
+                        <a class="resource-link block w-100" href="{{ resource.url }}" aria-label="{{ resource.title }}">
+                        {{ resource.title }}
+                        </a>
+                    </li>
+                {%- endfor -%}
+            </div>
+            </ul>
+        {%- endif -%}
+        {%- endif -%}
+
+  {%- endfor -%}
+{%- endcapture -%}
+
+{%- capture product_grid_header -%}
+    <div class="product-grid-heading-container w-100 flex-between align-center gap-sm">
+        {%- if predictive_search.performed -%}
+            <div class="heading-h2 product-grid-heading flex-1 text-left mr-auto">{{- products_heading_t -}}</div>
+        {%- else -%}
+            <div class="heading-h2 product-grid-heading flex-1 text-left mr-auto">{{- products_recommended_heading_t -}}</div>
+        {%- endif -%}
+
+        {%- if predictive_search.performed -%}
+            <a class="product-grid-heading-btn button-1 ml-auto" href="{{- predictive_search_url -}}" aria-label="{{- link_to_t | t: link: shop_all_products_t -}}">
+                {{- shop_all_products_t -}}
+            </a>
+        {%- else -%}
+            <a class="product-grid-heading-btn button-1 ml-auto" href="{{- shop_all_url -}}" aria-label="{{- link_to_t | t: link: shop_all_products_t -}}">
+                {{- shop_all_products_t -}}
+            </a>
+        {%- endif -%}
+    </div>
+{%- endcapture -%}
+
+{% comment %} SIDEBAR {% endcomment %}
+{%- if sidebar_total_results_count > 0 -%}
+  <aside class="predictive-search-results__sidebar span-3 w-100 flex-start align-start flex-col opacity-1 g-3 pt-4">
+    {{- sidebar_content -}}
+  </aside>
+{%- endif -%}
+
+{% comment %} PRODUCT GRID {% endcomment %}
+<div class="predictive-search-results__product-grid-outer span-9 opacity-1 w-100">
+  {% comment %} ACCORDION HEADER [MOBILE] {% endcomment %}
+  <div class="resource-heading heading-h3 resource-heading--product-grid w-100 text-left uppercase relative">
+    {{- products_heading_t -}}
+    {{ 'icon-chevron.svg' | inline_asset_content }}
+  </div>
+
+  <section class="predictive-search-results__product-grid search-inactive w-100 grid g-3 pt-4 pb-4 m-h-0">
+    {% comment %} GRID HEADER [DESKTOP] {% endcomment %}
+    {{- product_grid_header -}}
+
+    {%- if product_results_count > 0 -%}
+      {%- for product in product_results limit: 10 -%}
+        {%- render 'product-card', product: product, lazy: true -%}
+      {%- endfor -%}
+
+      <a
+        class="product-grid-footer-link button-1 to-md-block hidden text-left to-sm-mb-6"
+        href="{%- if predictive_search.performed and predictive_search.resources.products.size > 0 -%}{{- predictive_search_url -}}{%- else -%}{{- shop_all_url -}}{%- endif -%}"
+        aria-label="{{- link_to_t | t: link: shop_all_products_t -}}"
+      >
+        {{- shop_all_products_t -}}
+      </a>
+
+    {%- else -%}
+      <div class="heading-h3 no-results span-3 flex-1 text-center pt-5 pb-5 flex flex-col g-4 align-center">
+        {{- no_results_general_t -}}
+        <a
+          href="{{- shop_all_url -}}"
+          class="button-1 hidden to-sm-block"
+          aria-label="{{- link_to_t | t: link: shop_all_products_t -}}"
+        >
+          {{- shop_all_products_t -}}
+        </a>
+      </div>
+    {%- endif -%}
+  </section>
+</div>
+
+{% stylesheet %}
+  predictive-search.predictive-search-section .predictive-search-results__sidebar,
+  predictive-search.predictive-search-section .predictive-search-results__product-grid-outer {
+    transition: opacity 0.25s ease-in 0.1s;
+  }
+
+  /* Sidebar */
+
+  predictive-search.predictive-search-section
+    .predictive-search-results__sidebar
+    .sidebar-resource-group {
+    position: relative;
+    list-style-type: none;
+  }
+
+  @media screen and (max-width: 992px) {
+    predictive-search.predictive-search-section .predictive-search-results__sidebar {
+      gap: var(--content-spacing-1);
+    }
+    predictive-search.predictive-search-section
+      .predictive-search-results__sidebar
+      .sidebar-resource-group::before {
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background-color: var(--brand-color-5);
+      content: '';
+    }
+  }
+
+  predictive-search.predictive-search-section
+    .predictive-search-results__sidebar
+    .sidebar-resource-group
+    .resource-heading
+    svg
+    path {
+    stroke: var(--brand-color-2);
+  }
+
+  @media screen and (min-width: 992px) {
+    predictive-search.predictive-search-section
+      .predictive-search-results__sidebar
+      .sidebar-resource-group
+      .resource-heading
+      svg {
+      display: none;
+    }
+    predictive-search.predictive-search-section
+      .predictive-search-results__sidebar
+      .sidebar-resource-group
+      .resource-heading {
+      pointer-events: none;
+    }
+  }
+
+  @media screen and (max-width: 992px) {
+    predictive-search.predictive-search-section
+      .predictive-search-results__sidebar
+      .sidebar-resource-group
+      .resource-content {
+      max-height: 0;
+    }
+  }
+  predictive-search.predictive-search-section
+    .predictive-search-results__sidebar
+    .sidebar-resource-group
+    .resource-content.accordion-open {
+    max-height: var(--content-height, 0);
+    margin-top: 16px;
+    margin-bottom: 20px;
+  }
+
+  predictive-search.predictive-search-section
+    .predictive-search-results__sidebar
+    .sidebar-resource-group
+    .resource-list-item {
+    color: var(--text-primary-color);
+    font-size: 16px;
+  }
+
+  predictive-search.predictive-search-section
+    .predictive-search-results__sidebar
+    .sidebar-resource-group
+    .resource-list-item
+    .resource-link {
+    width: max-content;
+    color: inherit;
+    font-size: 14px;
+    font-weight: inherit;
+    text-decoration: none;
+  }
+
+  predictive-search.predictive-search-section
+    .predictive-search-results__sidebar
+    .sidebar-resource-group
+    .resource-list-item:hover {
+    color: var(--primary-color);
+  }
+
+  /* Product Grid */
+
+  predictive-search.predictive-search-section:not(:has(.predictive-search-results__sidebar))
+    .predictive-search-results__product-grid-outer {
+    grid-column: span 12;
+  }
+
+  predictive-search.predictive-search-section .predictive-search-results__product-grid {
+    grid-template-columns: repeat(auto-fill, minmax(clamp(260px, 12vw, 340px), 1fr));
+    max-height: var(--content-height, 0);
+    margin-bottom: 20px;
+  }
+  predictive-search.predictive-search-section
+    .predictive-search-results__product-grid
+    .product-grid-heading-container {
+    grid-column: 1 / -1;
+  }
+  predictive-search.predictive-search-section
+    .predictive-search-results__product-grid-outer
+    .resource-heading {
+    display: none;
+  }
+
+  @media screen and (max-width: 992px) {
+    predictive-search.predictive-search-section .predictive-search-results__product-grid {
+      padding: 0;
+    }
+    predictive-search.predictive-search-section
+      .predictive-search-results__product-grid
+      .product-grid-heading-container
+      .product-grid-heading {
+      display: none;
+    }
+    predictive-search.predictive-search-section
+      .predictive-search-results__product-grid
+      .product-grid-heading-container
+      .product-grid-heading-btn {
+      display: none;
+    }
+    predictive-search.predictive-search-section
+      .predictive-search-results__product-grid-outer
+      .resource-heading.active {
+      display: flex !important;
+    }
+  }
+
+  predictive-search.predictive-search-section
+    .predictive-search-results__product-grid
+    .product-grid-footer-link {
+    width: max-content;
+  }
+
+  @media screen and (max-width: 992px) {
+    predictive-search.predictive-search-section
+      .predictive-search-results__product-grid
+      .product-grid-footer-link {
+      grid-column: span 2;
+      margin-right: auto;
+      margin-left: auto;
+    }
+  }
+{% endstylesheet %}

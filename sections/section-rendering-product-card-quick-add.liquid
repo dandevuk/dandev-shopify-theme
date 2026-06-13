@@ -1,0 +1,19 @@
+{%- comment -%}
+  Minimal section for the Section Rendering API — returns one product-card-quick-add
+  so variant updates keep dropdown/card markup (not the full PDP section).
+{%- endcomment -%}
+
+{%- render 'product-card-quick-add',
+  prod: product,
+  section_id: section.id
+-%}
+
+{% schema %}
+{
+  "name": "Product card quick add",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": []
+}
+{% endschema %}

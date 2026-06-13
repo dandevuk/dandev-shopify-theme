@@ -1,0 +1,204 @@
+{%- liquid
+  assign slider_content = slides | default: ''
+  assign slider_id = slider_id | default: block.id | default: section.id
+
+  assign nav_scope_fallback = ''
+  if section and section.id
+    assign nav_scope_fallback = '#shopify-section-' | append: section.id
+  endif
+  assign nav_scope = nav_scope | default: nav_scope_fallback
+
+  assign base_class = base_class | default: 'blaze-loading'
+
+  if section.settings.toggle_top_margin_large
+    assign base_class = base_class | append: ' mt-5'
+  endif
+
+  assign custom_class_setting = block.settings.custom_class
+  assign custom_class = custom_class | default: custom_class_setting
+  assign container_classes = base_class
+
+  if custom_class != blank
+    assign container_classes = container_classes | append: ' ' | append: custom_class
+  endif
+
+  if full_width_mobile
+    assign container_classes = container_classes | append: ' overflow-mobile' | append: ' relative'
+  endif
+
+  assign loop_setting = loop_setting
+  if loop_setting == nil
+    if section and section.settings and section.settings.loop != nil
+      assign loop_setting = section.settings.loop
+    endif
+
+    if block and block.settings and block.settings.loop != nil
+      assign loop_setting = block.settings.loop
+    endif
+  endif
+  if autoplay_setting == nil
+    assign autoplay_setting = block.settings.autoplay
+  endif
+
+  assign autoplay_delay_setting = autoplay_delay_setting
+  if autoplay_delay_setting == nil
+    assign autoplay_delay_setting = block.settings.autoplay_delay | default: 3
+  endif
+  assign autoplay_delay_ms = autoplay_delay_setting | times: 1000
+  if show_pagination == nil
+    assign show_pagination = block.settings.show_pagination
+  endif
+  if show_scrollbar == nil
+    assign show_scrollbar = block.settings.scrollbar_display
+  endif
+  if custom_layout == false
+    assign slides_per_view_tablet = blank
+    assign slides_per_view_desktop = blank
+    assign slides_per_view_large_desktop = blank
+    assign slides_per_view_mobile = blank
+  endif
+
+  assign space_between_mobile = slider_spacing_mobile | default: settings.slider_spacing_tablet
+  assign space_between_tablet = slider_spacing_tablet | default: settings.slider_spacing_tablet
+  assign space_between_desktop = slider_spacing_desktop | default: settings.slider_spacing_large_desktop
+  assign space_between_large_desktop = slider_spacing_large_desktop | default: settings.slider_spacing_large_desktop
+
+  assign slider_mobile = slides_per_view_mobile | default: settings.slides_per_view_mobile
+  assign slider_tablet = slides_per_view_tablet | default: settings.slides_per_view_tablet
+  assign slider_desktop = slides_per_view_desktop | default: settings.slides_per_view_desktop
+  assign slider_wide = slides_per_view_large_desktop | default: settings.slides_per_view_large_desktop
+  assign desktop_slides_to_show = slider_desktop | plus: 0
+  assign wide_slides_to_show = slider_wide | plus: 0
+  assign total_slides_count = total_slides | default: 0 | plus: 0
+  assign slider_initial = initial_slide | default: block.settings.initial_slide | default: 0 | plus: 0
+
+  assign centered_slides_setting = centered_slides
+  if centered_slides_setting == blank and block and block.settings
+    assign centered_slides_setting = block.settings.centered_slides
+  endif
+  if centered_slides_setting == blank and section and section.settings
+    assign centered_slides_setting = section.settings.centered_slides
+  endif
+
+  if centered_slides_setting == blank
+    assign centered_slides_setting = 'none'
+  endif
+
+  assign blaze_centered_slides_setting = centered_slides_setting
+  if centered_slides_setting == 'desktop'
+    assign blaze_centered_slides_setting = 'none'
+  elsif centered_slides_setting == 'both'
+    assign blaze_centered_slides_setting = 'mobile'
+  endif
+
+  if blaze_centered_slides_setting == 'mobile' or blaze_centered_slides_setting == 'both'
+    assign container_classes = container_classes | append: ' blaze-slider--centered-mobile'
+  endif
+
+  if blaze_centered_slides_setting == 'desktop' or blaze_centered_slides_setting == 'both'
+    assign container_classes = container_classes | append: ' blaze-slider--centered-desktop'
+  endif
+
+  assign should_center_track_desktop = false
+  assign should_center_track_wide = false
+  if total_slides_count > 0
+    if centered_slides_setting == 'desktop' or centered_slides_setting == 'both'
+      if desktop_slides_to_show > total_slides_count
+        assign should_center_track_desktop = true
+      endif
+      if wide_slides_to_show > total_slides_count
+        assign should_center_track_wide = true
+      endif
+    endif
+  endif
+
+  assign show_scrollbar = show_scrollbar | default: block.settings.show_scrollbar | default: false
+  if show_scrollbar == true
+    assign show_scrollbar = 'both'
+  elsif show_scrollbar == false
+    assign show_scrollbar = 'none'
+  endif
+
+-%}
+
+<div class="blaze-container-wrapper isolate relative" {{ shopify_attributes }}>
+  <div
+    id="blaze-slider-{{ slider_id }}"
+    class="blaze-slider {{ container_classes | strip }}"
+    style="
+      --slides-to-show-mobile: {{ slider_mobile }};
+      --slides-to-show-tablet: {{ slider_tablet }};
+      --slides-to-show-desktop: {{ slider_desktop }};
+      --slides-to-show-wide: {{ slider_wide }};
+      --slide-gap-mobile: {{ space_between_mobile }}px;
+      --slide-gap-tablet: {{ space_between_tablet }}px;
+      --slide-gap-desktop: {{ space_between_desktop }}px;
+      --slide-gap-wide: {{ space_between_large_desktop }}px;
+    "
+    data-blaze-slider
+    data-slider-nav-scope="{{ nav_scope }}"
+    data-slider-mobile="{{ slider_mobile }}"
+    data-slider-tablet="{{ slider_tablet }}"
+    data-slider-desktop="{{ slider_desktop }}"
+    data-slider-wide="{{ slider_wide }}"
+    data-slider-gap-mobile="{{ space_between_mobile }}"
+    data-slider-gap-tablet="{{ space_between_tablet }}"
+    data-slider-gap-desktop="{{ space_between_desktop }}"
+    data-slider-gap-wide="{{ space_between_large_desktop }}"
+    data-slider-initial="{{ slider_initial }}"
+    {% if loop_setting != nil %}
+      data-slider-loop="{% if loop_setting %}true{% else %}false{% endif %}"
+    {% endif %}
+    data-slider-centered="{{ blaze_centered_slides_setting }}"
+    data-slider-pagination="{% if show_pagination %}true{% else %}false{% endif %}"
+    data-slider-autoplay="{% if autoplay_setting %}true{% else %}false{% endif %}"
+    data-slider-autoplay-interval="{{ autoplay_delay_ms }}"
+    role="region"
+    aria-roledescription="carousel"
+    aria-label="Carousel"
+  >
+    <div class="blaze-track-container">
+      <div class="blaze-track">
+        {{ slider_content }}
+      </div>
+    </div>
+    {%- if show_scrollbar == 'both' -%}
+      <div class="blaze-scrollbar mt-8" data-blaze-scrollbar hidden aria-hidden="true">
+        <span class="blaze-scrollbar-thumb" data-blaze-scrollbar-thumb></span>
+      </div>
+    {%- elsif show_scrollbar == 'desktop' -%}
+      <div class="blaze-scrollbar mt-8 to-sm-hidden" data-blaze-scrollbar hidden aria-hidden="true">
+        <span class="blaze-scrollbar-thumb" data-blaze-scrollbar-thumb></span>
+      </div>
+    {%- elsif show_scrollbar == 'mobile' -%}
+      <div class="blaze-scrollbar mt-8 from-sm-hidden" data-blaze-scrollbar hidden aria-hidden="true">
+        <span class="blaze-scrollbar-thumb" data-blaze-scrollbar-thumb></span>
+      </div>
+    {%- endif -%}
+    {%- if show_pagination -%}
+      <div class="blaze-pagination g-1 relative ml-auto mr-auto mt-4"></div>
+    {%- endif -%}
+  </div>
+
+  {%- if navigation_style == 'inline' -%}
+    {%- render 'slider-navigation', navigation_style: navigation_style -%}
+  {%- endif -%}
+</div>
+{%- if should_center_track_desktop or should_center_track_wide -%}
+  <style>
+    {%- if should_center_track_desktop -%}
+      @media screen and (min-width: 992px) {
+        #blaze-slider-{{ slider_id }} .blaze-track {
+          justify-content: space-between;
+        }
+      }
+    {%- endif -%}
+    {%- if should_center_track_wide -%}
+      @media screen and (min-width: 1600px) {
+        #blaze-slider-{{ slider_id }} .blaze-track {
+          justify-content: space-between;
+        }
+      }
+    {%- endif -%}
+  </style>
+{%- endif -%}

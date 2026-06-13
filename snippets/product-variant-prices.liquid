@@ -1,0 +1,133 @@
+{%- liquid
+  assign price_variant = product.selected_or_first_available_variant
+  if product.selected_variant != blank
+    assign price_variant = product.selected_variant
+  endif
+
+  assign active_selling_plan_allocation = nil
+  if product.selected_selling_plan != blank
+    for allocation in price_variant.selling_plan_allocations
+      if allocation.selling_plan.id == product.selected_selling_plan.id
+        assign active_selling_plan_allocation = allocation
+        break
+      endif
+    endfor
+  endif
+
+  assign display_price = price_variant.price
+  assign display_compare_at_price = price_variant.compare_at_price
+  if active_selling_plan_allocation != blank
+    assign display_price = active_selling_plan_allocation.price
+    assign display_compare_at_price = active_selling_plan_allocation.compare_at_price
+  endif
+-%}
+
+<div class="variant-prices-container">
+  {%- if product.has_only_default_variant -%}
+    {%- if display_compare_at_price > display_price -%}
+      <span class="{% unless card %}large-body-text{% endunless %} bold">
+        {{- display_price | money -}}
+      </span>
+      <span
+        class="{% unless card %}large-body-text{% endunless %}"
+        style="text-decoration:line-through;opacity: 0.7"
+      >
+        {{- display_compare_at_price | money -}}
+      </span>
+    {%- else -%}
+      <span class="{% unless card %}large-body-text{% endunless %} bold">
+        {{- display_price | money -}}
+      </span>
+    {%- endif -%}
+  {%- else -%}
+    {%- case price_format -%}
+      {%- when 'variant_price' -%}
+          <div
+            variant-price
+            class="variant-price-wrapper"
+          >
+            {%- if display_compare_at_price > display_price -%}
+              <span class="{% unless card %}large-body-text{% endunless %} bold">
+                {{- display_price | money -}}
+              </span>
+              <span
+                class="{% unless card %}large-body-text{% endunless %}"
+                style="text-decoration:line-through;opacity: 0.7"
+              >
+                {{- display_compare_at_price | money -}}
+              </span>
+            {%- else -%}
+              <span class="{% unless card %}large-body-text{% endunless %} bold">
+                {{- display_price | money -}}
+              </span>
+            {%- endif -%}
+          </div>
+      {%- when 'from' -%}
+        {%- if product.price_varies == false -%}
+          <div class="variant-price-wrapper">
+            {%- if product.compare_at_price > product.price -%}
+              <span class="{% unless card %}large-body-text{% endunless %} bold">
+                {{- product.price | money -}}
+              </span>
+              <span
+                class="{% unless card %}large-body-text{% endunless %}"
+                style="text-decoration:line-through;opacity: 0.7"
+              >
+                {{- product.compare_at_price | money -}}
+              </span>
+            {%- else -%}
+              <span class="{% unless card %}large-body-text{% endunless %} bold">
+                {{- product.price | money -}}
+              </span>
+            {%- endif -%}
+          </div>
+        {%- else -%}
+          <div class="variant-price-wrapper">
+            <span class="product-price {% unless card %}large-body-text{% endunless %} bold"
+              ><span class="regular">{{ 'products.product.from' | t }}</span>
+              {{ product.price_min | money }}
+              {% if product.compare_at_price_min != 0 -%}
+                {%- if product.price_min < product.compare_at_price_min -%}
+                  &nbsp;<span style="text-decoration:line-through;opacity: 0.7">
+                    {{- product.compare_at_price_min | money -}}
+                  </span>
+                {%- endif -%}
+              {%- endif -%}
+            </span>
+          </div>
+        {%- endif -%}
+      {%- when 'range' -%}
+        {%- if product.price_varies == false -%}
+          <div class="variant-price-wrapper">
+            {%- if product.compare_at_price > product.price -%}
+              <span class="{% unless card %}large-body-text{% endunless %} bold">
+                {{- product.price | money -}}
+              </span>
+              <span
+                class="{% unless card %}large-body-text{% endunless %}"
+                style="text-decoration:line-through;opacity: 0.7"
+              >
+                {{- product.compare_at_price | money -}}
+              </span>
+            {%- else -%}
+              <span class="{% unless card %}large-body-text{% endunless %} bold">
+                {{- product.price | money -}}
+              </span>
+            {%- endif -%}
+          </div>
+        {%- else -%}
+          <div class="variant-price-wrapper">
+            <span class="product-price {% unless card %}large-body-text{% endunless %} bold">
+              {{- product.price_min | money }} - {{ product.price_max | money -}}
+            </span>
+          </div>
+        {%- endif -%}
+    {%- endcase -%}
+  {%- endif %}
+</div>
+
+{% stylesheet %}
+  .variant-prices-container .large-body-text {
+    font-size: 18px;
+  }
+{% endstylesheet %}

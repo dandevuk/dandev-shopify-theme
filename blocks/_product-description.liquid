@@ -1,0 +1,102 @@
+{%- liquid
+  if product == blank
+    assign product = closest.product
+  endif
+
+  if product == blank and section.settings.product != blank
+    assign product = section.settings.product
+  endif
+
+  if product != blank and product.variants.size == 0 and product.handle != blank
+    assign product = all_products[product.handle]
+  endif
+
+  assign description = block.settings.description | default: product.description
+  assign add_read_more_link = block.settings.add_read_more_link
+  assign read_more_link_url = block.settings.read_more_link_url
+  assign truncate_height = block.settings.truncate_height
+  assign add_border_bottom = block.settings.add_border_bottom
+-%}
+{%- if description != blank -%}
+  <div
+    class="product-description-container {% if add_border_bottom %}border-bottom pb-3{% endif %}"
+    {{ block.shopify_attributes }}
+  >
+    <div class="{{ truncate_height }}">{{ description }}</div>
+    {%- if add_read_more_link and read_more_link_url != blank -%}
+      <a href="#{{ read_more_link_url }}" class="pt-1" style="color: var(--text-color-highlight);">
+        {{- 'general.read_more' | t -}}
+      </a>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Description",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "info": "If left blank, the product description will be used."
+    },
+    {
+      "type": "checkbox",
+      "id": "add_read_more_link",
+      "label": "Add 'Read More' Link",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "read_more_link_url",
+      "label": "'Read More' Anchor link",
+      "visible_if": "{{ block.settings.add_read_more_link == true }}"
+    },
+    {
+      "type": "header",
+      "content": "Styling"
+    },
+    {
+      "type": "select",
+      "id": "truncate_height",
+      "label": "Truncate height",
+      "options": [
+        {
+          "value": "none",
+          "label": "No Truncation"
+        },
+        {
+          "value": "vertical-clamp-one",
+          "label": "1 Line"
+        },
+        {
+          "value": "vertical-clamp-two",
+          "label": "2 Lines"
+        },
+        {
+          "value": "vertical-clamp-three",
+          "label": "3 Lines"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "checkbox",
+      "id": "add_border_bottom",
+      "label": "Add Border Bottom",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Description"
+    }
+  ]
+}
+{% endschema %}

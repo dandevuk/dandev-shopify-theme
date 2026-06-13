@@ -1,0 +1,75 @@
+{%- liquid
+  assign limit = section.settings.limit | default: 8
+-%}
+
+<div
+  class="cart-recommendations hidden"
+  cart-recommendations
+  data-cart-recommendations
+  data-cart-recommendations-section
+  data-cart-recommendations-container
+  data-section-id="{{ section.id }}"
+  data-limit="{{ limit }}"
+>
+  {% comment %}
+    {%- if heading != blank -%}
+      <div class="heading heading-sm">
+        {{ heading }}
+      </div>
+    {%- endif -%}
+  {% endcomment %}
+
+  {%-
+    render 'recommendations-slider',
+    slider_id: 'cart-recs-' | append: section.id,
+    recommendations: recommendations,
+    limit: limit,
+    slider_attributes: 'data-cart-recommendations-slider',
+    slider_class: 'blaze-loading cart-recommendations-slider',
+    slide_class: 'product h-auto',
+    slider_aria_label: section.settings.heading | default: 'Recommended for you',
+    slider_mobile: 2,
+    slider_tablet: 2,
+    slider_desktop: 3,
+    slider_wide: 4,
+    slider_gap_mobile: 16,
+    slider_gap_tablet: 16,
+    slider_gap_desktop: 24,
+    slider_gap_wide: 30,
+    slider_loop: false,
+    slider_pagination: false,
+    css_mobile_slides: 2,
+    css_tablet_slides: 2,
+    css_desktop_slides: 3,
+    css_wide_slides: 4,
+    css_mobile_gap: 16,
+    css_tablet_gap: 16,
+    css_desktop_gap: 24,
+    css_wide_gap: 30,
+    ensure_structure: true,
+    use_fallback: true
+  -%}
+</div>
+
+{% schema %}
+{
+  "name": "Cart recommendations",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Recommended for you"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Maximum products",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    }
+  ]
+}
+{% endschema %}

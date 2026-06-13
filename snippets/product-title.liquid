@@ -1,0 +1,11 @@
+{%- liquid
+  assign tag = tag | default: 'h1'
+  assign style = style | default: 'heading-h1'
+
+  if product == blank
+    assign product = closest.product
+  endif
+-%}
+<div class="product-title" {{ shopify_attributes }}>
+  <{{ tag }} class="product-title {{ style }}">{{ product.title }}</{{ tag }}>
+</div>

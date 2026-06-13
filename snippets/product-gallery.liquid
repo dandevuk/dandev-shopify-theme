@@ -1,0 +1,1169 @@
+{%- liquid
+  assign has_media = false
+  if product.media != blank
+    assign has_media = true
+  endif
+  assign has_multiple_media = false
+  if product.images.size > 1 and has_media
+    assign has_multiple_media = true
+  endif
+  assign slider_class = 'main-slider-slide slider-slide'
+  assign gallery_opacity_class = ''
+  if has_multiple_media and style == 'slider'
+    assign gallery_opacity_class = 'opacity-0'
+  endif
+  assign main_slider_id = 'product-main-slider-' | append: section.id
+  assign main_gallery_nav_id = 'product-main-slider-nav-' | append: section.id
+  assign thumb_slider_id = 'product-thumb-slider-' | append: section.id
+  assign gallery_container_id = 'product-gallery-' | append: section.id
+  assign lightbox_modal_id = 'product-lightbox-' | append: section.id
+  assign lightbox_slider_id = 'product-lightbox-slider-' | append: section.id
+  assign lightbox_nav_id = lightbox_slider_id | append: '-nav'
+  assign lightbox_heading_id = 'product-lightbox-heading-' | append: section.id
+  assign main_slider_selector = '#' | append: main_slider_id
+  assign thumb_orientation = 'vertical'
+  if thumb_positioning == 'under'
+    assign thumb_orientation = 'horizontal'
+  endif
+
+  assign initial_slide_index = 0
+  assign selected_variant = product.selected_or_first_available_variant
+  assign variant_image = selected_variant.featured_image
+  if variant_image == blank and selected_variant.featured_media != blank and selected_variant.featured_media.media_type == 'image'
+    assign variant_image = selected_variant.featured_media.preview_image
+  endif
+  if variant_image != blank and variant_image.position != blank
+    for media in product.media
+      if media.position == variant_image.position
+        assign initial_slide_index = forloop.index0
+        break
+      endif
+    endfor
+  endif
+
+  assign selected_variant_id = selected_variant.id
+  assign variant_has_featured_slide = false
+  if variant_image != blank
+    assign variant_has_featured_slide = true
+  endif
+
+  assign grid_hero_index = 0
+  assign grid_use_variant_reorder = false
+  if style == 'grid'
+    assign selected_variant_media_id = blank
+    if selected_variant.featured_media
+      assign selected_variant_media_id = selected_variant.featured_media.id
+    elsif selected_variant.featured_image
+      assign selected_variant_media_id = selected_variant.featured_image.id
+    elsif selected_variant.image
+      assign selected_variant_media_id = selected_variant.image.id
+    endif
+
+    if selected_variant_media_id != blank
+      for media in product.media
+        if media.id == selected_variant_media_id
+          assign grid_hero_index = forloop.index0
+          assign grid_use_variant_reorder = true
+          break
+        endif
+      endfor
+    endif
+
+    if grid_use_variant_reorder == false and variant_has_featured_slide
+      for media in product.media
+        if forloop.index0 == initial_slide_index
+          assign grid_hero_index = forloop.index0
+          assign grid_use_variant_reorder = true
+          break
+        endif
+      endfor
+    endif
+
+    assign initial_slide_index = grid_hero_index
+  endif
+
+  assign placeholder_media = product.media.first
+  for media in product.media
+    if forloop.index0 == initial_slide_index
+      assign placeholder_media = media
+      break
+    endif
+  endfor
+-%}
+
+{%- assign lightbox_slide_count = 0 -%}
+{%- capture lightbox_slides -%}
+  {%- for media in product.media -%}
+    {%- if media.media_type == 'image' -%}
+      {%- assign lightbox_slide_count = lightbox_slide_count | plus: 1 -%}
+      <div class="lightbox-slider-slide slider-slide" data-lightbox-index="{{ forloop.index0 }}">
+        <div class="slider-zoom-container">
+          {%- render 'image',
+            image: media,
+            max_width: 3000,
+            mobile_width: 1000,
+            class: 'lightbox-slider-image',
+            use_placeholder: false,
+            lazy: false
+          -%}
+        </div>
+      </div>
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+{%- assign has_lightbox_media = false -%}
+{%- if lightbox_slide_count > 0 -%}
+  {%- assign has_lightbox_media = true -%}
+{%- endif -%}
+
+{%- if has_multiple_media and style == 'slider' and placeholder_media != blank -%}
+  <div class="gallery-mount relative w-100">
+    <div
+      class="gallery-placeholder flex g-2 w-100{% if thumb_positioning == 'under' %} flex-col-reverse{% else %} to-md-flex-col-reverse{% endif %}"
+      data-gallery-placeholder
+      data-thumb-positioning="{{ thumb_positioning }}"
+      aria-hidden="true"
+    >
+      {%- unless thumb_positioning == 'under' -%}
+        <div class="gallery-placeholder__thumb-spacer to-md-hidden from-md-block" aria-hidden="true"></div>
+      {%- endunless -%}
+      <div class="gallery-placeholder__main relative {% if thumb_positioning == 'under' %}w-100{% else %}w-80 to-sm-w-100{% endif %}">
+        <div class="gallery-image-holder border-radius w-100 overflow-hidden relative pb-100">
+          {%- case placeholder_media.media_type -%}
+            {%- when 'image' -%}
+              {%- render 'image',
+                image: placeholder_media,
+                max_width: 1000,
+                class: 'absolute w-100 h-100 object-cover',
+                use_placeholder: false,
+                lazy: false,
+                preload: true
+              -%}
+            {%- else -%}
+              {%- render 'image',
+                image: placeholder_media.preview_image,
+                max_width: 1000,
+                class: 'absolute w-100 h-100 object-cover',
+                use_placeholder: false,
+                lazy: false,
+                preload: true
+              -%}
+          {%- endcase -%}
+        </div>
+      </div>
+    </div>
+{%- endif -%}
+
+<div
+  id="{{ gallery_container_id }}"
+  gallery-container
+  data-gallery-style="{{ style }}"
+  data-thumb-positioning="{{ thumb_positioning }}"
+  data-thumb-orientation="{{ thumb_orientation }}"
+  class="gallery-container gallery-layout sticky flex {% if thumb_positioning == 'under' and style == 'slider' %}flex-col-reverse{% endif %} to-md-flex-col-reverse {{ gallery_opacity_class }} h-100 {% if has_multiple_media %}g-2{% endif %}"
+>
+  {%- if has_multiple_media and style == 'slider' -%}
+    <div class="thumb-gallery to-md-w-100 {% if thumb_positioning == 'under' and style == 'slider' %}under{% endif %}">
+      {%- capture thumb_slides -%}
+        {%- for media in product.media -%}
+          {%- liquid
+            assign lazy_load = false
+            if forloop.index <= 4
+              assign lazy_load = true
+            endif
+          -%}
+          {%- case media.media_type -%}
+            {%- when 'image' -%}
+              <div class="thumb slider-slide w-100 h-100 overflow-hidden relative">
+                <div class="gallery-image-holder border-radius w-100 h-100 overflow-hidden relative">
+                  {%- if media != blank -%}
+                    {%- render 'image',
+                        image: media,
+                        max_width: 200,
+                        class: 'absolute w-100 h-100 object-cover',
+                        use_placeholder: false,
+                        lazy: lazy_load
+                    -%}
+                  {%- else -%}
+                    {{ 'product-1' | placeholder_svg_tag: class: 'absolute w-100 h-100 object-cover' }}
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- when 'model' -%}
+              <div class="thumb slider-slide w-100 h-100 overflow-hidden relative">
+                <div class="gallery-image-holder border-radius w-100 h-100 overflow-hidden relative">
+                  {%- render 'image',
+                      image: media.preview_image,
+                      max_width: 200,
+                      class: 'absolute w-100 h-100 object-cover',
+                      use_placeholder: false,
+                      lazy: lazy_load
+                  -%}
+                </div>
+              </div>
+            {%- when 'video' -%}
+              <div class="thumb slider-slide w-100 h-100 overflow-hidden relative">
+                <div class="gallery-image-holder border-radius w-100 h-100 overflow-hidden relative video">
+                  {%- render 'image',
+                      image: media.preview_image,
+                      max_width: 200,
+                      class: 'absolute w-100 h-100 object-cover',
+                      use_placeholder: false,
+                      lazy: lazy_load
+                  -%}
+                </div>
+              </div>
+            {%- when 'external_video' -%}
+              <div class="thumb slider-slide w-100 h-100 overflow-hidden relative">
+                <div class="gallery-image-holder border-radius w-100 h-100 overflow-hidden relative">
+                  {%- render 'image',
+                      image: media.preview_image,
+                      max_width: 200,
+                      class: 'absolute w-100 h-100 object-cover',
+                      use_placeholder: false,
+                      lazy: lazy_load
+                  -%}
+                </div>
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      {%- endcapture -%}
+
+      <div
+        id="{{ thumb_slider_id }}"
+        class="blaze-slider slider thumb-slider w-100"
+        data-blaze-slider
+        data-thumb-gallery-slider
+        data-slider-mobile="4"
+        data-slider-tablet="4"
+        data-slider-desktop="4"
+        data-slider-wide="4"
+        data-slider-gap-mobile="20"
+        data-slider-gap-tablet="20"
+        data-slider-gap-desktop="10"
+        data-slider-gap-wide="10"
+        data-slider-loop="false"
+        data-slider-pagination="false"
+        data-slider-initial="{{ initial_slide_index }}"
+        style="--slides-to-show-mobile: 4; --slides-to-show-tablet: 4; --slides-to-show-desktop: 4; --slides-to-show-wide: 4; --slide-gap-mobile: 20px; --slide-gap-tablet: 20px; --slide-gap-desktop: 10px; --slide-gap-wide: 10px;"
+      >
+        <div class="blaze-track-container">
+          <div class="blaze-track">
+            {{ thumb_slides }}
+          </div>
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+  <div
+    class="main-gallery relative {% if thumb_positioning == 'under' or style == 'grid' or has_multiple_media != true %}w-100{% else %}w-80 to-sm-w-100{% endif %}"
+    main-gallery
+  >
+    {%- render 'product-badges', product: product, limit: 2 -%}
+
+    {%- if has_lightbox_media and product.template_suffix != 'gift-card' -%}
+      <button
+        type="button"
+        class="gallery-lightbox-trigger border-radius-circle"
+        style="background-color: #fff;"
+        data-lightbox-trigger
+        data-modal-trigger="{{ lightbox_modal_id }}"
+        data-lightbox-main-slider="{% if has_multiple_media %}{{ main_slider_selector }}{% endif %}"
+        aria-label="{{ 'products.product.open_lightbox' | t | default: 'View full-size gallery' }}"
+      >
+        {{ 'icon-search.svg' | inline_asset_content }}
+      </button>
+    {%- endif -%}
+
+    {%- if has_media -%}
+      {%- if has_multiple_media -%}
+        {%- capture main_slides -%}
+          {%- for media in product.media -%}
+            {%- liquid
+              assign slide_order = forloop.index
+              assign grid_class = 'span-4'
+              assign lazy_load = false
+              if forloop.index > 1
+                assign lazy_load = true
+              endif
+
+              if style == 'slider'
+                assign image_number = forloop.index
+                if image_number == 1
+                  assign grid_class = 'span-12 first-image'
+                else
+                  assign module_result = image_number | modulo: 5
+                  if module_result == 1 or module_result == 0
+                    assign grid_class = 'span-6'
+                  else
+                    assign grid_class = 'span-4'
+                  endif
+                endif
+              elsif style == 'grid'
+                if forloop.index0 == grid_hero_index
+                  assign grid_class = 'span-12 first-image'
+                  assign slide_order = 1
+                  assign lazy_load = false
+                else
+                  if grid_use_variant_reorder
+                    if forloop.index0 < grid_hero_index
+                      assign slide_order = forloop.index | plus: 1
+                    else
+                      assign slide_order = forloop.index
+                    endif
+                  else
+                    assign slide_order = forloop.index
+                  endif
+
+                  assign image_number = slide_order
+                  assign module_result = image_number | modulo: 5
+                  if module_result == 1 or module_result == 0
+                    assign grid_class = 'span-6'
+                  else
+                    assign grid_class = 'span-4'
+                  endif
+                endif
+              endif
+            -%}
+            {%- case media.media_type -%}
+              {%- when 'image' -%}
+                {%- liquid
+                  assign variant_ids_for_media = ''
+
+                  for variant in product.variants
+                    assign variant_image_id = ''
+                    if variant.featured_media
+                      assign variant_image_id = variant.featured_media.id
+                    elsif variant.featured_image
+                      assign variant_image_id = variant.featured_image.id
+                    elsif variant.image
+                      assign variant_image_id = variant.image.id
+                    endif
+                    if variant_image_id == media.id
+                      assign variant_ids_for_media = variant_ids_for_media | append: variant.id | append: ','
+                    endif
+                  endfor
+                -%}
+                <div
+                  class="{{ slider_class }} {{ grid_class }}"
+                  data-index="{{ forloop.index0 }}"
+                  data-id="{{ variant_ids_for_media }}"
+                  {% if style == 'grid' %}style="--slide-order: {{ slide_order }};"{% endif %}
+                >
+                  <div class="gallery-image-holder border-radius w-100 overflow-hidden relative pb-100">
+                    {%- if media != blank -%}
+                      {%- render 'image',
+                          image: media,
+                          max_width: 1000,
+                          class: 'absolute w-100 h-100 object-cover',
+                          use_placeholder: false,
+                          lazy: lazy_load
+                      -%}
+                      {%- if style == "grid" -%}
+                        <button
+                          type="button"
+                          class="gallery-lightbox-trigger to-sm-hidden"
+                          style="inset: 0;width: 100%;height: 100%;"
+                          data-slide-index="{{ forloop.index0 }}"
+                          data-lightbox-trigger
+                          data-modal-trigger="{{ lightbox_modal_id }}"
+                          data-lightbox-main-slider="{% if has_multiple_media %}{{ main_slider_selector }}{% endif %}"
+                          aria-label="{{ 'products.product.open_lightbox' | t | default: 'View full-size gallery' }}"
+                        >
+                          <span class="visually-hidden">{{ 'products.product.open_lightbox' | t | default: 'View full-size gallery' }}</span>
+                        </button>
+                      {%- endif -%}
+                    {%- else -%}
+                      {{ 'product-1' | placeholder_svg_tag }}
+                    {%- endif -%}
+                  </div>
+                </div>
+              {%- when 'model' -%}
+                <div
+                  class="{{ slider_class }} {{ grid_class }}"
+                  data-index="{{ forloop.index0 }}"
+                  {% if style == 'grid' %}style="--slide-order: {{ slide_order }};"{% endif %}
+                >
+                  <div class="gallery-image-holder border-radius w-100 h-100 overflow-hidden relative">
+                    {{ media | model_viewer_tag: image_size: '600x' }}
+                  </div>
+                </div>
+              {%- when 'video' -%}
+                <div
+                  class="{{ slider_class }} {{ grid_class }}"
+                  data-index="{{ forloop.index0 }}"
+                  {% if style == 'grid' %}style="--slide-order: {{ slide_order }};"{% endif %}
+                >
+                  <div class="gallery-image-holder border-radius w-100 h-100 overflow-hidden relative">
+                    {{ media | video_tag: image_size: 600, autoplay: true, loop: true, muted: true, controls: true }}
+                  </div>
+                </div>
+              {%- when 'external_video' -%}
+                <div
+                  class="{{ slider_class }} {{ grid_class }}"
+                  data-index="{{ forloop.index0 }}"
+                  {% if style == 'grid' %}style="--slide-order: {{ slide_order }};"{% endif %}
+                >
+                  <div class="gallery-image-holder border-radius w-100 h-100 overflow-hidden relative">
+                    {%- if media.host == 'youtube' -%}
+                      {{ media | external_video_url: color: 'white' | external_video_tag }}
+                    {%- elsif media.host == 'vimeo' -%}
+                      {{ media | external_video_url: loop: '1', muted: '1' | external_video_tag }}
+                    {%- endif -%}
+                  </div>
+                </div>
+            {%- endcase -%}
+          {%- endfor -%}
+        {%- endcapture -%}
+
+        <div
+          main-gallery-slider
+          id="{{ main_slider_id }}"
+          data-product-id="{{ product.id }}"
+          class="blaze-slider main-slider relative w-100 h-auto{% if style == 'grid' %} desktop{% endif %}"
+          data-blaze-slider
+          data-slider-mobile="1"
+          data-slider-tablet="1"
+          data-slider-desktop="1"
+          data-slider-wide="1"
+          data-slider-gap-mobile="8"
+          data-slider-gap-tablet="8"
+          data-slider-gap-desktop="8"
+          data-slider-gap-wide="8"
+          data-slider-pagination="true"
+          data-slider-loop="false"
+          data-slider-initial="{{ initial_slide_index }}"
+          data-slider-nav-scope="#{{ main_gallery_nav_id }}"
+          style="--slides-to-show-mobile: 1; --slides-to-show-tablet: 1; --slides-to-show-desktop: 1; --slides-to-show-wide: 1; --slide-gap-mobile: 8px; --slide-gap-tablet: 8px; --slide-gap-desktop: 8px; --slide-gap-wide: 8px;"
+        >
+          <div
+            id="{{ main_gallery_nav_id }}"
+            class="main-gallery-navigation"
+          >
+            {%- render 'slider-navigation', navigation_style: 'inline' -%}
+          </div>
+          <div class="blaze-track-container">
+            <div class="blaze-track">
+              {{ main_slides }}
+            </div>
+          </div>
+          <div class="blaze-pagination slider-pagination g-1 flex-center relative mt-4"></div>
+        </div>
+
+        {%- if has_multiple_media and style == 'slider' -%}
+          <script
+            src="{{ 'product-gallery-slider.js' | asset_url }}"
+            type="module"
+            fetchpriority="low"
+          ></script>
+        {%- endif -%}
+
+        {%- if style == 'grid' and has_multiple_media -%}
+          <script
+            src="{{ 'product-gallery.js' | asset_url }}"
+            type="module"
+            fetchpriority="low"
+          ></script>
+        {%- endif -%}
+      {%- else -%}
+        {%- comment -%} Single media item - no slider needed {%- endcomment -%}
+        {%- for media in product.media limit: 1 -%}
+          {%- case media.media_type -%}
+            {%- when 'image' -%}
+              <div class="gallery-image-holder border-radius w-100 overflow-hidden relative pb-100">
+                {%- if media != blank -%}
+                  {%- render 'image',
+                    image: media,
+                    max_width: 1000,
+                    class: 'absolute w-100 h-100 object-cover',
+                    use_placeholder: false,
+                    lazy: false
+                  -%}
+                {%- else -%}
+                  {{ 'product-1' | placeholder_svg_tag }}
+                {%- endif -%}
+              </div>
+            {%- when 'model' -%}
+              <div class="gallery-image-holder border-radius w-100 h-100 overflow-hidden relative">
+                {{ media | model_viewer_tag: image_size: '600x' }}
+              </div>
+            {%- when 'video' -%}
+              <div class="gallery-image-holder border-radius w-100 h-100 overflow-hidden relative">
+                {{
+                  media
+                  | video_tag:
+                    image_size: 600,
+                    autoplay: true,
+                    loop: true,
+                    muted: true,
+                    controls: true
+                }}
+              </div>
+            {%- when 'external_video' -%}
+              <div class="gallery-image-holder border-radius w-100 h-100 overflow-hidden relative">
+                {%- if media.host == 'youtube' -%}
+                  {{ media | external_video_url: color: 'white' | external_video_tag }}
+                {%- elsif media.host == 'vimeo' -%}
+                  {{ media | external_video_url: loop: '1', muted: '1' | external_video_tag }}
+                {%- endif -%}
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      {%- endif -%}
+    {%- else -%}
+      <div class="gallery-image-holder border-radius w-100 overflow-hidden relative pb-100">
+        {{ 'product-1' | placeholder_svg_tag }}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{%- if has_multiple_media and style == 'slider' and placeholder_media != blank -%}
+  </div>
+{%- endif -%}
+
+{%- if has_lightbox_media -%}
+  <div
+    class="product-lightbox-modal"
+    data-modal="{{ lightbox_modal_id }}"
+    data-lightbox-modal
+    aria-hidden="true"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="{{ lightbox_heading_id }}"
+    style="display: none;"
+  >
+    <div
+      class="product-lightbox-modal__overlay"
+      data-modal-close="{{ lightbox_modal_id }}"
+      aria-hidden="true"
+    ></div>
+    <div
+      class="product-lightbox-modal__content"
+      data-modal-panel
+    >
+      <header class="product-lightbox-modal__header flex align-center flex-between g-3">
+        {% comment %} <h2 id="{{ lightbox_heading_id }}" class="product-lightbox-modal__title">{{ product.title | escape }}</h2> {% endcomment %}
+        <button
+          type="button"
+          class="product-lightbox-modal__close"
+          aria-label="{{ 'accessibility.close_modal' | t | default: 'Close' }}"
+          data-modal-close="{{ lightbox_modal_id }}"
+        >
+          {{ 'icon--close.svg' | inline_asset_content }}
+        </button>
+        <div
+          slot="container-end"
+          id="{{ lightbox_nav_id }}"
+          class="product-gallery-navigation lightbox-navigation"
+        >
+          {%- render 'slider-navigation' -%}
+        </div>
+      </header>
+      <div class="product-lightbox-modal__body">
+        <div class="flex flex-col">
+          <div
+            thumb-gallery-slider
+            id="{{ lightbox_slider_id }}"
+            class="blaze-slider slider lightbox-slider"
+            data-blaze-slider
+            data-slider-mobile="1"
+            data-slider-tablet="1"
+            data-slider-desktop="1"
+            data-slider-wide="1"
+            data-slider-gap-mobile="10"
+            data-slider-gap-tablet="10"
+            data-slider-gap-desktop="10"
+            data-slider-gap-wide="10"
+            data-slider-loop="false"
+            data-slider-pagination="false"
+            data-slider-nav-scope="#{{ lightbox_nav_id }}"
+            data-lightbox-slide-count="{{ lightbox_slide_count }}"
+          >
+            <div class="blaze-track-container">
+              <div class="blaze-track">
+                {{ lightbox_slides | strip }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{%- stylesheet -%}
+  .gallery-mount {
+    position: relative;
+    width: 100%;
+  }
+
+  .gallery-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    opacity: 1;
+    pointer-events: none;
+  }
+
+  main-product:not([data-gallery-revealed]) .gallery-placeholder {
+    transition: opacity 0.4s ease;
+  }
+
+  @media screen and (min-width: 768px) {
+    .gallery-placeholder[data-thumb-positioning='left'] {
+      bottom: 0;
+      align-items: flex-start;
+    }
+
+    .gallery-placeholder[data-thumb-positioning='left'] .gallery-placeholder__thumb-spacer {
+      flex-shrink: 0;
+      width: calc(20% - var(--content-spacing-3, 12px));
+    }
+  }
+
+  .gallery-mount:not(.gallery-mount--settled) .gallery-container[data-gallery-style='slider'] {
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .gallery-mount--settled .gallery-container[data-gallery-style='slider'] {
+    overflow: visible;
+    pointer-events: auto;
+  }
+
+  .gallery-mount:has(.gallery-container--ready) .gallery-placeholder {
+    opacity: 0;
+  }
+
+  .gallery-placeholder--removed {
+    display: none;
+  }
+
+  main-product:not([data-gallery-revealed]) .gallery-container[data-gallery-style='slider'] {
+    transition: opacity 0.4s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    main-product:not([data-gallery-revealed]) .gallery-container[data-gallery-style='slider'],
+    main-product:not([data-gallery-revealed]) .gallery-placeholder {
+      transition: none;
+    }
+  }
+
+  /* Stable layout before Blaze initializes (prevents stacked full-width slides/thumbs) */
+  .gallery-container[data-gallery-style='slider'] .main-slider:not([data-slider-initialized='true']) .blaze-track-container,
+  .gallery-container[data-gallery-style='slider'] .thumb-slider:not([data-slider-initialized='true']) .blaze-track-container {
+    overflow: hidden !important;
+  }
+
+  @media screen and (max-width: 767.98px) {
+    .gallery-container[data-gallery-style='slider'] .thumb-slider:not([data-slider-initialized='true']) {
+      --slider-overflow-behavior: hidden;
+    }
+
+    .gallery-mount:not(:has(.gallery-container--ready)) .main-slider .blaze-pagination {
+      min-height: 8px;
+      margin-top: var(--content-spacing-4, 1rem);
+    }
+  }
+
+  @media screen and (min-width: 768px) {
+    .gallery-container[data-gallery-style='slider'][data-thumb-orientation='vertical']:not(.gallery-container--ready) .thumb-gallery {
+      overflow: hidden;
+      max-height: calc(
+        (min(100vw, var(--page-width, 1440px)) - (var(--page-width-padding, 40px) * 2)) / 2 * 0.8
+      );
+    }
+  }
+
+  @media only screen and (min-width: 768px) {
+    #main-product .main-slider .slider-pagination {
+      display: none;
+    }
+  }
+
+  .main-gallery .main-slider .main-gallery-navigation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    aspect-ratio: 1 / 1;
+    pointer-events: none;
+  }
+
+  .main-gallery .main-slider .main-gallery-navigation .blaze-navigation-arrows {
+    width: 100%;
+    height: 100%;
+  }
+
+  .main-gallery .main-slider .main-gallery-navigation .blaze-button-prev,
+  .main-gallery .main-slider .main-gallery-navigation .blaze-button-next {
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+    width: 35px;
+    height: 35px;
+    margin: 0;
+    padding: 0;
+    pointer-events: auto;
+    transform: translateY(-50%);
+  }
+
+  .main-gallery .main-slider .main-gallery-navigation .blaze-button-prev {
+    left: var(--content-spacing-2, 0.5rem);
+  }
+
+  .main-gallery .main-slider .main-gallery-navigation .blaze-button-next {
+    right: var(--content-spacing-2, 0.5rem);
+  }
+
+  @media only screen and (max-width: 767.98px) {
+    .gallery-image-holder .variant-image-wrapper {
+      display: none;
+    }
+
+    /* Mobile carousel uses DOM order + data-slider-initial, not desktop grid reordering */
+    .gallery-container[data-gallery-style='grid'] .main-slider:not(.desktop) .blaze-track > .main-slider-slide {
+      order: 0 !important;
+      flex: 0 0 var(--slide-width) !important;
+      width: var(--slide-width) !important;
+      max-width: var(--slide-width) !important;
+      grid-column: unset !important;
+    }
+  }
+
+  .gallery-lightbox-trigger {
+    position: absolute;
+    top: var(--content-spacing-2);
+    right: var(--content-spacing-2);
+    z-index: 2;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+
+    /* border-radius: 50%; */
+
+    /* background: rgba(17, 17, 17, 0.55); */
+    color: #fff;
+    cursor: pointer;
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .gallery-lightbox-trigger:hover,
+  .gallery-lightbox-trigger:focus {
+    outline: none;
+
+    /* background: rgba(17, 17, 17, 0.85); */
+    transform: scale(1.05);
+  }
+
+  .gallery-lightbox-trigger svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+
+    /* fill: currentColor; */
+    pointer-events: none;
+  }
+
+  .product-lightbox-modal {
+    display: none;
+    padding: 0;
+  }
+
+  .product-lightbox-modal.modal-overlay--visible {
+    display: flex;
+    justify-content: stretch;
+    align-items: stretch;
+  }
+
+  .product-lightbox-modal .product-lightbox-modal__content.modal-panel,
+  .product-lightbox-modal__content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: hidden;
+    background: #0b0b0b;
+  }
+
+  .product-lightbox-modal__title {
+    margin: 0;
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .product-lightbox-modal__close {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    color: inherit;
+
+    /* border-radius: 50%; */
+
+    /* background: rgba(17, 17, 17, 0.65); */
+    cursor: pointer;
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .product-lightbox-modal__close:hover,
+  .product-lightbox-modal__close:focus {
+    outline: none;
+
+    /* background: rgba(17, 17, 17, 0.85); */
+    transform: scale(1.05);
+  }
+
+  .product-lightbox-modal__close svg {
+    display: block;
+    width: 18px;
+    height: 18px;
+    pointer-events: none;
+    fill: currentcolor;
+  }
+
+  .product-lightbox-modal__header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    flex-shrink: 0;
+    padding: clamp(12px, 2vw, 20px);
+    pointer-events: none;
+  }
+
+  .product-lightbox-modal__header > * {
+    pointer-events: auto;
+  }
+
+  .product-lightbox-modal__body {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    overflow: hidden;
+  }
+
+  .product-lightbox-modal__body > .flex {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .lightbox-slider {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+  }
+
+  .lightbox-slider .blaze-track-container {
+    height: 100%;
+  }
+
+  .lightbox-slider .blaze-track {
+    height: 100%;
+    align-items: center;
+  }
+
+  .lightbox-slider .slider-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background: #0b0b0b;
+  }
+
+  .lightbox-slider .slider-zoom-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .lightbox-slider-image {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  /* .lightbox-navigation {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  padding: 0 clamp(1rem, 3vw, 2.5rem);
+} */
+
+  #main-product-container #main-product .gallery .gallery-container {
+    top: 105px;
+  }
+
+  .main-slider .slider-slide {
+    height: auto;
+    aspect-ratio: 1 / 1;
+  }
+
+  /* Single media item styles */
+  .main-gallery .gallery-image-holder {
+    aspect-ratio: 1 / 1;
+  }
+
+  .thumb-slider {
+    width: 100%;
+    height: auto;
+  }
+
+  .thumb-slider .slider-slide {
+    aspect-ratio: 1 / 1;
+  }
+
+  #main-product-container
+    #main-product
+    .gallery
+    .gallery-container
+    .main-gallery
+    .gallery-image-holder
+    video,
+  #main-product-container
+    #main-product
+    .gallery
+    .gallery-container
+    .main-gallery
+    .gallery-image-holder
+    iframe,
+  #main-product-container
+    #main-product
+    .gallery
+    .gallery-container
+    .main-gallery
+    .gallery-image-holder
+    model-viewer,
+  #main-product-container
+    #main-product
+    .gallery
+    .gallery-container
+    .main-gallery
+    .gallery-image-holder
+    svg:not([lightbox-trigger] svg) {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media only screen and (min-width: 768px) {
+    .gallery-container[data-thumb-orientation='vertical'] .thumb-slider {
+      height: 100%;
+      max-height: 100%;
+      overflow: hidden !important;
+    }
+
+    .gallery-container[data-thumb-orientation='vertical'] .thumb-slider .blaze-track-container {
+      height: 100%;
+      padding-right: 2px;
+      overflow: hidden auto;
+      cursor: grab;
+      touch-action: pan-y;
+    }
+
+    .gallery-container[data-thumb-orientation='vertical']
+      .thumb-slider
+      .blaze-track-container.thumb-dragging {
+      cursor: grabbing;
+      user-select: none;
+    }
+
+    .gallery-container[data-thumb-orientation='vertical'] .thumb-slider .blaze-track {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transform: none !important;
+      will-change: auto;
+    }
+
+    .gallery-container[data-thumb-orientation='vertical'] .thumb-slider .blaze-track > * {
+      flex: 0 0 auto;
+      width: 100% !important;
+    }
+
+    .gallery-container[data-thumb-orientation='vertical'] .thumb-slider .thumb {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1 / 1;
+    }
+  }
+
+  #main-product-container
+    #main-product
+    .gallery
+    .gallery-container
+    .main-gallery
+    .gallery-image-holder
+    video,
+  #main-product-container
+    #main-product
+    .gallery
+    .gallery-container
+    .main-gallery
+    .gallery-image-holder
+    iframe,
+  #main-product-container
+    #main-product
+    .gallery
+    .gallery-container
+    .main-gallery
+    .gallery-image-holder
+    model-viewer,
+  #main-product-container
+    #main-product
+    .gallery
+    .gallery-container
+    .main-gallery
+    .gallery-image-holder
+    svg:not([lightbox-trigger] svg) {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media only screen and (min-width: 768px) {
+    .thumb-gallery {
+      flex-shrink: 0; /* Prevent growing */
+      width: calc(20% - var(--content-spacing-3));
+      height: auto; /* Let JavaScript control the height */
+      overflow: hidden;
+    }
+
+    .thumb-gallery.under {
+      width: 100%;
+    }
+
+    .thumb-gallery.under .thumb-slider {
+      height: 100px;
+    }
+
+    .thumb-gallery.under .thumb-slider .blaze-track {
+      height: 100px;
+    }
+
+    .thumb-slider {
+      overflow: hidden !important;
+    }
+
+    .gallery-lightbox-trigger {
+      top: 0.75rem;
+      right: 0.75rem;
+      width: 38px;
+      height: 38px;
+    }
+
+    .thumb-slider .slider-slide {
+      width: auto;
+      height: auto;
+      aspect-ratio: 1 / 1;
+    }
+
+    .lightbox-slider {
+      height: 100%;
+    }
+
+    #main-product-container #main-product .gallery .gallery-container {
+      top: 105px;
+    }
+
+    .thumb-slider .slider-slide {
+      height: auto;
+      aspect-ratio: 1 / 1;
+    }
+
+    .main-slider .variant-image-wrapper {
+      display: none;
+    }
+
+    .variant-image-wrapper.attached-false {
+      display: none !important;
+    }
+
+    .main-slider .slider-slide .gallery-image-holder {
+      border: 1px solid var(--brand-color-5);
+      background-color: #fff;
+    }
+    .main-slider .variant-image-wrapper.active {
+      display: block;
+    }
+
+    .main-slider .slider-slide .first-image .gallery-image-holder:has(.active) > img {
+      display: none;
+    }
+
+    /* Single media item styles */
+    .main-gallery .gallery-image-holder {
+      aspect-ratio: 1 / 1;
+    }
+
+    /* Desktop grid layout: driven by Liquid (hero index, span-*, --slide-order), not JS */
+    .gallery-container[data-gallery-style='grid'] .main-gallery .main-slider .blaze-track {
+      display: grid;
+      gap: clamp(
+        var(--grid-gap-mobile),
+        calc(var(--grid-intercept) + var(--grid-slope) * 1vw),
+        var(--grid-gap)
+      );
+      grid-template-columns: repeat(12, 1fr);
+      transform: none !important;
+    }
+
+    .gallery-container[data-gallery-style='grid'] .main-gallery .main-slider .blaze-track > .main-slider-slide {
+      order: var(--slide-order);
+      width: 100%;
+    }
+
+    .gallery-container[data-gallery-style='grid'] .main-gallery .main-slider .blaze-track-container {
+      overflow: visible;
+    }
+
+    .gallery-container[data-gallery-style='grid'] .main-gallery .main-slider .blaze-pagination,
+    .gallery-container[data-gallery-style='grid'] .main-gallery .main-slider .slider-pagination {
+      display: none;
+    }
+
+    .main-gallery .main-slider .main-slider-slide {
+      flex-shrink: 0 !important;
+    }
+
+    /* THIS IS THE ORIGINAL CODE FOR THE GALLERY  */
+  }
+{%- endstylesheet -%}

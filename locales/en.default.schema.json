@@ -1,0 +1,100 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "general": {
+    "404": "Not found",
+    "article": "Article",
+    "badges": "Badges",
+    "block": "Block",
+    "blog": "Blog",
+    "brand_colors": "Brand colours",
+    "buttons": "Buttons",
+    "cards": "Cards",
+    "cart": "Cart",
+    "collection": "Collection",
+    "collections": "Collections",
+    "collection_card": "Collection card",
+    "collections_grid": "Collections grid",
+    "colors": "Colours",
+    "column": "Column",
+    "content": "Content",
+    "custom_section": "Custom section",
+    "fonts": "Fonts",
+    "footer": "Footer",
+    "group": "Group",
+    "header": "Header",
+    "inputs": "Inputs",
+    "layout": "Layout",
+    "main": "Main",
+    "page": "Page",
+    "password": "Password",
+    "primary": "Primary",
+    "product": "Product",
+    "row": "Row",
+    "search": "Search",
+    "secondary": "Secondary",
+    "section": "Section",
+    "settings": "Settings",
+    "sidebar": "Sidebar",
+    "spacing": "Spacing",
+    "text": "Text",
+    "theme": "Theme",
+    "tracking": "Tracking",
+    "typography": "Typography"
+  },
+  "labels": {
+    "alignment": "Alignment",
+    "background": "Background",
+    "badge_padding_horizontal": "Badge horizontal padding",
+    "badge_padding_vertical": "Badge vertical padding",
+    "border_thickness": "Border thickness",
+    "corner_radius": "Corner radius",
+    "foreground": "Foreground",
+    "grid_gap": "Grid spacing",
+    "grid_item_width": "Grid item width",
+    "gtm_tracking_id": "GTM Tracking ID",
+    "input_corner_radius": "Input corner radius",
+    "layout_direction": "Layout direction",
+    "menu": "Menu",
+    "page_padding_mobile": "Page padding (mobile)",
+    "page_padding_tablet": "Page padding (tablet)",
+    "page_padding": "Page padding",
+    "page_width": "Page width",
+    "padding": "Padding",
+    "show_payment_icons": "Show payment icons",
+    "text_size": "Text size",
+    "text_style": "Text style",
+    "text": "Text"
+  },
+  "options": {
+    "alignment": {
+      "left": "Left",
+      "center": "Center",
+      "right": "Right"
+    },
+    "direction": {
+      "horizontal": "Horizontal",
+      "vertical": "Vertical"
+    },
+    "page_width": {
+      "narrow": "Narrow",
+      "wide": "Wide"
+    },
+    "size": {
+      "large": "Large",
+      "small": "Small"
+    },
+    "text_style": {
+      "title": "Title",
+      "subtitle": "Subtitle",
+      "normal": "Normal text"
+    },
+  }
+}

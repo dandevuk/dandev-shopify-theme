@@ -1,0 +1,560 @@
+{%- liquid
+  assign checkout_t = 'general.cart.checkout' | t
+
+  # Side cart — Tabs config comes from section settings using "id:Label|id2:Label2" format
+  assign default_cart_label = 'general.side_cart.cart_items' | t
+  assign default_wishlist_label = 'general.side_cart.saved_items' | t
+  assign default_tabs_config = 'cart:' | append: default_cart_label | append: '|wishlist:' | append: default_wishlist_label
+
+  assign sidecart_tabs_config = tabs_config | default: default_tabs_config
+  assign sidecart_tabs = sidecart_tabs_config | split: '|'
+
+  assign express_checkout_message_default = 'general.side_cart.side_cart_messages.express_checkout_note' | t
+  assign express_checkout_text = express_checkout_message | default: express_checkout_message_default
+
+  assign sidecart_subtotal_label = 'general.side_cart.subtotal' | t
+  assign sidecart_item_count = 'sections.header.cart_count' | t: count: cart.item_count
+  assign sidecart_tabs_aria_label = 'general.side_cart.side_cart_buttons_and_tabs.tabs_aria_label' | t
+-%}
+
+<nav
+  class="side-cart-tabs flex"
+  role="tablist"
+  aria-label="{{ sidecart_tabs_aria_label | escape }}"
+>
+  {%- for tab in sidecart_tabs -%}
+    {%- assign parts = tab | split: ':' -%}
+    {%- assign id = parts[0] | strip -%}
+    {%- assign label = parts[1] | strip -%}
+    <button
+      type="button"
+      class="side-cart-tab h-100 w-100 flex g-1 align-center{% if forloop.first %} active{% endif %}"
+      data-cart-tab
+      data-tab="{{ id }}"
+      id="sidecart-tab-{{ id }}"
+      role="tab"
+      aria-controls="sidecart-panel-{{ id }}"
+      aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+      {% if forloop.first %}
+        tabindex="0"
+      {% else %}
+        tabindex="-1"
+      {% endif %}
+    >
+      {%- if forloop.first -%}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="22"
+          height="24"
+          viewBox="0 0 22 24"
+          fill="none"
+        >
+          <path d="M3.83904 0.5L0.5 4.95096V20.531C0.5 21.1214 0.734527 21.6875 1.15199 22.105C1.56945 22.5225 2.13565 22.757 2.72603 22.757H18.306C18.8964 22.757 19.4626 22.5225 19.8801 22.105C20.2975 21.6875 20.5321 21.1214 20.5321 20.531V4.95096L17.193 0.5H3.83904Z" stroke="#1D1D1D" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M0.5 4.95203H20.5321" stroke="#1D1D1D" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M14.9622 9.40308C14.9364 10.5661 14.4562 11.6728 13.6245 12.4863C12.7928 13.2997 11.6757 13.7551 10.5124 13.7551C9.34902 13.7551 8.23191 13.2997 7.40022 12.4863C6.56852 11.6728 6.08835 10.5661 6.0625 9.40308" stroke="#1D1D1D" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      {%- endif -%}
+      {%- unless forloop.first -%}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="25"
+          height="22"
+          viewBox="0 0 25 22"
+          fill="none"
+        >
+          <path d="M13.8213 2.50781C16.1158 0.140291 19.7973 -0.212876 22.249 1.87598C25.0927 4.30309 25.2442 8.66613 22.6934 11.2988L13.2451 21.0547C12.8312 21.4818 12.1649 21.4818 11.751 21.0547L2.30273 11.2988C-0.16361 8.74838 -0.098425 4.57432 2.49316 2.10938L2.75195 1.87598C5.12718 -0.147859 8.66102 0.12043 10.9609 2.29102L11.1797 2.50781L12.1416 3.49902L12.501 3.86914L12.8594 3.49902L13.8213 2.50781Z" stroke="white"/>
+        </svg>
+      {%- endunless -%}
+      <span>
+        {{ label }}
+      </span>
+    </button>
+  {%- endfor -%}
+</nav>
+
+<div
+  cart-items-container
+  class="cart flex flex-col"
+  data-cart-items
+  data-cart-content
+  role="tabpanel"
+  id="sidecart-panel-cart"
+  aria-labelledby="sidecart-tab-cart"
+  data-items-count="{{- cart.item_count -}}"
+  data-full-basket-threshold="{{ full_basket_threshold }}"
+>
+  <form
+    action="{{ routes.cart_url }}"
+    method="post"
+    class="flex flex-col flex-between h-100"
+    novalidate
+    side-cart-form
+  >
+    {%- if localization.market.metafields.custom.free_shipping_cart_total != blank
+      or settings.free_delivery != blank
+    -%}
+      <div
+        free-delivery-status
+        class="free-delivery-status flex-center align-center flex-col g-1 p-2 text-center"
+      >
+        {% comment %} Icon placeholder removed during migration {% endcomment %}
+        {%- assign free_delivery_amount = settings.free_delivery -%}
+        {%- if free_delivery_amount != blank -%}
+          {%- assign free_delivery_amount = free_delivery_amount | times: 100 -%}
+        {%- elsif localization.market.metafields.custom.free_shipping_cart_total != blank -%}
+          {%- assign market_data = localization.market.metafields.custom.free_shipping_cart_total
+            | json
+          -%}
+          {%- assign free_delivery_amount = market_data
+            | split: 'amount":'
+            | last
+            | split: '}'
+            | first
+            | times: 1.0
+          -%}
+        {%- endif -%}
+
+        {%- assign cart_total = cart.items_subtotal_price -%}
+        {%- if free_delivery_amount != blank and free_delivery_amount != 0 -%}
+          {%- assign free_delivery_progress = cart_total
+            | times: 100
+            | divided_by: free_delivery_amount
+          -%}
+        {%- else -%}
+          {%- assign free_delivery_progress = 0 -%}
+        {%- endif -%}
+
+        {%- if free_delivery_progress > 100 -%}
+          {%- assign free_delivery_progress = 100 -%}
+        {%- endif -%}
+        {%- if free_delivery_progress < 0 -%}
+          {%- assign free_delivery_progress = 0 -%}
+        {%- endif -%}
+        <div class="free-delivery-progress-bar w-100 relative border-radius" aria-hidden="true">
+          <div
+            class="free-delivery-progress absolute top-0 left-0 h-100 border-radius"
+            style="width: {{ free_delivery_progress }}%"
+          ></div>
+
+          <div
+            class="free-delivery-knob absolute"
+            style="left: calc({{ free_delivery_progress }}% - 14px)"
+            aria-hidden="true"
+          >
+            <div class="free-delivery-knob-inner">
+              {{ 'icon-truck.svg' | inline_asset_content }}
+            </div>
+          </div>
+        </div>
+
+        <span class="free-delivery-text heading-h5 uppercase" role="status" aria-live="polite">
+          {%- if free_delivery_amount != blank -%}
+            {%- if cart_total < free_delivery_amount -%}
+              {% assign spend_more = free_delivery_amount | minus: cart_total -%}
+              {{ spend_more | money }}
+              {{ 'general.side_cart.side_cart_messages.free_delivery_progress' | t }}
+            {%- else -%}
+              {{ 'general.side_cart.side_cart_messages.free_delivery_reached' | t }}
+            {%- endif -%}
+          {%- endif -%}
+        </span>
+      </div>
+    {%- endif -%}
+    {%- if settings.free_gift != blank -%}
+      <div
+        free-gift-status
+        class="free-gift-status flex-center align-center flex-col g-1 p-2 text-center"
+      >
+        {%- assign free_gift_amount = settings.free_gift | times: 100 -%}
+        {%- assign cart_total = cart.items_subtotal_price -%}
+        {%- if free_gift_amount != blank and free_gift_amount != 0 -%}
+          {%- assign free_gift_progress = cart_total
+            | times: 100
+            | divided_by: free_gift_amount
+          -%}
+        {%- else -%}
+          {%- assign free_gift_progress = 0 -%}
+        {%- endif -%}
+
+        {%- if free_gift_progress > 100 -%}
+          {%- assign free_gift_progress = 100 -%}
+        {%- endif -%}
+        {%- if free_gift_progress < 0 -%}
+          {%- assign free_gift_progress = 0 -%}
+        {%- endif -%}
+        <div class="free-gift-progress-bar w-100 relative border-radius" aria-hidden="true">
+          <div
+            class="free-gift-progress absolute top-0 left-0 h-100 border-radius"
+            style="width: {{ free_gift_progress }}%"
+          ></div>
+
+          <div
+            class="free-gift-knob absolute"
+            style="left: calc({{ free_gift_progress }}% - 14px)"
+            aria-hidden="true"
+          >
+            <div class="free-gift-knob-inner">
+              {{ 'icon-gift.svg' | inline_asset_content }}
+            </div>
+          </div>
+        </div>
+
+        <span class="free-gift-text heading-h5 uppercase" role="status" aria-live="polite">
+          {%- if free_gift_amount != blank -%}
+            {%- if cart_total < free_gift_amount -%}
+              {% assign spend_more = free_gift_amount | minus: cart_total -%}
+              {{ spend_more | money }}
+              {{ 'general.side_cart.side_cart_messages.free_gift_progress' | t }}
+            {%- else -%}
+              {{ 'general.side_cart.side_cart_messages.free_gift_reached' | t }}
+            {%- endif -%}
+          {%- endif -%}
+        </span>
+      </div>
+    {%- endif -%}
+    <div class="items-wrapper h-100 overflow-y-auto">
+      {%- if cart.item_count == 0 -%}
+        <div class="empty-cart flex flex-col text-center flex-center g-3 h-100 p-4 section-container">
+          <p class="heading-md">{{- 'general.side_cart.side_cart_messages.empty_cart' | t -}}</p>
+          <button
+            class="button-1 m-in-auto continue-shopping closeSideCart"
+            closeSideCart
+            data-close-cart
+            type="button"
+          >
+            {{ 'general.continue_shopping' | t }}
+          </button>
+          {%- if settings.empty_side_cart_recommended_title != blank
+            and settings.empty_side_cart_recommended_url != blank
+          -%}
+            <a href="{{- settings.empty_side_cart_recommended_url -}}" class="button-1">
+              {{- settings.empty_side_cart_recommended_title -}}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- elsif cart.item_count >= 1 -%}
+        <div class="items m-2 mt-3 mb-1">
+          {%- for item in cart.items -%}
+            {%- render 'side-cart-item', item: item, key: item.key -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="recommended-mobile-products from-lg-hidden">
+      {%- comment -%}
+        Show recommendations in the side cart for both non-empty and empty carts when:
+        - a recommendations response exists OR
+        - a fallback product list / collection is configured in theme settings.
+      {%- endcomment -%}
+
+      {%- capture sidecart_recommendations_slider -%}
+        {%- render 'recommendations-slider',
+          use_fallback: true,
+          show_quickview_button: true,
+          slider_aria_label: 'general.side_cart.side_cart_buttons_and_tabs.recommended_products' | t,
+          slider_mobile: 2,
+          slider_tablet: 2,
+          slider_desktop: 3,
+          slider_wide: 4,
+          slider_gap_mobile: 16,
+          slider_gap_tablet: 16,
+          slider_gap_desktop: 24,
+          slider_gap_wide: 30,
+          slider_loop: false,
+          slider_pagination: false,
+          css_mobile_slides: 2,
+          css_tablet_slides: 2,
+          css_desktop_slides: 3,
+          css_wide_slides: 4,
+          css_mobile_gap: 16,
+          css_tablet_gap: 16,
+          css_desktop_gap: 24,
+          css_wide_gap: 30,
+          slider_class: 'blaze-loading cart-recommendations-slider p-2 pt-3 pb-1',
+          ensure_structure: true
+        -%}
+      {%- endcapture -%}
+
+      {%- assign sidecart_recommendations_label = 'general.side_cart.side_cart_buttons_and_tabs.recommended_products'
+        | t
+      -%}
+      {%- render 'accordion-item-general',
+        question: sidecart_recommendations_label,
+        content_html: sidecart_recommendations_slider
+      -%}
+    </div>
+
+    <div class="cart-details flex flex-col g-3 section-container third p-3">
+      <div class="total-wrapper flex flex-between flex-row">
+        <div class="heading-h4">
+          {{- sidecart_subtotal_label | escape }}
+          ({{ sidecart_item_count | escape }})
+        </div>
+
+        <div
+          side-cart-total
+          class="sub-total heading-sm"
+          data-sub-total="{{- cart.items_subtotal_price -}}"
+        >
+          {{- cart.items_subtotal_price | money -}}
+        </div>
+      </div>
+
+      <div class="cart__ctas">
+        <button
+          type="submit"
+          id="checkout"
+          class="button-3 w-100 cart__checkout-button"
+          name="checkout"
+          {% if cart == empty %}
+            disabled
+          {% endif %}
+        >
+          {% comment %} {{ 'content.checkout' | t }} {% endcomment %}
+          {{ checkout_t }}
+        </button>
+
+        {% if additional_checkout_buttons and settings.show_accelerated_checkout_buttons %}
+          <div
+            class="
+              additional-checkout-buttons
+              {% if accelerated_checkout_buttons_layout == 'vertical' %}additional-checkout-buttons--vertical{% endif %}
+            "
+          >
+            {{ content_for_additional_checkout_buttons }}
+          </div>
+        {% endif %}
+
+        <p class="text-center express-options-text">
+          {{- express_checkout_text | escape -}}
+        </p>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div
+  class="wishlist overflow-auto max-dvh"
+  data-cart-content
+  role="tabpanel"
+  id="sidecart-panel-wishlist"
+  aria-labelledby="sidecart-tab-wishlist"
+  hidden
+  style="display:none; flex-direction: column;"
+>
+  <div
+    side-cart-wishlist-grid
+    aria-live="polite"
+    aria-busy="false"
+    class="p-3 flex flex-col g-3"
+    data-empty-message="{{- settings.wishlist_empty_message -}}"
+    data-button-message="{{- settings.wishlist_button_message -}}"
+    data-button-link="{{- settings.wishlist_button_link -}}"
+  ></div>
+</div>
+
+{% stylesheet %}
+  .free-delivery-status,
+  .free-gift-status {
+    background-color: var(--brand-color-2);
+    color: var(--text-color-alternate);
+  }
+
+  .free-delivery-progress-bar,
+  .free-gift-progress-bar {
+    position: relative;
+    height: 3px;
+    min-height: 3px;
+    margin: 12px 0 8px;
+    background-color: rgb(255 255 255 / 30%);
+    background-color: color-mix(in srgb, var(--text-color-alternate) 30%, transparent);
+  }
+
+  .free-delivery-progress,
+  .free-gift-progress {
+    height: 100%;
+    background-color: white;
+    transition: width 0.3s ease;
+    will-change: width;
+  }
+
+  /* knob (circle) that rides the progress bar */
+  .free-delivery-knob,
+  .free-gift-knob {
+    top: 50%;
+    z-index: 2;
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+    transform: translateY(-50%);
+  }
+
+  .free-delivery-knob-inner,
+  .free-gift-knob-inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgb(0 0 0 / 6%);
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 12%);
+    background: var(--text-color-alternate);
+  }
+
+  .free-delivery-knob-inner svg,
+  .free-gift-knob-inner svg {
+    display: block;
+  }
+
+  .free-delivery-text,
+  .free-gift-text {
+    display: block;
+    margin-top: 6px;
+    color: var(--text-color-alternate);
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  }
+
+  /* Side cart tabs */
+  .side-cart-tabs {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    background-color: var(--brand-color-1);
+  }
+  .side-cart-tabs #sidecart-tab-cart {
+    justify-content: center;
+    max-width: 122px;
+  }
+  .side-cart-tabs #sidecart-tab-wishlist {
+    max-width: fit-content;
+    padding-inline: 20px;
+    text-align: left;
+  }
+
+  [cart-items-container] {
+    height: calc(100vh - 60px);
+  }
+
+  @supports (height: 100dvh) {
+    [cart-items-container] {
+      height: calc(100dvh - 60px);
+    }
+  }
+
+  .cart-recommendations-slider,
+  .cart-recommendations-slider .shopify-section {
+    width: 100%;
+  }
+
+  #shopify-section-side-cart .item.side-cart-item {
+    position: relative;
+    padding-bottom: 20px;
+  }
+
+  /* Not Active Tab */
+  button[data-cart-tab] {
+    background-color: var(--text-color);
+    color: var(--text-color-alternate);
+    cursor: pointer;
+    transition: 150ms ease;
+    stroke: var(--text-color-alternate);
+  }
+
+  button[data-cart-tab] svg path {
+    stroke: var(--text-color-alternate);
+  }
+
+  /* Active Tab */
+  button[data-cart-tab][aria-selected='true'] {
+    background-color: var(--text-color-alternate);
+    color: var(--text-color);
+  }
+
+  button[data-cart-tab][aria-selected='true'] svg path {
+    stroke: var(--text-color);
+  }
+
+  /* Base divider setup (but not active yet) */
+  #shopify-section-side-cart .items > div::after {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: var(--brand-color-5);
+    content: '';
+    pointer-events: none;
+    opacity: 0; /* default hidden */
+  }
+
+  /* Add the border only when the next sibling is NOT a non-variant item */
+  #shopify-section-side-cart .item.side-cart-item[data-variant-id]:has(+ .item[data-variant-id]) {
+    padding-bottom: 40px; /* increase space */
+  }
+
+  #shopify-section-side-cart
+    .item.side-cart-item[data-variant-id]:has(+ .item[data-variant-id])::after {
+    bottom: 20px; /* center line within the padding */
+    opacity: 1; /* show border */
+  }
+  #shopify-section-side-cart .items > div:not([data-variant-id]) {
+    position: relative;
+    margin-bottom: 40px;
+  }
+  #shopify-section-side-cart .items > div:not([data-variant-id])::after {
+    bottom: -20px; /* center line within the padding */
+    opacity: 1; /* show border */
+  }
+
+  #shopify-section-side-cart .item .img-wrapper {
+    width: 72px;
+    height: 83px;
+  }
+
+  .express-options-text {
+    margin-top: 18px;
+    font-size: 12px;
+  }
+
+  .cart form .recommended-mobile-products {
+    background-color: var(--brand-color-2);
+  }
+
+  .cart form .recommended-mobile-products .panel {
+    border-bottom: unset;
+  }
+
+  .cart form .recommended-mobile-products .content {
+    background-color: var(--text-color-alternate);
+
+    /* padding: 16px 8px; */
+  }
+
+  .cart form .recommended-mobile-products .button-accordion .accordion__question {
+    color: var(--text-color-alternate);
+    font-size: 14px;
+    font-weight: 500;
+    font-style: normal;
+    line-height: 150%; /* 21px */
+  }
+
+  .cart form .recommended-mobile-products .button-accordion .chevron {
+    width: 18px;
+    height: auto;
+    color: var(--text-color-alternate);
+  }
+
+  #shopify-section-side-cart .wishlist:has(.empty-wishlist-message) {
+    justify-content: center;
+    min-height: calc(100% - 80px);
+  }
+
+  .cart-drawer-content .recommended-mobile-products .button-accordion .chevron svg {
+    transform: rotateX(180deg);
+  }
+  .cart-drawer-content .recommended-mobile-products .button-accordion.active .chevron svg {
+    transform: rotateX(0deg);
+  }
+{% endstylesheet %}

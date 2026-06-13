@@ -1,0 +1,239 @@
+{% layout none %}
+
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    {%- render 'fonts' -%}
+
+    {%- if shop.brand.square_logo -%}
+      <link rel="icon" type="image/png" href="{{ shop.brand.square_logo | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+
+    {% render 'css-variables' %}
+
+    {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'utilities.css' | asset_url | stylesheet_tag: preload: true }}
+
+    {% render 'meta-tags' %}
+
+    {{ content_for_header }}
+  </head>
+
+  <body class="page-width vertical-margin">
+    <header class="gift-card__header">
+      <div class="logo text-center">
+        {{ shop.brand.logo | image_url: width: 400, format: "png" | image_tag: class: "logo__image" }}
+      </div>
+    </header>
+
+    <main class="gift-card text-center">
+      <div class="gift-card__gift-icon flex flex-center mb-3">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="300" height="130" viewBox="0 0 285 110">
+          <defs>
+            <clipPath id="clip-path">
+              <rect id="Rectangle_13561" data-name="Rectangle 13561" width="300" height="130" fill="#000"/>
+            </clipPath>
+          </defs>
+          <g id="Group_27936" data-name="Group 27936">
+            <path id="Path_2052" data-name="Path 2052" d="M272.512,67.795H217.141c9.617-6.078,15.7-13.43,18.111-21.94,4.265-15.034-4.287-29.8-14.655-37.767-12.47-9.58-24.029-8.928-31.532-6.694C174.828,5.635,161.148,19.5,148.4,42.6c-2.788,5.056-5.223,9.993-7.254,14.406-2.034-4.413-4.465-9.35-7.254-14.406-12.744-23.1-26.424-36.964-40.66-41.2C85.734-.84,74.174-1.492,61.7,8.088,51.336,16.056,42.784,30.822,47.049,45.855c2.413,8.509,8.494,15.862,18.111,21.94H9.787A9.788,9.788,0,0,0,0,77.585v37.007H131.364v-46.8h19.573v46.8H282.3V77.585a9.786,9.786,0,0,0-9.787-9.79M81.5,54.466c-8.82-4.2-14.221-9.029-15.615-13.95-1.859-6.549,3.767-13.846,7.749-16.9,4.115-3.161,7.5-4.05,10.184-4.05a13.252,13.252,0,0,1,3.828.591c8.842,2.628,19.133,13.877,28.984,31.668,2.708,4.89,5.066,9.707,7.011,13.966C105.762,63.089,91.63,59.3,81.5,54.466m134.925-13.95c-1.4,4.921-6.8,9.747-15.618,13.95-10.134,4.832-24.263,8.623-42.137,11.319,1.945-4.259,4.3-9.076,7.008-13.966,9.851-17.791,20.145-29.04,28.987-31.668a13.235,13.235,0,0,1,3.828-.591c2.677,0,6.069.889,10.184,4.05,3.982,3.059,9.608,10.356,7.749,16.9" transform="translate(0 0)" fill="#ffc800"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="gift-card__container mb-5">
+        <h1 class="heading-h1 gift-card__heading mt-0 mb-0">{{ 'gift_cards.issued.subtext' | t }}</h1>
+
+        <div class="gift-card__price">
+          <p>
+            {% if settings.currency_code_enabled %}
+              {{ gift_card.initial_value | money_with_currency }}
+            {% else %}
+              {{ gift_card.initial_value | money }}
+            {% endif %}
+          </p>
+
+          {%- if gift_card.enabled == false or gift_card.expired -%}
+            <p class="gift-card__label badge badge--{{ settings.sold_out_badge_color_scheme }}">
+              {{ 'gift_cards.issued.expired' | t }}
+            </p>
+          {%- endif -%}
+        </div>
+
+        {% if settings.currency_code_enabled %}
+          {%- assign gift_card_balance = gift_card.balance | money_with_currency -%}
+        {% else %}
+          {%- assign gift_card_balance = gift_card.balance | money -%}
+        {% endif %}
+        {%- if gift_card.balance != gift_card.initial_value -%}
+          <p class="gift-card__label caption-large">
+            {{ 'gift_cards.issued.remaining_html' | t: balance: gift_card_balance }}
+          </p>
+        {%- endif -%}
+
+        <div class="gift-card__qr-code" data-identifier="{{ gift_card.qr_identifier }}"></div>
+      </div>
+
+      <div class="gift-card__information flex flex-wrap align-center flex-center g-3 mt-4">
+        <input
+          type="text"
+          name="gift_card_code"
+          class="gift-card__number flex-1 text-center"
+          value="{{ gift_card.code | format_code }}"
+          aria-label="{{ 'gift_cards.issued.gift_card_code' | t }}"
+          readonly
+        >
+        <div class="gift-card__copy-code">
+          <button class="button-1 link gift-card__copy-link">{{ 'gift_cards.issued.copy_code' | t }}</button>
+        </div>
+
+        <div class="copied_code_success flex w-100 flex-center g-3 mt-3">
+          <span class="gift-card__copy-success form__message flex w-100 flex-center g-3 mt-3" role="status"></span>
+          <template>
+            <img src="{{ 'icon--tick.svg' |  asset_url }}" width="30" height="30" alt="Success" loading="lazy" decoding="async">
+            {{ 'gift_cards.issued.copy_code_success' | t }}
+          </template>
+        </div>
+
+        <div class="gift-card__buttons w-100 mt-5 flex flex-wrap flex-center g-3 no-print">
+          {%- if gift_card.pass_url -%}
+            <a href="{{ gift_card.pass_url }}" class="gift_card__apple-wallet">
+              <img
+                src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}"
+                width="120"
+                height="40"
+                alt="{{ 'gift_cards.issued.add_to_apple_wallet' | t }}"
+                loading="lazy"
+              >
+            </a>
+          {%- endif -%}
+
+          <button class="button-2" onclick="window.print();">
+            {{ 'gift_cards.issued.print_gift_card' | t }}
+          </button>
+
+          <div class="gift-card__continue w-100 mt-3 text-center">
+            <a
+              href="{{ request.origin }}"
+              class="button-1"
+              target="_blank"
+              rel="noopener"
+              aria-describedby="a11y-new-window-message"
+            >
+              {{ 'gift_cards.issued.shop_link' | t }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div hidden>
+      <span id="a11y-new-window-message">{{ 'accessibility.link_messages.new_window' | t }}</span>
+    </div>
+
+    <script>
+      var string = { qrImageAlt: {{ 'gift_cards.issued.qr_image_alt' | t | json }} };
+      document.addEventListener('DOMContentLoaded', function() {
+        new QRCode(document.querySelector('.gift-card__qr-code'), {
+          text: document.querySelector('.gift-card__qr-code').dataset.identifier,
+          width: 120,
+          height: 120,
+          imageAltText: string.qrImageAlt
+        });
+      });
+
+      var template = document.getElementsByTagName("template")[0];
+      var clonedTemplate = template.content.cloneNode(true);
+      var isMessageDisplayed = false;
+
+      document.querySelector('.gift-card__copy-link').addEventListener('click', () => {
+        navigator.clipboard.writeText(document.querySelector('.gift-card__number').value).then(function () {
+          if (!isMessageDisplayed) {
+            document.querySelector('.gift-card__copy-success').appendChild(clonedTemplate);
+            isMessageDisplayed = true;
+          }
+        });
+      });
+    </script>
+
+    {%- style -%}
+    body {
+      background-color: #FFFFFF;
+      color: #000;
+      box-sizing: border-box;
+      padding: 60px;
+    }
+    @media screen and (max-width: 768px) {
+      body { padding: 30px 0 0 0; }
+    }
+
+    .gift-card__header {
+      max-width: 380px;
+      margin: 0 auto 24px;
+    }
+    .gift-card__header .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .gift-card {
+      max-width: 380px;
+      margin: 0 auto;
+    }
+    .gift-card__gift-icon svg path {
+      fill: var(--brand-color-3);
+    }
+    .gift-card__container {
+      background: var(--brand-color-3);
+      color: #343432;
+      max-width: 280px;
+      padding: 30px 20px 40px;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+      box-sizing: border-box;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .gift-card__heading {
+      color: var(--text-primary-color);
+    }
+    .gift-card__price p {
+      font-size: 30px;
+      color: var(--text-primary-color);
+      font-weight: 600;
+      margin: 12px 0;
+    }
+
+    .gift-card__qr-code img { margin: 0 auto; }
+
+    .gift-card__information {
+      margin: 0 auto;
+    }
+
+    .gift-card__information .gift-card__number {
+      font-size: 20px;
+      background-color: var(--brand-color-2);
+      font-style: normal;
+      font-weight: 300;
+      font-stretch: normal;
+      border: 0;
+      color: var(--text-primary-color);
+      border-radius: 24px;
+      padding: 7px;
+    }
+
+    .copied_code_success,
+    .gift-card__copy-success {
+      color: var(--text-primary-color);
+    }
+    .gift-card__copy-success img {
+      width: 20px;
+      margin: unset;
+    }
+
+    .gift-card__continue a { margin: 0 auto; }
+    {%- endstyle -%}
+
+  </body>
+</html>

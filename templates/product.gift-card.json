@@ -1,0 +1,99 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "product",
+      "blocks": {
+        "product_title_p3Bxkj": {
+          "type": "_product-title",
+          "name": "Title",
+          "settings": {},
+          "blocks": {}
+        },
+        "product_price_eti3bj": {
+          "type": "_product-price",
+          "name": "Price",
+          "settings": {
+            "price_format": "variant_price"
+          },
+          "blocks": {}
+        },
+        "product_description_YwJcVY": {
+          "type": "_product-description",
+          "name": "Description",
+          "settings": {
+            "description": "",
+            "add_read_more_link": false,
+            "read_more_link_url": "",
+            "truncate_height": "none",
+            "add_border_bottom": false
+          },
+          "blocks": {}
+        },
+        "product_variant_selectors_GWTq3R": {
+          "type": "_product-variant-selectors",
+          "name": "Variant Selectors",
+          "settings": {
+            "option_select_type": "select",
+            "add_border_bottom": false
+          },
+          "blocks": {}
+        },
+        "product_gift_card_fields_drVpkU": {
+          "type": "_product-gift-card-fields",
+          "name": "Gift card fields",
+          "settings": {},
+          "blocks": {}
+        },
+        "product_submit_bQTTGM": {
+          "type": "_product-submit",
+          "name": "Submit Form",
+          "settings": {
+            "add_to_cart_style": "button-1",
+            "add_border_bottom": false
+          },
+          "blocks": {}
+        },
+        "complementary-products": {
+          "type": "_product-complementary-products",
+          "static": true,
+          "settings": {
+            "heading": "Why Not Add",
+            "product_list": [],
+            "add_border_bottom": false
+          },
+          "blocks": {}
+        },
+        "information": {
+          "type": "_product-information",
+          "static": true,
+          "settings": {},
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "product_title_p3Bxkj",
+        "product_price_eti3bj",
+        "product_description_YwJcVY",
+        "product_variant_selectors_GWTq3R",
+        "product_gift_card_fields_drVpkU",
+        "product_submit_bQTTGM"
+      ],
+      "settings": {
+        "show_recommendations_slider": true,
+        "recommendations_heading": "You May Also Like"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

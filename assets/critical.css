@@ -1,0 +1,504 @@
+/** Critical CSS for the theme. This file is included on every page. */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  margin: 0;
+  background-color: var(--body-background-color);
+  color: var(--text-color);
+  font-family: var(--body-font-family);
+  font-size: clamp(
+    var(--body-font-size-mobile),
+    calc(var(--body-intercept) + var(--body-slope) * 1vw),
+    var(--body-font-size)
+  );
+  font-weight: var(--body-font-weight);
+  line-height: var(--body-line-height);
+}
+
+body.no-scroll {
+  position: fixed;
+  inset: 0;
+  max-width: 100dvw;
+}
+
+html:has(dialog[scroll-lock][open], details[scroll-lock][open]) {
+  overflow: hidden;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* List styling */
+ul,
+ol {
+  margin-block: 1rem;
+  padding-left: 1.5rem;
+}
+
+li + li {
+  margin-top: 0.25rem;
+}
+li {
+  line-height: var(--body-line-height);
+}
+
+/* add some checks for ul,ol last child */
+ul:last-child,
+ol:last-child {
+  margin-bottom: 0;
+}
+
+ul.list-none,
+ol.list-none {
+  margin-block: 0;
+  padding-left: 0;
+}
+
+ul.list-none li,
+ol.list-none li {
+  margin: 0;
+  list-style: none;
+}
+
+/* Link styling */
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.3s ease;
+}
+
+a:not([class^="button-"]):hover,
+a:not([class^="button-"]):focus {
+  color: var(--text-color-highlight);
+}
+
+input,
+textarea,
+select {
+  border-radius: var(--style-border-radius-inputs);
+  font: inherit;
+}
+
+select {
+  background-color: var(--color-background);
+  color: currentcolor;
+}
+
+dialog {
+  background-color: var(--color-background);
+  color: var(--text-color);
+}
+
+p {
+  text-wrap: pretty;
+}
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+p:empty {
+  display: none;
+}
+
+sup,
+sub {
+  position: relative;
+  font-size: 0.75em;
+  line-height: 0;
+  vertical-align: baseline;
+}
+sup {
+  top: -0.5em;
+}
+sub {
+  bottom: -0.25em;
+}
+
+blockquote {
+  margin: 1.5rem 0;
+  padding-left: 1rem;
+  padding-block: 1rem;
+  border-left: 4px solid var(--text-color);
+  background-color: #f5f5f5;
+  font-style: italic;
+}
+
+hr {
+  margin: 2rem 0;
+  border: 0;
+  border-top: 1px solid var(--text-color);
+}
+
+iframe {
+  width: 100%;
+  max-width: 100%;
+  border: 0;
+  aspect-ratio: 16 / 9; /* keeps embeds like YouTube proportional */
+}
+
+figure {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+figcaption {
+  margin-top: 0.5rem;
+  color: var(--text-color);
+  font-size: 0.875em;
+  text-align: left;
+}
+
+table {
+  display: block;
+  width: 100%;
+  margin: 1rem 0;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 0.625rem;
+  border: 1px solid var(--text-color);
+  text-align: left;
+}
+th {
+  background-color: var(--table-header-bg, #f9f9f9);
+  font-weight: bold;
+}
+
+/* Definition lists */
+dl {
+  margin: 1rem 0;
+}
+dt {
+  margin-top: 0.5rem;
+  font-weight: bold;
+}
+dd {
+  margin: 0 0 0.5rem 1rem;
+}
+
+code {
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+  background: #f5f5f5;
+  font-family: var(--body-font-family);
+}
+pre {
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  background: #f5f5f5;
+  font-family: var(--body-font-family);
+}
+pre code {
+  padding: 0;
+  background: none;
+}
+
+:is(
+  p,
+  .heading-h0,
+  h1,
+  .heading-h1,
+  h2,
+  .heading-h2,
+  h3,
+  .heading-h3,
+  h4,
+  .heading-h4,
+  h5,
+  .heading-h5,
+  h6,
+  .heading-h6
+):first-child,
+:empty:first-child
+  + :where(
+    p,
+    .heading-h0,
+    h1,
+    .heading-h1,
+    h2,
+    .heading-h2,
+    h3,
+    .heading-h3,
+    h4,
+    .heading-h4,
+    h5,
+    .heading-h5,
+    h6,
+    .heading-h6
+  ) {
+  margin-block-start: 0;
+}
+
+:is(
+  p,
+  .heading-h0,
+  h1,
+  .heading-h1,
+  h2,
+  .heading-h2,
+  h3,
+  .heading-h3,
+  h4,
+  .heading-h4,
+  h5,
+  .heading-h5,
+  h6,
+  .heading-h6
+):last-child,
+:where(
+    p,
+    .heading-h0,
+    h1,
+    .heading-h1,
+    h2,
+    .heading-h2,
+    h3,
+    .heading-h3,
+    h4,
+    .heading-h4,
+    h5,
+    .heading-h5,
+    h6,
+    .heading-h6
+  )
+  + :has(+ :empty:last-child) {
+  margin-block-end: 0;
+}
+
+/** Theme styles below */
+
+/* BUTTONS */
+
+input,
+select,
+textarea {
+  height: max-content;
+  padding: var(--input-v-padding) var(--input-h-padding);
+  border: 1px solid var(--input-border-color);
+  border-width: var(--input-border-width);
+  border-radius: var(--input-border-radius);
+  background-color: var(--input-background-color);
+  color: var(--text-color);
+  font: inherit;
+  font-size: var(--input-font-size);
+  line-height: normal;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--input-placeholder-color);
+  opacity: 1;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid var(--input-focus-border-color);
+}
+
+input[type="checkbox"] {
+  flex: none;
+  width: 19px;
+  min-width: 19px;
+  max-width: 19px;
+  height: 19px;
+  min-height: 19px;
+  max-height: 19px;
+  padding: unset;
+  border: none;
+  border-radius: 50%;
+  background-color: #fff;
+  cursor: pointer;
+  appearance: none;
+  aspect-ratio: 1;
+}
+input[type="checkbox"]:focus {
+  outline: none;
+}
+
+input[type="checkbox"]:checked {
+  background-color: var(--brand-color-2);
+}
+
+input[type="checkbox"]::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: none;
+  width: 4px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  content: "";
+  transform: translate(-50%, -59%) rotate(40deg);
+}
+
+input[type="checkbox"]:checked::before {
+  background-color: var(--brand-color-2);
+  transform: scale(1);
+}
+
+input[type="checkbox"]:checked::after {
+  display: block;
+}
+
+label:has(input[type="checkbox"]) {
+  display: flex;
+  gap: 6px;
+}
+
+input.error,
+select.error,
+textarea.error {
+  border-color: var(--input-error-border-color);
+  outline: none;
+  background-color: var(--input-error-background-color);
+  color: var(--input-error-text-color);
+}
+
+input.error::placeholder,
+textarea.error::placeholder {
+  color: var(--input-error-placeholder-color);
+}
+
+/* DISABLED BUTTONS */
+
+[class^="button-"].disabled,
+[class^="button-"].disabled:hover {
+  border-color: #393939;
+  background: #393939;
+  opacity: 0.7;
+}
+
+/* Reset button tag styles */
+button:not([class^="button-"]) {
+  border: none;
+  outline: none;
+  background: none;
+  color: var(--text-color);
+  font-family: inherit;
+  font-size: clamp(
+    var(--body-font-size-mobile),
+    calc(var(--body-intercept) + var(--body-slope) * 1vw),
+    var(--body-font-size)
+  );
+  font-weight: inherit;
+  cursor: pointer;
+  appearance: none;
+}
+
+.button-accordion {
+  border-color: inherit;
+  color: inherit;
+}
+
+.slider-pagination-bullet.slider-pagination-bullet-active {
+  background-color: var(--brand-color-2) !important;
+}
+
+#shopify-chat inbox-online-store-chat[is-open="false"] {
+  bottom: 60px !important;
+  z-index: 9 !important;
+}
+
+/* Toasty minimal styles — ensure toasts are visible (added by assistant) */
+#toasty-zone {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 999999999;
+  width: 100%;
+  padding: 10px;
+  pointer-events: none;
+}
+#toasty-zone output.toasty {
+  position: absolute;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 360px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgb(0 0 0 / 25%);
+  overflow: hidden;
+  background: rgb(0 0 0 / 85%);
+  color: #fff;
+  pointer-events: auto;
+}
+#toasty-zone output.toasty.bg {
+  background: var(--background, rgb(0 0 0 / 85%));
+}
+#toasty-zone output.toasty .toasty-image {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+#toasty-zone output.toasty .toasty-title {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+}
+#toasty-zone output.toasty .toasty-body {
+  font-size: 13px;
+  opacity: 0.95;
+}
+#toasty-zone output.toasty .toasty-close {
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
+  color: inherit;
+  cursor: pointer;
+}
+#toasty-zone output.toasty.dragging {
+  opacity: 0.95;
+}
+
+@media (max-width: 600px) {
+  #toasty-zone {
+    right: 10px;
+    left: 10px;
+  }
+  #toasty-zone output.toasty {
+    right: 10px;
+    left: 10px;
+    width: auto;
+  }
+}

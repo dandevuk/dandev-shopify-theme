@@ -1,0 +1,299 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "page_header_4Wq8WV": {
+      "type": "page-header",
+      "blocks": {
+        "section_content_H9C6f6": {
+          "type": "section-content",
+          "settings": {
+            "content_spacing": "g-2"
+          },
+          "blocks": {
+            "heading_6eTqtm": {
+              "type": "heading",
+              "name": "Heading",
+              "settings": {
+                "heading": "Heading",
+                "heading_type": "h2",
+                "heading_size": "heading-h1"
+              },
+              "blocks": {}
+            },
+            "richtext_ELA9jX": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "richtext": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>"
+              },
+              "blocks": {}
+            },
+            "links_container_wqgbaj": {
+              "type": "links-container",
+              "name": "Links Container",
+              "settings": {
+                "content_spacing": "g-1"
+              },
+              "blocks": {
+                "link_nP6HVG": {
+                  "type": "link",
+                  "settings": {
+                    "link_text": "Link Text",
+                    "link": "shopify://collections",
+                    "link_title": "Link Title",
+                    "link_style": "button-2",
+                    "external_link": false
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "link_nP6HVG"
+              ]
+            }
+          },
+          "block_order": [
+            "heading_6eTqtm",
+            "richtext_ELA9jX",
+            "links_container_wqgbaj"
+          ]
+        }
+      },
+      "block_order": [
+        "section_content_H9C6f6"
+      ],
+      "name": "Page Header",
+      "settings": {
+        "style_selector": "theme",
+        "section_styling": "third",
+        "background_color": "linear-gradient(180deg, rgba(230, 27, 27, 1), rgba(255, 255, 255, 1) 100%)",
+        "text_color": "#0cecf8",
+        "overlay_type": "theme",
+        "overlay_styling": "secondary",
+        "overlay_color": "linear-gradient(180deg, rgba(64, 251, 22, 0.1), rgba(255, 255, 255, 1) 100%)",
+        "layout_style": "full-width",
+        "text_alignment": "left",
+        "truncate_text": true,
+        "truncate_lines": 3
+      }
+    },
+    "text_section": {
+      "type": "text-section",
+      "blocks": {
+        "id": {
+          "type": "section-content",
+          "static": true,
+          "settings": {
+            "content_spacing": "g-1"
+          },
+          "blocks": {
+            "heading_ft6Xne": {
+              "type": "heading",
+              "name": "Heading",
+              "settings": {
+                "heading": "Text Section Heading",
+                "heading_type": "h2",
+                "heading_size": "heading-h1"
+              },
+              "blocks": {}
+            },
+            "richtext_bRQ6qi": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "richtext": "<p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p><p><br/>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p><p><br/>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.<br/><br/>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.<br/></p><p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p>"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "heading_ft6Xne",
+            "richtext_bRQ6qi"
+          ]
+        }
+      },
+      "name": "Text Section",
+      "settings": {
+        "style_selector": "theme",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "text_alignment": "text-center",
+        "page_width": "page-width--narrow",
+        "vertical_spacing": "vertical-margin",
+        "id_text": ""
+      }
+    },
+    "text_media_qVDiEJ": {
+      "type": "text-media",
+      "blocks": {
+        "section_content_cgyQXH": {
+          "type": "section-content",
+          "settings": {
+            "content_spacing": "g-3"
+          },
+          "blocks": {
+            "heading_HMgxkX": {
+              "type": "heading",
+              "name": "Heading",
+              "settings": {
+                "heading": "Heading",
+                "heading_type": "h2",
+                "heading_size": "heading-h1"
+              },
+              "blocks": {}
+            },
+            "richtext_kyB9GB": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "richtext": "<p>Add text here</p>"
+              },
+              "blocks": {}
+            },
+            "links_container_GFjcrQ": {
+              "type": "links-container",
+              "name": "Links Container",
+              "settings": {
+                "content_spacing": "g-1"
+              },
+              "blocks": {
+                "link_dB4tdP": {
+                  "type": "link",
+                  "name": "Link",
+                  "settings": {
+                    "link_text": "Link Text",
+                    "link": "shopify://collections/best-sellers",
+                    "link_title": "Link Title",
+                    "link_style": "button-2",
+                    "external_link": false
+                  },
+                  "blocks": {}
+                },
+                "link_qwgzjQ": {
+                  "type": "link",
+                  "settings": {
+                    "link_text": "Link Text",
+                    "link": "shopify://collections",
+                    "link_title": "Link Title",
+                    "link_style": "button-1",
+                    "external_link": false
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "link_dB4tdP",
+                "link_qwgzjQ"
+              ]
+            }
+          },
+          "block_order": [
+            "heading_HMgxkX",
+            "richtext_kyB9GB",
+            "links_container_GFjcrQ"
+          ]
+        }
+      },
+      "block_order": [
+        "section_content_cgyQXH"
+      ],
+      "name": "Text Media",
+      "settings": {
+        "content_type": "image",
+        "html_embed_content": "",
+        "image": "shopify://shop_images/pexels-terricks-noah-282960-838680_6103b579-3a75-4e01-9f7a-3acdc1d55a62.jpg",
+        "image_display": "contain",
+        "lazy_load": true,
+        "style_selector": "theme",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "background_image_type": "none",
+        "background_image_theme": "1",
+        "container_style_selector": "theme",
+        "container_section_styling": "third",
+        "container_background_color": "linear-gradient(#ffffff, #ffffff)",
+        "container_text_color": "#393939",
+        "container_background_image_type": "none",
+        "container_background_image_theme": "1",
+        "remove_text_padding": false,
+        "vertical_text_alignment": "align-center",
+        "horizontal_layout": "section-text-left",
+        "vertical_layout": "text-bottom",
+        "page_width": "page-width",
+        "vertical_spacing": "vertical-margin",
+        "id_text": ""
+      }
+    },
+    "scrolling_marquee_dEbPqr": {
+      "type": "scrolling-marquee",
+      "blocks": {
+        "marquee_slide_Bep9De": {
+          "type": "_marquee_slide",
+          "name": "Marquee Slide",
+          "settings": {},
+          "blocks": {
+            "inline_richtext": {
+              "type": "inline_richtext",
+              "static": true,
+              "settings": {
+                "inline_richtext": "Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat.",
+                "text_size": "heading-h2"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": []
+        }
+      },
+      "block_order": [
+        "marquee_slide_Bep9De"
+      ],
+      "name": "Scrolling Marquee",
+      "settings": {
+        "style_selector": "theme",
+        "section_styling": "third",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "page_width": "page-width",
+        "vertical_spacing": "vertical-padding",
+        "autoplay": 6
+      }
+    },
+    "cta_banner_kJNYpT": {
+      "type": "cta-banner",
+      "name": "CTA Banner",
+      "settings": {
+        "page_width": "page-width--full",
+        "vertical_spacing": "none"
+      },
+      "blocks": {
+        "cta": {
+          "type": "_cta",
+          "static": true,
+          "settings": {
+            "style": "banner"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": []
+    }
+  },
+  "order": [
+    "page_header_4Wq8WV",
+    "text_section",
+    "text_media_qVDiEJ",
+    "scrolling_marquee_dEbPqr",
+    "cta_banner_kJNYpT"
+  ]
+}

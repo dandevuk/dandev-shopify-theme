@@ -1,0 +1,52 @@
+{%- liquid
+  assign lazy = false
+  if section.index > 2
+    assign lazy = true
+  endif
+
+  if closest.collection != blank
+    assign coll = closest.collection
+  endif
+-%}
+{%- if card_style == 'title-link' -%}
+  <a href="{{ coll.url }}" class="button-3 button-narrow {% if is_current %}selected{% endif %} {% if card_style == 'title-link' %}capitalize body-font-family button-medium{% endif %}">
+    {{- coll.title -}}
+  </a>
+{%- else -%}
+  <a
+    href="{{ coll.url }}"
+    class="collection-card no-hover-color flex flex-col border-radius-large p-2 {% if card_style == "square" %}g-2{% else %}g-3{% endif %} h-100 no-decoration"
+    style="background-color: #fff;"
+    aria-label="Link to {{ coll.title }}"
+  >
+    <div
+      class="border-radius card-image overflow-hidden {% if card_style == "square" %}ar-1{%  else %}h-100{% endif %}"
+      {% if card_style == 'rectangle' %}
+        style="max-height: 290px;"
+      {% endif %}
+    >
+      {%- liquid
+        if coll.featured_image != blank
+          render 'image', image: coll.featured_image, max_width: 700, use_placeholder: true, lazy: lazy, class: 'object-cover', context_text: coll.title
+        elsif settings.collection_fallback != blank
+          render 'image', image: settings.collection_fallback, max_width: 700, use_placeholder: true, lazy: lazy, class: 'object-cover', context_text: coll.title
+        else
+          echo 'collection-6' | placeholder_svg_tag
+        endif
+      -%}
+    </div>
+    <div class="no-text-margins">
+      <div class="link-arrow {% if size == "square" %}heading-h4{% else %}heading-h3{% endif %} flex align-center g-1">
+        <span>{{ coll.title }}</span>
+      </div>
+    </div>
+  </a>
+{%- endif -%}
+{%- stylesheet -%}
+  .collection-card .link-arrow svg {
+    transition: transform 0.2s ease;
+  }
+  .collection-card:hover .link-arrow svg {
+    transform: translateX(3px);
+  }
+{%- endstylesheet -%}

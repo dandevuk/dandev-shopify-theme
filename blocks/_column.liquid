@@ -1,0 +1,106 @@
+<div
+  class="column flex flex-col {{ block.settings.text_alignment }} {{ block.settings.columns }} {{ block.settings.columns_mobile }} no-text-margins"
+  {{ block.shopify_attributes }}
+>
+  {%- content_for 'blocks' -%}
+</div>
+
+{%- stylesheet -%}
+  .custom-section .column {
+    gap: clamp(
+      var(--grid-gap-mobile),
+      calc(var(--grid-intercept) + var(--grid-slope) * 1vw),
+      var(--grid-gap)
+    );
+  }
+  .custom-section .column:empty {
+    display: none;
+  }
+{%- endstylesheet -%}
+
+{% schema %}
+{
+  "name": "Column",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Column Span (Desktop)",
+      "options": [
+        {
+          "value": "span-12",
+          "label": "100%"
+        },
+        {
+          "value": "span-6",
+          "label": "50%"
+        },
+        {
+          "value": "span-4",
+          "label": "33.33%"
+        },
+        {
+          "value": "span-3",
+          "label": "25%"
+        }
+      ],
+      "default": "span-12"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Column Span (Mobile)",
+      "options": [
+        {
+          "value": "",
+          "label": "100%"
+        },
+        {
+          "value": "span-sm-3",
+          "label": "50%"
+        },
+        {
+          "value": "span-sm-2",
+          "label": "33.33%"
+        }
+      ],
+      "default": ""
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "options": [
+        {
+          "value": "text-left",
+          "label": "Left"
+        },
+        {
+          "value": "text-center",
+          "label": "Centre"
+        },
+        {
+          "value": "text-right",
+          "label": "Right"
+        }
+      ],
+      "default": "text-left"
+    }
+  ],
+  "blocks": [
+    { "type": "heading" },
+    { "type": "richtext" },
+    { "type": "links-container" },
+    { "type": "_image" },
+    { "type": "_content-grid" },
+    { "type": "_product-card" },
+    { "type": "_divider" }
+  ],
+  "presets": [
+    {
+      "name": "Column"
+    }
+  ]
+}
+{% endschema %}

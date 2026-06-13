@@ -1,0 +1,141 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "full_width_image_7VmPNj": {
+      "type": "full-width-image",
+      "name": "Full Width Image",
+      "settings": {
+        "image": "{{ article.image }}",
+        "url_link": "",
+        "link_label": "",
+        "preserve_image_dimensions": false,
+        "desktop_height_setting": 200,
+        "mobile_height_setting": 200,
+        "lazy_load": false,
+        "border_radius": false,
+        "page_width": "page-width--full",
+        "vertical_spacing": "",
+        "custom_spacing": false,
+        "top_spacing": 120,
+        "bottom_spacing": 120,
+        "top_spacing_mobile": 60,
+        "bottom_spacing_mobile": 60
+      }
+    },
+    "main": {
+      "type": "article",
+      "settings": {
+        "style_selector": "theme",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "text_alignment": "text-left",
+        "page_width": "page-width--narrow",
+        "vertical_spacing": "vertical-padding"
+      }
+    },
+    "featured_product_6U6dyf": {
+      "type": "featured-product",
+      "blocks": {
+        "product_title_price_qDUgEG": {
+          "type": "_product-title-price",
+          "settings": {},
+          "blocks": {
+            "product_title_7h3nE8": {
+              "type": "_product-title",
+              "settings": {},
+              "blocks": {}
+            },
+            "product_price_w3UDDT": {
+              "type": "_product-price",
+              "settings": {
+                "price_format": "from"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "product_title_7h3nE8",
+            "product_price_w3UDDT"
+          ]
+        },
+        "product_description_jb4r43": {
+          "type": "_product-description",
+          "settings": {
+            "description": "{{ closest.product.description }}",
+            "add_read_more_link": false,
+            "read_more_link_url": "",
+            "truncate_height": "vertical-clamp-two",
+            "add_border_bottom": false
+          },
+          "blocks": {}
+        },
+        "product_variant_selectors_Hapkb4": {
+          "type": "_product-variant-selectors",
+          "settings": {
+            "option_select_type": "radio",
+            "add_border_bottom": true
+          },
+          "blocks": {}
+        },
+        "product_submit_3epXpT": {
+          "type": "_product-submit",
+          "settings": {
+            "add_to_cart_style": "button-1",
+            "show_quantity": true,
+            "add_border_bottom": false
+          },
+          "blocks": {}
+        },
+        "link_CHR4DQ": {
+          "type": "link",
+          "settings": {
+            "link_text": "View full product details",
+            "link": "{{ closest.product.url }}",
+            "link_title": "View full product details",
+            "link_style": "theme-link",
+            "external_link": false
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "product_title_price_qDUgEG",
+        "product_description_jb4r43",
+        "product_variant_selectors_Hapkb4",
+        "product_submit_3epXpT",
+        "link_CHR4DQ"
+      ],
+      "name": "Featured Product",
+      "settings": {
+        "product": "",
+        "style_selector": "theme",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "text_alignment": "text-left",
+        "page_width": "page-width--narrow",
+        "vertical_spacing": "vertical-margin",
+        "custom_spacing": false,
+        "top_spacing": 120,
+        "bottom_spacing": 120,
+        "top_spacing_mobile": 60,
+        "bottom_spacing_mobile": 60,
+        "id_text": ""
+      }
+    }
+  },
+  "order": [
+    "full_width_image_7VmPNj",
+    "main",
+    "featured_product_6U6dyf"
+  ]
+}

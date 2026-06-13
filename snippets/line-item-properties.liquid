@@ -1,0 +1,98 @@
+{% doc %}
+  Renders cart line item properties with pre-order messaging.
+  @param {line_item} item - Cart line item
+  @param {string} [list_item_class] - Optional extra class on each list item
+{% enddoc %}
+
+{%- if item.properties != blank -%}
+  {%- liquid
+    assign list_class = list_item_class | default: 'flex align-center flex-wrap m-0'
+    assign show_pre_order = false
+    assign despatch_raw = ''
+    assign legacy_pre_order_key = 'general.side_cart.side_cart_messages.pre_order' | t
+    assign legacy_despatch_key = 'general.side_cart.side_cart_messages.expected_delivery' | t
+
+    for property in item.properties
+      assign prop_key = property[0]
+      assign prop_value = property[1]
+
+      if prop_key == '_pre_order' and prop_value == 'true'
+        assign show_pre_order = true
+      elsif prop_key == legacy_pre_order_key and prop_value == 'true'
+        assign show_pre_order = true
+      endif
+
+      if prop_key == '_expected_despatch_date' and prop_value != blank
+        assign despatch_raw = prop_value
+      elsif prop_key == legacy_despatch_key and prop_value != blank
+        assign despatch_raw = prop_value
+      endif
+    endfor
+
+    assign despatch_formatted = ''
+    if despatch_raw != blank
+      assign despatch_formatted = despatch_raw | date: '%d.%m.%Y'
+    endif
+  -%}
+  <ul class="m-0 p-0">
+    {%- if show_pre_order -%}
+      <li
+        class="{{ list_class }}"
+        line_item_property
+        style="font-size:12px;"
+        data-key="_pre_order"
+        data-value="true"
+      >
+        <strong class="mr-2">{{- 'products.product.pre_order' | t -}}</strong>
+      </li>
+    {%- endif -%}
+    {%- if despatch_formatted != blank -%}
+      <li
+        class="{{ list_class }}"
+        line_item_property
+        style="font-size:12px;"
+        data-key="_expected_despatch_date"
+        data-value="{{ despatch_raw }}"
+      >
+        <span>{{- 'products.product.expected_delivery' | t: date: despatch_formatted -}}</span>
+      </li>
+    {%- endif -%}
+    {%- for property in item.properties -%}
+      {%- liquid
+        assign prop_key = property[0]
+        assign first_char = prop_key | slice: 0
+        assign skip_property = false
+
+        if prop_key == '_pre_order' or prop_key == '_expected_despatch_date'
+          assign skip_property = true
+        elsif prop_key == legacy_pre_order_key or prop_key == legacy_despatch_key
+          assign skip_property = true
+        endif
+      -%}
+      {%- unless skip_property -%}
+        {%- unless first_char == '_' -%}
+          <li
+            class="{{ list_class }}"
+            line_item_property
+            style="font-size:12px;"
+            data-key="{{- prop_key -}}"
+            data-value="{{- property[1] -}}"
+          >
+            <strong class="mr-2">{{- prop_key | append: ':' -}}</strong>
+            <span class="vertical-clamp-one">{{- property[1] -}}</span>
+          </li>
+        {%- else -%}
+          <li
+            class="visually-hidden"
+            line_item_property
+            data-key="{{- prop_key -}}"
+            data-value="{{- property[1] -}}"
+          >
+            <strong>{{- prop_key | append: ':' -}}</strong>
+            {{- property[1] -}}
+          </li>
+        {%- endunless -%}
+      {%- endunless -%}
+    {%- endfor -%}
+  </ul>
+{%- endif -%}
