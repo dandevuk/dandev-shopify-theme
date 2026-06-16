@@ -1,4 +1,8 @@
 {
+  "terminal.integrated.env.windows": {
+    "NODE_OPTIONS": "--use-system-ca",
+    "NODE_EXTRA_CA_CERTS": "${env:USERPROFILE}\\.certs\\avg-root-ca.pem"
+  },
   "workbench.colorCustomizations": {
     "activityBar.background": "#000",
     "titleBar.activeBackground": "#3F4BEA",
