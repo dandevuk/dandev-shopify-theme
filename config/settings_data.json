@@ -64,7 +64,7 @@
     "gradient_background": "linear-gradient(62deg, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.15) 100%)",
     "gradient_background_alternate": "linear-gradient(180deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 1) 100%)",
     "text_color": "#DD5486",
-    "text_color_highlight": "#A67CD8",
+    "text_color_highlight": "#FD4396",
     "brand_color_1": "#1d1d1d",
     "brand_color_2": "#000000",
     "brand_color_3": "#ff355eff",
