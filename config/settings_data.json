@@ -60,11 +60,11 @@
     "global_radius_mobile": 6,
     "global_radius_large": 10,
     "global_radius_large_mobile": 8,
-    "body_background_color": "#fafafa",
+    "body_background_color": "#0C0C0C",
     "gradient_background": "linear-gradient(62deg, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.15) 100%)",
     "gradient_background_alternate": "linear-gradient(180deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 1) 100%)",
-    "text_color": "#1d1d1d",
-    "text_color_highlight": "#000000",
+    "text_color": "#DD5486",
+    "text_color_highlight": "#A67CD8",
     "brand_color_1": "#1d1d1d",
     "brand_color_2": "#000000",
     "brand_color_3": "#ff355eff",
@@ -192,21 +192,6 @@
     "medium_content_spacing_mobile": 15,
     "small_content_spacing_desktop": 8,
     "small_content_spacing_mobile": 8,
-    "content_for_index": [],
-    "blocks": {
-      "1768834845299682660": {
-        "type": "shopify://apps/subscriptions/blocks/app-embed-block/a3bfe9ec-96f8-4508-a003-df608a36d2ad",
-        "disabled": true,
-        "settings": {
-          "color_text_title": "#6d7175",
-          "color_text_body": "#6d7175",
-          "dividers_color": "#8f8d8d",
-          "bacgkround_color": "#ffffff",
-          "border_thickness": 1,
-          "border_radius": 0,
-          "subscription_policy_url": ""
-        }
-      }
-    }
+    "content_for_index": []
   }
 }
