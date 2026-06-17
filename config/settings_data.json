@@ -78,7 +78,7 @@
     "section_text_color_2": "#0C0C0C",
     "section_highlight_color_2": "#FD4396",
     "section_text_color_3": "#ffffff",
-    "buttons_border_thickness": 1,
+    "buttons_border_thickness": 2,
     "buttons_radius": 40,
     "button_transition": 2,
     "button_h_padding": 20,
