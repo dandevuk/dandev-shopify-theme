@@ -124,7 +124,6 @@
               "type": "_image",
               "name": "Image",
               "settings": {
-                "image": "shopify://shop_images/quickfire-logo.svg",
                 "preserve_image_dimensions": true,
                 "image_height": 40,
                 "image_link": ""
@@ -151,6 +150,21 @@
           "name": "Product Information",
           "settings": {},
           "blocks": {
+            "accordion_YyyKMV": {
+              "type": "_accordion",
+              "name": "Accordion",
+              "settings": {
+                "heading": "Heading",
+                "heading_type": "h2",
+                "heading_size": "heading-h3",
+                "content_type": "richtext",
+                "richtext_content": "",
+                "liquid_content": "",
+                "open_default": false,
+                "id_attribute": ""
+              },
+              "blocks": {}
+            },
             "accordion_yVwdTh": {
               "type": "_accordion",
               "name": "Accordion",
@@ -198,6 +212,7 @@
             }
           },
           "block_order": [
+            "accordion_YyyKMV",
             "accordion_yVwdTh",
             "accordion_KeEBU6",
             "accordion_wLkYRV"
@@ -353,7 +368,6 @@
       "settings": {
         "content_type": "image",
         "html_embed_content": "",
-        "image": "shopify://shop_images/pexels-ekrulila-3804415.jpg",
         "image_display": "cover",
         "lazy_load": true,
         "video_type": "shopify",
