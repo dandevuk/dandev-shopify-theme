@@ -26,6 +26,18 @@
           },
           "blocks": {}
         },
+        "product_description_AhRbDX": {
+          "type": "_product-description",
+          "name": "Description",
+          "settings": {
+            "description": "{{ closest.product.metafields.custom.short_description | metafield_tag }}",
+            "add_read_more_link": true,
+            "read_more_link_url": "product-read-more",
+            "truncate_height": "none",
+            "add_border_bottom": false
+          },
+          "blocks": {}
+        },
         "product_collection_links_XGXj4z": {
           "type": "_product-collection-links",
           "name": "Collection Links",
@@ -38,18 +50,6 @@
               "test-1",
               "test-2"
             ]
-          },
-          "blocks": {}
-        },
-        "product_description_YwJcVY": {
-          "type": "_product-description",
-          "name": "Description",
-          "settings": {
-            "description": "",
-            "add_read_more_link": true,
-            "read_more_link_url": "description-read-more",
-            "truncate_height": "vertical-clamp-three",
-            "add_border_bottom": true
           },
           "blocks": {}
         },
@@ -156,13 +156,13 @@
               "type": "_accordion",
               "name": "Accordion",
               "settings": {
-                "heading": "Description",
+                "heading": "Material",
                 "heading_type": "h2",
                 "heading_size": "heading-h3",
                 "content_type": "richtext",
-                "richtext_content": "{{ closest.product.description }}<p>Made from lightweight and soft cotton fabric, this unisex high-quality tee is as comfy as it is stylish. The well-loved slouchy loose cut makes it a wardrobe staple for all the fashion forwarders. Another standout feature is the dazzling colors that can easily catch anyone's attention.</p><ul><li>Drop shoulders</li><li>Crew neck</li><li>Ribbed collar</li><li>Loose fit</li><li>100% combed cotton</li><li>Pre-shrunk</li><li>Reactive-dyed for longer-lasting color</li><li>Fabric weight: 190g/m²</li><li>Side-seamed construction</li><li>Double-stitched ribbed collar</li><li>Taped neck and shoulders</li><li>Double-stitched cuffs and hem</li></ul><p>Wash on the reverse side with neutral detergents. Do not soak, expose to the sun, and bleach. Iron, steam, or tumble dry at low temperature(max 30℃ or 90℉). </p>",
+                "richtext_content": "<p>Made from lightweight and soft cotton fabric, this unisex high-quality tee is as comfy as it is stylish. The well-loved slouchy loose cut makes it a wardrobe staple for all the fashion forwarders. Another standout feature is the dazzling colors that can easily catch anyone's attention.</p><ul><li>Drop shoulders</li><li>Crew neck</li><li>Ribbed collar</li><li>Loose fit</li><li>100% combed cotton</li><li>Pre-shrunk</li><li>Reactive-dyed for longer-lasting color</li><li>Fabric weight: 190g/m²</li><li>Side-seamed construction</li><li>Double-stitched ribbed collar</li><li>Taped neck and shoulders</li><li>Double-stitched cuffs and hem</li></ul><p>Wash on the reverse side with neutral detergents. Do not soak, expose to the sun, and bleach. Iron, steam, or tumble dry at low temperature(max 30℃ or 90℉). </p>",
                 "liquid_content": "",
-                "open_default": true,
+                "open_default": false,
                 "id_attribute": "description-read-more"
               },
               "blocks": {}
@@ -218,8 +218,8 @@
       "block_order": [
         "product_title_p3Bxkj",
         "product_price_eti3bj",
+        "product_description_AhRbDX",
         "product_collection_links_XGXj4z",
-        "product_description_YwJcVY",
         "product_variant_selectors_GWTq3R",
         "product_selling_plan_selector_dmncFQ",
         "product_submit_bQTTGM",
@@ -232,8 +232,8 @@
       "settings": {
         "block_spacing": "g-4",
         "block_spacing_mobile": "to-sm-g-3",
-        "desktop_gallery_style": "grid",
-        "thumb_positioning": "left",
+        "desktop_gallery_style": "slider",
+        "thumb_positioning": "under",
         "show_out_of_stock_settings": true,
         "show_recommendations_slider": true,
         "recommendations_heading": "You May Also Like",
@@ -325,7 +325,7 @@
               "type": "richtext",
               "name": "Richtext",
               "settings": {
-                "richtext": "<p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p><p><br/>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p><p><br/>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p>"
+                "richtext": "{{ closest.product.description }}"
               },
               "blocks": {}
             }
@@ -377,7 +377,7 @@
         "bottom_spacing": 120,
         "top_spacing_mobile": 60,
         "bottom_spacing_mobile": 60,
-        "id_text": ""
+        "id_text": "product-read-more"
       }
     },
     "faq_group_rERmHC": {
