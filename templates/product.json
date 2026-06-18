@@ -29,6 +29,7 @@
         "product_collection_links_XGXj4z": {
           "type": "_product-collection-links",
           "name": "Collection Links",
+          "disabled": true,
           "settings": {
             "title": "Looking for these products?",
             "collection_list": [
@@ -109,6 +110,7 @@
         "product_text_icon_KQ8BJ9": {
           "type": "_product-text-icon",
           "name": "Text & Icon Banner",
+          "disabled": true,
           "settings": {
             "image_size": 150,
             "image_size_mobile": 150,
