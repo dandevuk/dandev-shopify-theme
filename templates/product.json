@@ -32,7 +32,7 @@
           "settings": {
             "description": "{{ closest.product.metafields.custom.short_description | metafield_tag }}",
             "add_read_more_link": true,
-            "read_more_link_url": "",
+            "read_more_link_url": "product-read-more",
             "truncate_height": "none",
             "add_border_bottom": false
           },
@@ -156,13 +156,13 @@
               "type": "_accordion",
               "name": "Accordion",
               "settings": {
-                "heading": "Description",
+                "heading": "Material",
                 "heading_type": "h2",
                 "heading_size": "heading-h3",
                 "content_type": "richtext",
-                "richtext_content": "{{ closest.product.description }}<p>Made from lightweight and soft cotton fabric, this unisex high-quality tee is as comfy as it is stylish. The well-loved slouchy loose cut makes it a wardrobe staple for all the fashion forwarders. Another standout feature is the dazzling colors that can easily catch anyone's attention.</p><ul><li>Drop shoulders</li><li>Crew neck</li><li>Ribbed collar</li><li>Loose fit</li><li>100% combed cotton</li><li>Pre-shrunk</li><li>Reactive-dyed for longer-lasting color</li><li>Fabric weight: 190g/m²</li><li>Side-seamed construction</li><li>Double-stitched ribbed collar</li><li>Taped neck and shoulders</li><li>Double-stitched cuffs and hem</li></ul><p>Wash on the reverse side with neutral detergents. Do not soak, expose to the sun, and bleach. Iron, steam, or tumble dry at low temperature(max 30℃ or 90℉). </p>",
+                "richtext_content": "<p>Made from lightweight and soft cotton fabric, this unisex high-quality tee is as comfy as it is stylish. The well-loved slouchy loose cut makes it a wardrobe staple for all the fashion forwarders. Another standout feature is the dazzling colors that can easily catch anyone's attention.</p><ul><li>Drop shoulders</li><li>Crew neck</li><li>Ribbed collar</li><li>Loose fit</li><li>100% combed cotton</li><li>Pre-shrunk</li><li>Reactive-dyed for longer-lasting color</li><li>Fabric weight: 190g/m²</li><li>Side-seamed construction</li><li>Double-stitched ribbed collar</li><li>Taped neck and shoulders</li><li>Double-stitched cuffs and hem</li></ul><p>Wash on the reverse side with neutral detergents. Do not soak, expose to the sun, and bleach. Iron, steam, or tumble dry at low temperature(max 30℃ or 90℉). </p>",
                 "liquid_content": "",
-                "open_default": true,
+                "open_default": false,
                 "id_attribute": "description-read-more"
               },
               "blocks": {}
@@ -377,7 +377,7 @@
         "bottom_spacing": 120,
         "top_spacing_mobile": 60,
         "bottom_spacing_mobile": 60,
-        "id_text": ""
+        "id_text": "product-read-more"
       }
     },
     "faq_group_rERmHC": {
