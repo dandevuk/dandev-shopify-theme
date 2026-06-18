@@ -73,7 +73,6 @@
       "name": "Hero",
       "settings": {
         "transparent_header": false,
-        "image": "shopify://shop_images/luis-quintero-m4-MPvqeXXY-unsplash.jpg",
         "desktop_height": 500,
         "mobile_height": 400,
         "layout_style": "full-width",
@@ -151,6 +150,7 @@
         },
         "richtext": {
           "type": "richtext",
+          "disabled": true,
           "static": true,
           "settings": {
             "richtext": "<p>Add text here</p>"
@@ -236,6 +236,7 @@
         },
         "richtext": {
           "type": "richtext",
+          "disabled": true,
           "static": true,
           "settings": {
             "richtext": "<p>Add text here</p>"
@@ -326,6 +327,7 @@
         },
         "richtext": {
           "type": "richtext",
+          "disabled": true,
           "static": true,
           "settings": {
             "richtext": "<p>Add text here</p>"
@@ -439,6 +441,7 @@
       "block_order": [
         "slider_articles_zhYNzW"
       ],
+      "disabled": true,
       "name": "Article Slider",
       "settings": {
         "style_selector": "theme",
@@ -524,6 +527,7 @@
       "block_order": [
         "slider_usps_MjAE3q"
       ],
+      "disabled": true,
       "name": "USP Slider",
       "settings": {
         "style_selector": "theme",
@@ -538,9 +542,9 @@
     },
     "full_width_image_reRrbd": {
       "type": "full-width-image",
+      "disabled": true,
       "name": "Full Width Image",
       "settings": {
-        "image": "shopify://shop_images/pexels-valentinantonucci-996971.jpg",
         "url_link": "shopify://collections/best-sellers",
         "link_label": "Link to the Best Sellers collection",
         "preserve_image_dimensions": false,
@@ -555,21 +559,6 @@
         "bottom_spacing": 120,
         "top_spacing_mobile": 60,
         "bottom_spacing_mobile": 60
-      }
-    },
-    "search_VeV3H3": {
-      "type": "search",
-      "name": "Search",
-      "settings": {
-        "filter_positioning": "horizontal",
-        "style_selector": "theme",
-        "section_styling": "primary",
-        "background_color": "linear-gradient(#ffffff, #ffffff)",
-        "text_color": "#393939",
-        "grid_items": 15,
-        "filters_alignment": "horizontal",
-        "page_width": "page-width",
-        "vertical_spacing": "vertical-margin"
       }
     },
     "cta_banner_CPXmnn": {
@@ -587,6 +576,7 @@
           "blocks": {}
         }
       },
+      "disabled": true,
       "name": "CTA Banner",
       "settings": {
         "page_width": "page-width--full",
@@ -607,7 +597,6 @@
     "slider_hrEXAy",
     "slider_h7JJLB",
     "full_width_image_reRrbd",
-    "search_VeV3H3",
     "cta_banner_CPXmnn"
   ]
 }
