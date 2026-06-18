@@ -124,7 +124,6 @@
               "type": "_image",
               "name": "Image",
               "settings": {
-                "image": "shopify://shop_images/quickfire-logo.svg",
                 "preserve_image_dimensions": true,
                 "image_height": 40,
                 "image_link": ""
@@ -151,21 +150,6 @@
           "name": "Product Information",
           "settings": {},
           "blocks": {
-            "accordion_yVwdTh": {
-              "type": "_accordion",
-              "name": "Accordion",
-              "settings": {
-                "heading": "Variant Specific Field",
-                "heading_type": "h2",
-                "heading_size": "heading-h3",
-                "content_type": "liquid",
-                "richtext_content": "",
-                "liquid_content": "{%- unless product.has_only_default_variant -%}{{ product.selected_or_first_available_variant.title }}{%- endunless -%}",
-                "open_default": true,
-                "id_attribute": ""
-              },
-              "blocks": {}
-            },
             "accordion_KeEBU6": {
               "type": "_accordion",
               "name": "Accordion",
@@ -174,10 +158,25 @@
                 "heading_type": "h2",
                 "heading_size": "heading-h3",
                 "content_type": "richtext",
-                "richtext_content": "{{ closest.product.description }}",
+                "richtext_content": "{{ closest.product.description }}<p>Made from lightweight and soft cotton fabric, this unisex high-quality tee is as comfy as it is stylish. The well-loved slouchy loose cut makes it a wardrobe staple for all the fashion forwarders. Another standout feature is the dazzling colors that can easily catch anyone's attention.</p><ul><li>Drop shoulders</li><li>Crew neck</li><li>Ribbed collar</li><li>Loose fit</li><li>100% combed cotton</li><li>Pre-shrunk</li><li>Reactive-dyed for longer-lasting color</li><li>Fabric weight: 190g/m²</li><li>Side-seamed construction</li><li>Double-stitched ribbed collar</li><li>Taped neck and shoulders</li><li>Double-stitched cuffs and hem</li></ul><p>Wash on the reverse side with neutral detergents. Do not soak, expose to the sun, and bleach. Iron, steam, or tumble dry at low temperature(max 30℃ or 90℉). </p>",
+                "liquid_content": "",
+                "open_default": true,
+                "id_attribute": "description-read-more"
+              },
+              "blocks": {}
+            },
+            "accordion_YyyKMV": {
+              "type": "_accordion",
+              "name": "Accordion",
+              "settings": {
+                "heading": "Size Guide",
+                "heading_type": "h2",
+                "heading_size": "heading-h3",
+                "content_type": "richtext",
+                "richtext_content": "",
                 "liquid_content": "",
                 "open_default": false,
-                "id_attribute": "description-read-more"
+                "id_attribute": ""
               },
               "blocks": {}
             },
@@ -198,8 +197,8 @@
             }
           },
           "block_order": [
-            "accordion_yVwdTh",
             "accordion_KeEBU6",
+            "accordion_YyyKMV",
             "accordion_wLkYRV"
           ]
         },
@@ -353,7 +352,6 @@
       "settings": {
         "content_type": "image",
         "html_embed_content": "",
-        "image": "shopify://shop_images/pexels-ekrulila-3804415.jpg",
         "image_display": "cover",
         "lazy_load": true,
         "video_type": "shopify",
