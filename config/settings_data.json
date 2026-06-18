@@ -165,6 +165,7 @@
     "article_fallback": "shopify://shop_images/pexels-fauxels-3182781.jpg",
     "size_guide_page": "size-guides",
     "image_display": "object-cover",
+    "background_color_product_card": "#000000",
     "klaviyo_api_key": "",
     "side_cart": true,
     "free_delivery": "50",
