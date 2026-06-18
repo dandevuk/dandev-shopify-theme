@@ -309,21 +309,11 @@
             "content_spacing": "g-3"
           },
           "blocks": {
-            "heading_LHacDY": {
-              "type": "heading",
-              "name": "Heading",
-              "settings": {
-                "heading": "",
-                "heading_type": "h2",
-                "heading_size": "heading-h1"
-              },
-              "blocks": {}
-            },
             "heading_8BWdex": {
               "type": "heading",
               "name": "Heading",
               "settings": {
-                "heading": "Extra Product Information",
+                "heading": "The Design",
                 "heading_type": "h2",
                 "heading_size": "heading-h1"
               },
@@ -339,7 +329,6 @@
             }
           },
           "block_order": [
-            "heading_LHacDY",
             "heading_8BWdex",
             "richtext_WjD8x3"
           ]
@@ -352,7 +341,8 @@
       "settings": {
         "content_type": "image",
         "html_embed_content": "",
-        "image_display": "cover",
+        "image": "{{ product.metafields.images.design.value }}",
+        "image_display": "contain",
         "lazy_load": true,
         "video_type": "shopify",
         "video_url": "https://www.youtube.com/watch?v=XXXXXXXX",
@@ -362,20 +352,20 @@
         "muted": true,
         "loop": true,
         "preload": true,
-        "style_selector": "custom",
+        "style_selector": "theme",
         "section_styling": "primary",
         "background_color": "linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 100%)",
         "text_color": "#ffffff",
         "background_image_type": "theme",
         "background_image_theme": "1",
         "container_style_selector": "theme",
-        "container_section_styling": "third",
+        "container_section_styling": "primary",
         "container_background_color": "linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)",
         "container_text_color": "#393939",
         "container_background_image_type": "theme",
         "container_background_image_theme": "2",
-        "remove_text_padding": false,
-        "vertical_text_alignment": "align-end",
+        "remove_text_padding": true,
+        "vertical_text_alignment": "align-center",
         "horizontal_layout": "section-text-left",
         "vertical_layout": "text-bottom",
         "page_width": "page-width",
