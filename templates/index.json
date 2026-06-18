@@ -9,6 +9,27 @@
  */
 {
   "sections": {
+    "full_width_image_reRrbd": {
+      "type": "full-width-image",
+      "name": "Full Width Image",
+      "settings": {
+        "image": "shopify://shop_images/Gemini_Generated_Image_wjl1bbwjl1bbwjl1.png",
+        "url_link": "shopify://collections/best-sellers",
+        "link_label": "Link to the Best Sellers collection",
+        "preserve_image_dimensions": true,
+        "desktop_height_setting": 300,
+        "mobile_height_setting": 400,
+        "lazy_load": true,
+        "border_radius": true,
+        "page_width": "page-width--full",
+        "vertical_spacing": "",
+        "custom_spacing": false,
+        "top_spacing": 120,
+        "bottom_spacing": 120,
+        "top_spacing_mobile": 60,
+        "bottom_spacing_mobile": 60
+      }
+    },
     "hero_rtyajP": {
       "type": "hero",
       "blocks": {
@@ -21,6 +42,7 @@
             "heading_8RrgiQ": {
               "type": "heading",
               "name": "Heading",
+              "disabled": true,
               "settings": {
                 "heading": "Hero Banner",
                 "heading_type": "h2",
@@ -31,6 +53,7 @@
             "richtext_dat7gF": {
               "type": "richtext",
               "name": "Richtext",
+              "disabled": true,
               "settings": {
                 "richtext": "<p>Add text here to go under the heading</p>"
               },
@@ -70,9 +93,11 @@
       "block_order": [
         "section_content_zWyadW"
       ],
+      "disabled": true,
       "name": "Hero",
       "settings": {
         "transparent_header": false,
+        "image": "shopify://shop_images/Gemini_Generated_Image_wjl1bbwjl1bbwjl1.png",
         "desktop_height": 500,
         "mobile_height": 400,
         "layout_style": "full-width",
@@ -540,27 +565,6 @@
         "vertical_spacing": "vertical-margin"
       }
     },
-    "full_width_image_reRrbd": {
-      "type": "full-width-image",
-      "disabled": true,
-      "name": "Full Width Image",
-      "settings": {
-        "url_link": "shopify://collections/best-sellers",
-        "link_label": "Link to the Best Sellers collection",
-        "preserve_image_dimensions": false,
-        "desktop_height_setting": 300,
-        "mobile_height_setting": 400,
-        "lazy_load": true,
-        "border_radius": true,
-        "page_width": "page-width--full",
-        "vertical_spacing": "vertical-margin",
-        "custom_spacing": false,
-        "top_spacing": 120,
-        "bottom_spacing": 120,
-        "top_spacing_mobile": 60,
-        "bottom_spacing_mobile": 60
-      }
-    },
     "cta_banner_CPXmnn": {
       "type": "cta-banner",
       "blocks": {
@@ -590,13 +594,13 @@
     }
   },
   "order": [
+    "full_width_image_reRrbd",
     "hero_rtyajP",
     "slider_XxWG8i",
     "slider_e6Yp9W",
     "slider_igQG9A",
     "slider_hrEXAy",
     "slider_h7JJLB",
-    "full_width_image_reRrbd",
     "cta_banner_CPXmnn"
   ]
 }
