@@ -89,7 +89,7 @@
     "button_transition": 2,
     "button_h_padding": 20,
     "button_v_padding": 12,
-    "button_font_size": 18,
+    "button_font_size": 24,
     "button_font_weight": 400,
     "button_line_height": 100,
     "button_1_color": "#0C0C0C",
