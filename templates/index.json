@@ -13,7 +13,7 @@
       "type": "full-width-image",
       "name": "Full Width Image",
       "settings": {
-        "image": "shopify://shop_images/Gemini_Generated_Image_wjl1bbwjl1bbwjl1.png",
+        "image": "shopify://shop_images/hero-image.jpg",
         "url_link": "shopify://collections/best-sellers",
         "link_label": "Link to the Best Sellers collection",
         "preserve_image_dimensions": true,
