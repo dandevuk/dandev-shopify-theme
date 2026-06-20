@@ -134,7 +134,7 @@
               {%- render 'image',
                 image: placeholder_media,
                 max_width: 1000,
-                class: 'absolute w-100 h-100 object-cover',
+                class: 'absolute w-100 h-100 object-contain',
                 use_placeholder: false,
                 lazy: false,
                 preload: true
@@ -143,7 +143,7 @@
               {%- render 'image',
                 image: placeholder_media.preview_image,
                 max_width: 1000,
-                class: 'absolute w-100 h-100 object-cover',
+                class: 'absolute w-100 h-100 object-contain',
                 use_placeholder: false,
                 lazy: false,
                 preload: true
@@ -180,12 +180,12 @@
                     {%- render 'image',
                         image: media,
                         max_width: 200,
-                        class: 'absolute w-100 h-100 object-cover',
+                        class: 'absolute w-100 h-100 object-contain',
                         use_placeholder: false,
                         lazy: lazy_load
                     -%}
                   {%- else -%}
-                    {{ 'product-1' | placeholder_svg_tag: class: 'absolute w-100 h-100 object-cover' }}
+                    {{ 'product-1' | placeholder_svg_tag: class: 'absolute w-100 h-100 object-contain' }}
                   {%- endif -%}
                 </div>
               </div>
@@ -195,7 +195,7 @@
                   {%- render 'image',
                       image: media.preview_image,
                       max_width: 200,
-                      class: 'absolute w-100 h-100 object-cover',
+                      class: 'absolute w-100 h-100 object-contain',
                       use_placeholder: false,
                       lazy: lazy_load
                   -%}
@@ -207,7 +207,7 @@
                   {%- render 'image',
                       image: media.preview_image,
                       max_width: 200,
-                      class: 'absolute w-100 h-100 object-cover',
+                      class: 'absolute w-100 h-100 object-contain',
                       use_placeholder: false,
                       lazy: lazy_load
                   -%}
@@ -219,7 +219,7 @@
                   {%- render 'image',
                       image: media.preview_image,
                       max_width: 200,
-                      class: 'absolute w-100 h-100 object-cover',
+                      class: 'absolute w-100 h-100 object-contain',
                       use_placeholder: false,
                       lazy: lazy_load
                   -%}
@@ -355,7 +355,7 @@
                       {%- render 'image',
                           image: media,
                           max_width: 1000,
-                          class: 'absolute w-100 h-100 object-cover',
+                          class: 'absolute w-100 h-100 object-contain',
                           use_placeholder: false,
                           lazy: lazy_load
                       -%}
@@ -475,7 +475,7 @@
                   {%- render 'image',
                     image: media,
                     max_width: 1000,
-                    class: 'absolute w-100 h-100 object-cover',
+                    class: 'absolute w-100 h-100 object-contain',
                     use_placeholder: false,
                     lazy: false
                   -%}
