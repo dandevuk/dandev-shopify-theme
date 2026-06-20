@@ -9,27 +9,6 @@
  */
 {
   "sections": {
-    "full_width_image_reRrbd": {
-      "type": "full-width-image",
-      "name": "Full Width Image",
-      "settings": {
-        "image": "shopify://shop_images/hero-image.jpg",
-        "url_link": "shopify://collections/best-sellers",
-        "link_label": "Link to the Best Sellers collection",
-        "preserve_image_dimensions": true,
-        "desktop_height_setting": 300,
-        "mobile_height_setting": 400,
-        "lazy_load": true,
-        "border_radius": true,
-        "page_width": "page-width--full",
-        "vertical_spacing": "",
-        "custom_spacing": false,
-        "top_spacing": 120,
-        "bottom_spacing": 120,
-        "top_spacing_mobile": 60,
-        "bottom_spacing_mobile": 60
-      }
-    },
     "hero_rtyajP": {
       "type": "hero",
       "blocks": {
@@ -72,7 +51,7 @@
                     "link_text": "All Collections",
                     "link": "shopify://collections",
                     "link_title": "Link Title",
-                    "link_style": "button-2",
+                    "link_style": "button-3",
                     "external_link": false
                   },
                   "blocks": {}
@@ -93,11 +72,10 @@
       "block_order": [
         "section_content_zWyadW"
       ],
-      "disabled": true,
       "name": "Hero",
       "settings": {
         "transparent_header": false,
-        "image": "shopify://shop_images/Gemini_Generated_Image_wjl1bbwjl1bbwjl1.png",
+        "image": "shopify://shop_images/Gemini_Generated_Image_jbp5r6jbp5r6jbp5.png",
         "desktop_height": 500,
         "mobile_height": 400,
         "layout_style": "full-width",
@@ -595,7 +573,6 @@
     }
   },
   "order": [
-    "full_width_image_reRrbd",
     "hero_rtyajP",
     "slider_XxWG8i",
     "slider_e6Yp9W",
