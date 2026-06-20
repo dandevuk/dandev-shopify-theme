@@ -49,7 +49,7 @@
                     "link_text": "All Collections",
                     "link": "shopify://collections",
                     "link_title": "Link Title",
-                    "link_style": "button-3",
+                    "link_style": "button-1",
                     "external_link": false
                   },
                   "blocks": {}
@@ -82,7 +82,7 @@
         "background_color": "linear-gradient(#ffffff, #ffffff)",
         "text_color": "#393939",
         "overlay_type": "theme",
-        "overlay_styling": "third",
+        "overlay_styling": "primary",
         "overlay_color": "linear-gradient(#ffffff, #ffffff)",
         "text_content_horizontal_position": "span-5",
         "text_content_vertical_position": "align-end",
