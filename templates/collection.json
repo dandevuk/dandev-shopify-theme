@@ -68,14 +68,14 @@
     "main": {
       "type": "collection",
       "settings": {
-        "filter_positioning": "vertical",
+        "filter_positioning": "horizontal",
         "grid_items": 16,
         "page_width": "page-width",
         "vertical_spacing": "vertical-margin",
-        "custom_spacing": false,
-        "top_spacing": 120,
+        "custom_spacing": true,
+        "top_spacing": 0,
         "bottom_spacing": 120,
-        "top_spacing_mobile": 60,
+        "top_spacing_mobile": 0,
         "bottom_spacing_mobile": 60,
         "cta_1": "2025-kits",
         "cta_2": ""
@@ -122,7 +122,6 @@
       "settings": {
         "content_type": "image",
         "html_embed_content": "",
-        "image": "shopify://shop_images/woman-cross-legged-with-her-eyes-closed.jpg",
         "image_display": "contain",
         "lazy_load": true,
         "video_type": "shopify",
