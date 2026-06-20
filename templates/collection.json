@@ -50,10 +50,10 @@
       "settings": {
         "image": "{{ collection.image }}",
         "style_selector": "theme",
-        "section_styling": "third",
+        "section_styling": "secondary",
         "background_color": "linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)",
         "text_color": "#ffffff",
-        "overlay_type": "theme",
+        "overlay_type": "none",
         "overlay_styling": "secondary",
         "overlay_color": "linear-gradient(#ffffff, #ffffff)",
         "layout_style": "full-width",
