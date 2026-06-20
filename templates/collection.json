@@ -74,9 +74,9 @@
         "vertical_spacing": "vertical-margin",
         "custom_spacing": true,
         "top_spacing": 0,
-        "bottom_spacing": 120,
+        "bottom_spacing": 50,
         "top_spacing_mobile": 0,
-        "bottom_spacing_mobile": 60,
+        "bottom_spacing_mobile": 35,
         "cta_1": "2025-kits",
         "cta_2": ""
       }
