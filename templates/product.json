@@ -314,7 +314,7 @@
         "container_background_image_type": "theme",
         "container_background_image_theme": "2",
         "remove_text_padding": true,
-        "vertical_text_alignment": "align-center",
+        "vertical_text_alignment": "align-start",
         "horizontal_layout": "section-text-left",
         "vertical_layout": "text-top",
         "page_width": "page-width",
