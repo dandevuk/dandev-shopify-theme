@@ -233,7 +233,7 @@
         "block_spacing": "g-4",
         "block_spacing_mobile": "to-sm-g-3",
         "desktop_gallery_style": "slider",
-        "thumb_positioning": "left",
+        "thumb_positioning": "under",
         "show_out_of_stock_settings": true,
         "show_recommendations_slider": true,
         "recommendations_heading": "You May Also Like",
