@@ -316,7 +316,7 @@
         "remove_text_padding": true,
         "vertical_text_alignment": "align-center",
         "horizontal_layout": "section-text-left",
-        "vertical_layout": "text-bottom",
+        "vertical_layout": "text-top",
         "page_width": "page-width",
         "vertical_spacing": "vertical-padding",
         "custom_spacing": false,
