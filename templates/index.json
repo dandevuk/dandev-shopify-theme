@@ -82,7 +82,7 @@
         "background_color": "linear-gradient(#ffffff, #ffffff)",
         "text_color": "#393939",
         "overlay_type": "theme",
-        "overlay_styling": "secondary",
+        "overlay_styling": "third",
         "overlay_color": "linear-gradient(#ffffff, #ffffff)",
         "text_content_horizontal_position": "span-5",
         "text_content_vertical_position": "align-end",
