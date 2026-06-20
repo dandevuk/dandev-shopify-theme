@@ -166,7 +166,7 @@
     "collection_banner_fallback": "shopify://shop_images/pexels-padrinan-255379.jpg",
     "article_fallback": "shopify://shop_images/pexels-fauxels-3182781.jpg",
     "size_guide_page": "size-guides",
-    "image_display": "object-cover",
+    "image_display": "object-contain",
     "background_color_product_card": "#00000000",
     "klaviyo_api_key": "",
     "side_cart": true,
