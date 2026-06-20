@@ -9,10 +9,12 @@
  */
 {
   "current": {
-    "body_font_size": 14,
-    "body_font_size_mobile": 14,
+    "body_font_size": 18,
+    "body_font_size_mobile": 18,
     "body_font_weight": 400,
     "body_line_height": 150,
+    "body_font_size_large": 22,
+    "body_font_size_mobile_large": 22,
     "body_font_weight_large": 400,
     "heading_h0_size": 61,
     "heading_h0_font_weight": 400,
@@ -43,8 +45,8 @@
     "heading_h6_font_weight": 400,
     "heading_h6_line_height": 100,
     "heading_h6_font_family": "heading",
-    "caption_text_size": 12,
-    "caption_text_size_mobile": 12,
+    "caption_text_size": 16,
+    "caption_text_size_mobile": 16,
     "caption_text_font_weight": 400,
     "caption_line_height": 125,
     "page_width_narrow": 856,
