@@ -249,59 +249,6 @@
         "form_submit_style": "button-1"
       }
     },
-    "recommendations_qPhbHg": {
-      "type": "recommendations",
-      "blocks": {
-        "section-content": {
-          "type": "section-content",
-          "static": true,
-          "settings": {
-            "content_spacing": "g-1"
-          },
-          "blocks": {
-            "heading_3yED6f": {
-              "type": "heading",
-              "name": "Heading",
-              "settings": {
-                "heading": "You May Also Like",
-                "heading_type": "h2",
-                "heading_size": "heading-h2"
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "heading_3yED6f"
-          ]
-        },
-        "section-navigation": {
-          "type": "section-navigation",
-          "static": true,
-          "settings": {},
-          "blocks": {
-            "slider_navigation_arrows_yBGCbA": {
-              "type": "_slider-navigation-arrows",
-              "name": "slider Navigation Arrows",
-              "settings": {},
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "slider_navigation_arrows_yBGCbA"
-          ]
-        }
-      },
-      "name": "Recommendations",
-      "settings": {
-        "style_selector": "theme",
-        "section_styling": "primary",
-        "background_color": "linear-gradient(#ffffff, #ffffff)",
-        "text_color": "#393939",
-        "page_width": "page-width",
-        "vertical_spacing": "vertical-padding",
-        "lazy_images": false
-      }
-    },
     "text_media_TTHXBV": {
       "type": "text-media",
       "blocks": {
@@ -378,6 +325,59 @@
         "top_spacing_mobile": 60,
         "bottom_spacing_mobile": 60,
         "id_text": "product-read-more"
+      }
+    },
+    "recommendations_qPhbHg": {
+      "type": "recommendations",
+      "blocks": {
+        "section-content": {
+          "type": "section-content",
+          "static": true,
+          "settings": {
+            "content_spacing": "g-1"
+          },
+          "blocks": {
+            "heading_3yED6f": {
+              "type": "heading",
+              "name": "Heading",
+              "settings": {
+                "heading": "You May Also Like",
+                "heading_type": "h2",
+                "heading_size": "heading-h2"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "heading_3yED6f"
+          ]
+        },
+        "section-navigation": {
+          "type": "section-navigation",
+          "static": true,
+          "settings": {},
+          "blocks": {
+            "slider_navigation_arrows_yBGCbA": {
+              "type": "_slider-navigation-arrows",
+              "name": "slider Navigation Arrows",
+              "settings": {},
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "slider_navigation_arrows_yBGCbA"
+          ]
+        }
+      },
+      "name": "Recommendations",
+      "settings": {
+        "style_selector": "theme",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "page_width": "page-width",
+        "vertical_spacing": "vertical-padding",
+        "lazy_images": false
       }
     },
     "faq_group_rERmHC": {
@@ -460,8 +460,8 @@
   },
   "order": [
     "main",
-    "recommendations_qPhbHg",
     "text_media_TTHXBV",
+    "recommendations_qPhbHg",
     "faq_group_rERmHC"
   ]
 }
