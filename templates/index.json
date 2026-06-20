@@ -22,7 +22,7 @@
               "type": "heading",
               "name": "Heading",
               "settings": {
-                "heading": "Hero Banner",
+                "heading": "Awkward as fuck",
                 "heading_type": "h2",
                 "heading_size": "heading-h0"
               },
@@ -31,7 +31,6 @@
             "richtext_dat7gF": {
               "type": "richtext",
               "name": "Richtext",
-              "disabled": true,
               "settings": {
                 "richtext": "<p>Add text here to go under the heading</p>"
               },
