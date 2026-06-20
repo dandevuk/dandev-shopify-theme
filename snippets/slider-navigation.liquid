@@ -6,7 +6,7 @@
 -%}
 
 <div
-  class="{{ arrows_class }} flex-between g-1 {% if navigation_style == 'inline' %}w-100{% else %}max-w-max{% endif %}{% if hide_on_mobile == true %} to-sm-hidden{% endif %}"
+  class="{{ arrows_class }} flex-between g-1 {% if navigation_style == 'inline' %}inline w-100{% else %}max-w-max{% endif %}{% if hide_on_mobile == true %} to-sm-hidden{% endif %}"
   {{ shopify_attributes }}
 >
   <button type="button" class="{{ prev_button_class }}" aria-label="Previous slide">
@@ -55,24 +55,28 @@
     opacity: 0.2;
   }
 
-  .slider-section:has(.inline) {
+  .slider-section:has(.content-container .inline) .section-header .blaze-navigation-arrows {
+    display: none;
+  }
+
+  .content-container .inline {
     --slider-inline-page-width: var(--page-width);
   }
 
-  .slider-section:has(.page-width--narrow):has(.inline) {
+  .content-container .page-width--narrow.inline {
     --slider-inline-page-width: var(--page-width-narrow);
   }
 
-  .slider-section:has(.page-width--wide):has(.inline) {
+  .content-container .page-width--wide.inline {
     --slider-inline-page-width: var(--page-width-wide);
   }
 
-  .slider-section:has(.inline) .blaze-navigation-arrows {
+  .blaze-container-wrapper > .blaze-navigation-arrows.inline {
     pointer-events: none;
   }
 
-  .slider-section:has(.inline) .blaze-navigation-arrows .blaze-button-prev,
-  .slider-section:has(.inline) .blaze-navigation-arrows .blaze-button-next {
+  .blaze-container-wrapper > .blaze-navigation-arrows.inline .blaze-button-prev,
+  .blaze-container-wrapper > .blaze-navigation-arrows.inline .blaze-button-next {
     pointer-events: auto;
     position: absolute;
     top: 50%;
@@ -85,12 +89,12 @@
     user-select: none;
   }
 
-  .slider-section:has(.inline) .blaze-navigation-arrows .blaze-button-prev .slider-navigation-icon,
-  .slider-section:has(.inline) .blaze-navigation-arrows .blaze-button-next .slider-navigation-icon {
+  .blaze-container-wrapper > .blaze-navigation-arrows.inline .blaze-button-prev .slider-navigation-icon,
+  .blaze-container-wrapper > .blaze-navigation-arrows.inline .blaze-button-next .slider-navigation-icon {
     display: none;
   }
 
-  .slider-section:has(.inline) .blaze-navigation-arrows .blaze-button-prev {
+  .blaze-container-wrapper > .blaze-navigation-arrows.inline .blaze-button-prev {
     left: max(
       clamp(
         var(--page-width-padding-mobile),
@@ -102,7 +106,7 @@
     transform: translateY(50%) translateX(-50%);
   }
 
-  .slider-section:has(.inline) .blaze-navigation-arrows .blaze-button-next {
+  .blaze-container-wrapper > .blaze-navigation-arrows.inline .blaze-button-next {
     right: max(
       clamp(
         var(--page-width-padding-mobile),

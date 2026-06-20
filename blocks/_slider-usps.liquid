@@ -24,7 +24,7 @@
 -%}
 
 <div class="{{ page_width }} {{ slider_overflow_class }} {{ block.settings.navigation_display }} {{ block.settings.navigation_style }}">
-  {%- render 'slider-container', block: block, slides: slider_content, total_slides: total_slides, nav_scope: nav_scope, lazy_enabled: lazy_enabled, custom_layout: block.settings.custom_layout, show_pagination: block.settings.show_pagination, show_scrollbar: block.settings.scrollbar_display, slides_per_view_mobile: block.settings.slides_per_view_mobile, slides_per_view_desktop: block.settings.slides_per_view_desktop, slides_per_view_large_desktop: block.settings.slides_per_view_large_desktop, slides_per_view_tablet: block.settings.slides_per_view_tablet, centered_slides: block.settings.centered_slides, initial_slide: block.settings.initial_slide, shopify_attributes: block.shopify_attributes -%}
+  {%- render 'slider-container', block: block, slides: slider_content, total_slides: total_slides, nav_scope: nav_scope, lazy_enabled: lazy_enabled, custom_layout: block.settings.custom_layout, show_pagination: block.settings.show_pagination, show_scrollbar: block.settings.scrollbar_display, slides_per_view_mobile: block.settings.slides_per_view_mobile, slides_per_view_desktop: block.settings.slides_per_view_desktop, slides_per_view_large_desktop: block.settings.slides_per_view_large_desktop, slides_per_view_tablet: block.settings.slides_per_view_tablet, centered_slides: block.settings.centered_slides, initial_slide: block.settings.initial_slide, navigation_style: block.settings.navigation_style, shopify_attributes: block.shopify_attributes -%}
 </div>
 
 {% schema %}

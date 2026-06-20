@@ -111,7 +111,7 @@
         </div>
 
         <div class="flex flex-col flex-between g-1">
-          {%- if has_color_options -%}
+          {% comment %} {%- if has_color_options -%}
             <div class="variant-colour-options flex flex-start align-center g-1 mt-1 mb-1 overflow-hidden">
               {%- for option in product.options_with_values -%}
                 {%- assign option_name_downcase = option.name | downcase -%}
@@ -156,7 +156,7 @@
                 {%- endif -%}
               {%- endfor -%}
             </div>
-          {%- endif -%}
+          {%- endif -%} {% endcomment %}
 
           <div
             class="product-price"
@@ -227,10 +227,6 @@
 
   .product-card .product-image .button-wishlist svg {
     cursor: pointer;
-  }
-
-  .product-card .product-title {
-    min-height: 55px;
   }
 
   .product-card .product-title {

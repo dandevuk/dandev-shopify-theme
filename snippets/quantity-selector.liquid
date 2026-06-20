@@ -140,10 +140,9 @@
     width: 90px;
     min-width: 90px;
     min-height: 29px;
-    border: 1px solid var(--brand-color-5);
-    border-radius: 90px;
+    border: 1px solid var(--brand-color-1);
     overflow: hidden;
-    background-color: #fff;
+    background-color: var(--brand-color-2);
   }
 
   .quantity-wrapper > * {
@@ -162,6 +161,11 @@
     font-size: 22px;
     cursor: pointer;
     transition: 0.3s ease;
+  }
+
+  .quantity-wrapper .quantity-btn:hover {
+    background-color: var(--brand-color-1);
+    color: var(--brand-color-2);
   }
 
   .quantity-wrapper .quantity-btn--increment[data-pending='true'],
