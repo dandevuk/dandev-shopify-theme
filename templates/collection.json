@@ -149,7 +149,7 @@
         "horizontal_layout": "section-text-left",
         "vertical_layout": "text-bottom",
         "page_width": "page-width",
-        "vertical_spacing": "",
+        "vertical_spacing": "vertical-margin",
         "custom_spacing": false,
         "top_spacing": 120,
         "bottom_spacing": 120,
