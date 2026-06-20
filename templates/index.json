@@ -204,6 +204,7 @@
       "block_order": [
         "slider_products_cta_qTy6t4"
       ],
+      "disabled": true,
       "name": "Products with CTA Slider",
       "settings": {
         "style_selector": "theme",
