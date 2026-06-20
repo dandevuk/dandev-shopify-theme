@@ -55,7 +55,7 @@
                       {%- render 'image',
                           image: media,
                           max_width: 1000,
-                          class: 'absolute w-100 h-100 object-cover',
+                          class: 'absolute w-100 h-100 object-contain',
                           use_placeholder: false,
                           lazy: lazy_load
                       -%}
@@ -125,7 +125,7 @@
                 {%- render 'image',
                   image: media,
                   max_width: 1000,
-                  class: 'absolute w-100 h-100 object-cover',
+                  class: 'absolute w-100 h-100 object-contain',
                   use_placeholder: false,
                   lazy: false
                 -%}
@@ -168,7 +168,7 @@
           max_width: 1000,
           use_placeholder: true,
           lazy: false,
-          class: 'absolute inset-0 object-cover'
+          class: 'absolute inset-0 object-contain'
         -%}
       </div>
     {%- else -%}
