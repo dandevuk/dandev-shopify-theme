@@ -21,6 +21,7 @@
     "body_font_weight_large": 400,
     "body_line_height_large": 120,
     "heading_h0_size": 61,
+    "heading_h0_size_mobile": 50,
     "heading_h0_font_weight": 400,
     "heading_h0_line_height": 120,
     "heading_h1_size": 58,
