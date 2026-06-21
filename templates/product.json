@@ -26,6 +26,17 @@
           },
           "blocks": {}
         },
+        "product_awkward_switch_cVd8er": {
+          "type": "_product-awkward-switch",
+          "name": "Awkward Switch",
+          "settings": {
+            "switch_to_awkward_text": "Make things awkward",
+            "switch_to_awkward_image": "shopify://shop_images/awkward-smiley.png",
+            "switch_to_not_awkward_text": "Err... I'm too cool for this awkwardness",
+            "switch_to_not_awkward_image": "shopify://shop_images/cool-smiley.png"
+          },
+          "blocks": {}
+        },
         "product_description_AhRbDX": {
           "type": "_product-description",
           "name": "Description",
@@ -218,6 +229,7 @@
       "block_order": [
         "product_title_p3Bxkj",
         "product_price_eti3bj",
+        "product_awkward_switch_cVd8er",
         "product_description_AhRbDX",
         "product_collection_links_XGXj4z",
         "product_variant_selectors_GWTq3R",

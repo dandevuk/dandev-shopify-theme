@@ -48,12 +48,20 @@
     <div class="footer__inner-container w-100 flex flex-wrap g-3 to-sm-flex-col relative container-v-padding pb-0">
       <div class="footer__logo-container flex-col flex-start g-4 mr-auto to-sm-m-in-auto">
         <div class="store-logo">
-          {%- if store_logo != blank -%}
+          {%- liquid
+            assign awkward_footer_logo = settings.awkward_footer_logo
+            assign logo = section.settings.logo | default: shop.brand.logo
+
+            if template.name == 'product' and product.metafields.custom.is_awkward == true
+              assign logo = awkward_footer_logo
+            endif
+          -%}
+          {%- if logo != blank -%}
             <a href="{{ routes.root_url }}" aria-label="{{- link_to_t | t: link: shop.name -}}">
               {%- render 'image',
-                image: store_logo,
+                image: logo,
                 max_width: 400,
-                use_placeholder: true,
+                use_placeholder: false,
                 lazy: true,
                 class: 'object-contain'
               -%}

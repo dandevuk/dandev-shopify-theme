@@ -29,25 +29,17 @@
         class="logo-container flex-center align-center w-auto h-100"
         aria-label="{{ 'sections.header.link_to' | t }} {{ shop.name }}"
       >
-        {%- if section.settings.logo != blank -%}
-          <div class="store-logo flex-center align-center w-auto" style="max-height: 45px;">
-            {%- render 'image',
-              image: section.settings.logo,
-              max_width: 200,
-              use_placeholder: true,
-              lazy: false,
-              class: 'object-contain'
-            -%}
-          </div>
-        {%- elsif shop.brand.logo != blank -%}
-          <div class="store-logo flex-center align-center">
-            {%- render 'image',
-              image: shop.brand.logo,
-              max_width: 200,
-              use_placeholder: true,
-              lazy: false,
-              class: 'object-contain'
-            -%}
+        {%- liquid
+          assign awkward_header_logo = settings.awkward_header_logo
+          assign logo = section.settings.logo | default: shop.brand.logo
+
+          if template.name == 'product' and product.metafields.custom.is_awkward == true
+            assign logo = awkward_header_logo
+          endif
+        -%}
+        {%- if logo != blank -%}
+          <div class="store-logo flex-center align-center w-auto" style="height: 55px;">
+            {%- render 'image', image: logo, max_width: 300, use_placeholder: false, lazy: false, class: 'object-contain' -%}
           </div>
         {%- endif -%}
       </a>

@@ -1,0 +1,85 @@
+{%- liquid
+    assign awkward_group_product = product.metafields.custom.awkward_group_product.value
+    assign is_awkward = product.metafields.custom.is_awkward
+    assign switch_to_not_awkward_text = block.settings.switch_to_not_awkward_text
+    assign switch_to_awkward_text = block.settings.switch_to_awkward_text
+    assign switch_to_not_awkward_image = block.settings.switch_to_not_awkward_image
+    assign switch_to_awkward_image = block.settings.switch_to_awkward_image
+-%}
+{%- if awkward_group_product != blank -%}
+    <div class="product-awkward-switch-container" {{ block.shopify_attributes }}>
+        {%- if is_awkward == true -%}
+            <a href="{{ awkward_group_product.url }}" class="product-awkward-switch-button theme-link flex align-center g-1" data-awkward-switch="true">
+                {%- if switch_to_not_awkward_text != blank -%}
+                    {{ switch_to_not_awkward_text }}
+                {%- endif -%}
+                {%- if switch_to_not_awkward_image != blank -%}
+                  <div class="awkward-switch-icon">
+                    {%- render 'image', image: switch_to_not_awkward_image, max_width: 100, use_placeholder: true, lazy: true, class: 'object-contain' -%}
+                  </div>
+                {%- endif -%}
+            </a>
+        {%- else -%}
+            <a href="{{ awkward_group_product.url }}" class="product-awkward-switch-button theme-link flex align-center g-1" data-awkward-switch="false">
+                {%- if switch_to_awkward_text != blank -%}
+                    {{ switch_to_awkward_text }}
+                {%- endif -%}
+                {%- if switch_to_awkward_image != blank -%}
+                  <div class="awkward-switch-icon">
+                    {%- render 'image', image: switch_to_awkward_image, max_width: 100, use_placeholder: true, lazy: true, class: 'object-contain' -%}
+                  </div>
+                {%- endif -%}
+            </a>
+        {%- endif -%}
+    </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .awkward-switch-icon {
+    width: 40px;
+    height: auto;
+  }
+  .awkward-switch-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Awkward Switch",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "switch_to_awkward_text",
+      "label": "Switch to Awkward Text",
+      "default": "Switch to awkward"
+    },
+    {
+      "type": "image_picker",
+      "id": "switch_to_awkward_image",
+      "label": "Switch to Awkward Image"
+    },
+    {
+      "type": "text",
+      "id": "switch_to_not_awkward_text",
+      "label": "Switch to Not Awkward Text",
+      "default": "Switch to not awkward"
+    },
+    {
+      "type": "image_picker",
+      "id": "switch_to_not_awkward_image",
+      "label": "Switch to Not Awkward Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Awkward Switch"
+    }
+  ]
+}
+{% endschema %}
+  
+  
