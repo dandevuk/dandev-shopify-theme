@@ -50,27 +50,28 @@ const dedupe = (items) => {
   return result;
 };
 
-const waitForBlazeInstance = (sliderEl) => {
-  if (!sliderEl) {
-    return Promise.resolve(null);
+const getBlazeController = async () => {
+  if (window.themeBlazeSliderController) {
+    return window.themeBlazeSliderController;
   }
 
-  return new Promise((resolve) => {
-    if (sliderEl.__themeBlazeSlider) {
-      resolve(sliderEl.__themeBlazeSlider);
-      return;
-    }
+  const { blazeSliderController } = await import("@theme/blaze-slider-controller");
+  return blazeSliderController;
+};
 
-    const check = () => {
-      if (sliderEl.__themeBlazeSlider) {
-        resolve(sliderEl.__themeBlazeSlider);
-        return;
-      }
-      requestAnimationFrame(check);
-    };
+const initBlazeSlider = async (sliderEl) => {
+  if (!sliderEl) {
+    return null;
+  }
 
-    check();
-  });
+  const controller = await getBlazeController();
+  if (!controller) {
+    return null;
+  }
+
+  // Blaze may have initialized while the track was still empty; rebuild with loaded slides.
+  controller.destroy(sliderEl);
+  return controller.initSlider(sliderEl);
 };
 
 const fetchProductCard = async (handle) => {
@@ -194,15 +195,7 @@ class RecentlyViewedSlider {
       );
     }
 
-    const controller = window.themeBlazeSliderController;
-    if (controller && typeof controller.refresh === "function") {
-      controller.refresh(this.slider);
-    }
-
-    const blaze = await waitForBlazeInstance(this.slider);
-    if (blaze && typeof blaze.refresh === "function") {
-      blaze.refresh();
-    }
+    await initBlazeSlider(this.slider);
   }
 
   handleEmpty() {

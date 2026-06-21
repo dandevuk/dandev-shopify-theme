@@ -666,6 +666,7 @@ function handleStateChange(slider, prevStateIndex) {
 function construct(config, slider) {
     const track = slider.track;
     slider.slides = track.children;
+    slider.totalSlides = slider.slides.length;
     slider.offset = 0;
     slider.config = config;
     constructAutomata(slider, slider.totalSlides, config);
