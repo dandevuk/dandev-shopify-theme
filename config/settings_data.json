@@ -9,6 +9,9 @@
  */
 {
   "current": {
+    "awkward_header_logo": "shopify://shop_images/aaf-square-logo-awkward.png",
+    "awkward_footer_logo": "shopify://shop_images/aaf-square-logo-awkward.png",
+    "awkward_product_tag_image": "shopify://shop_images/awkward-tag1.png",
     "body_font_size": 18,
     "body_font_size_mobile": 18,
     "body_font_weight": 400,

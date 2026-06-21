@@ -8,6 +8,30 @@
     "theme_support_url": "https://support.shopify.com/"
   },
   {
+    "name": "Awkward Styling",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Awkward imagery"
+      },
+      {
+        "type": "image_picker",
+        "id": "awkward_header_logo",
+        "label": "Awkward header logo"
+      },
+      {
+        "type": "image_picker",
+        "id": "awkward_footer_logo",
+        "label": "Awkward footer logo"
+      },
+      {
+        "type": "image_picker",
+        "id": "awkward_product_tag_image",
+        "label": "Awkward product tag image"
+      }
+    ]
+  },
+  {
     "name": "t:general.typography",
     "settings": [
       {

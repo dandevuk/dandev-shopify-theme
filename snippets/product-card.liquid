@@ -103,7 +103,20 @@
             aria-label="{{- product.title | prepend: "Link to " -}}"
             style="margin-top:4px;"
           >
-            {{- product.title -}}
+            {%- liquid
+              assign awkward_product_tag_image = settings.awkward_product_tag_image
+              assign is_awkward_product = product.metafields.custom.is_awkward
+            -%}
+            {%- if awkward_product_tag_image != blank and is_awkward_product == true -%}
+              <div class="flex align-center g-1 no-text-margins">
+                <div class="w-30">
+                {%- render 'image', image: awkward_product_tag_image, max_width: 100, use_placeholder: true, lazy: true, class: 'object-contain' -%}
+                </div>
+                <span class="heading-h4 m-0">{{- product.title | remove: 'awkward ' -}}</span>
+              </div>
+            {% else %}
+              <span class="heading-h4">{{- product.title -}}</span>
+            {%- endif -%}
           </a>
           {% comment %} <div class="product-description vertical-clamp-two">
             {{- product.description | strip_html -}}

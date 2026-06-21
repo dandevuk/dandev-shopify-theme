@@ -5,7 +5,20 @@
   if product == blank
     assign product = closest.product
   endif
+
+  assign awkward_product_tag_image = settings.awkward_product_tag_image
+  assign is_awkward_product = product.metafields.custom.is_awkward
 -%}
 <div class="product-title" {{ shopify_attributes }}>
-  <{{ tag }} class="product-title {{ style }}">{{ product.title }}</{{ tag }}>
+  {%- if awkward_product_tag_image != blank and is_awkward_product == true -%}  
+    <div class="flex-center flex-col g-1 no-text-margins">
+      <div class="w-20">
+        {%- render 'image', image: awkward_product_tag_image, max_width: 400, use_placeholder: true, lazy: true, class: 'object-contain' -%}
+      </div>
+      <{{ tag }} class="product-title {{ style }} m-0">{{- product.title | remove: 'awkward ' -}}</{{ tag }}>
+    </div>
+
+  {% else %}
+    <{{ tag }} class="product-title {{ style }} m-0">{{ product.title }}</{{ tag }}>
+  {%- endif -%}
 </div>
