@@ -81,8 +81,15 @@
   assign widths = '100,200,300,400,600,800,1000,1200,1400,1600,2000' | split: ','
 
   assign object_position = ''
-  if image.presentation.focal_point or image_mobile.presentation.focal_point
-    assign object_position = '--object-position-desktop: ' | append: image.presentation.focal_point | append: '; --object-position-mobile: ' | append: image_mobile.presentation.focal_point | append: ';'
+  assign desktop_focal = image.presentation.focal_point
+  assign mobile_focal = image_mobile.presentation.focal_point
+
+  if image_mobile == blank or mobile_focal == blank
+    assign mobile_focal = desktop_focal
+  endif
+
+  if desktop_focal or mobile_focal
+    assign object_position = '--object-position-desktop: ' | append: desktop_focal | append: '; --object-position-mobile: ' | append: mobile_focal | append: ';'
   endif
 
   assign desktop_srcset = ''
@@ -188,7 +195,7 @@
       >
     {%- endif -%}
     {%- liquid
-      assign sizes = '(max-width: 767px) ' | append: mobile_width | append: 'px, ' | append: mobile_width | append: 'px'
+      assign sizes = '(max-width: 767px) ' | append: mobile_width | append: 'px, ' | append: max_width | append: 'px'
       assign mobile_render_srcset = mobile_srcset
       if use_modern_picture
         assign mobile_render_srcset = mobile_fallback_srcset
