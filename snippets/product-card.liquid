@@ -63,7 +63,7 @@
           context_text: product.title
         -%}
 
-        {%- if product.images.size > 1 and has_color_options == blank -%}
+        {%- if product.images.size > 1 -%}
           {%- render 'image',
             image: product.images[1],
             max_width: 400,

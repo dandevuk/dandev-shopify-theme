@@ -342,7 +342,7 @@ input[type="checkbox"] {
   padding: unset;
   border: none;
   border-radius: 50%;
-  background-color: #fff;
+  background-color: var(--brand-color-1);
   cursor: pointer;
   appearance: none;
   aspect-ratio: 1;
@@ -352,7 +352,7 @@ input[type="checkbox"]:focus {
 }
 
 input[type="checkbox"]:checked {
-  background-color: var(--brand-color-2);
+  background-color: var(--brand-color-1);
 }
 
 input[type="checkbox"]::after {
@@ -362,7 +362,7 @@ input[type="checkbox"]::after {
   display: none;
   width: 4px;
   height: 10px;
-  border: solid white;
+  border: solid var(--brand-color-2);
   border-width: 0 3px 3px 0;
   content: "";
   transform: translate(-50%, -59%) rotate(40deg);

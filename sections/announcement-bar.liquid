@@ -1,57 +1,61 @@
 {%- liquid
   assign blocks = section.blocks
 
-  assign color = section.settings.text_color
-  assign bg = section.settings.background_color
+  assign style_selector = section.settings.style_selector
+  assign section_styling = section.settings.section_styling
+  assign background_color = section.settings.background_color
+  assign text_color = section.settings.text_color
 
   assign autoplay = section.settings.autoplay
-  assign slides_per_view = section.settings.slides_per_view
 
-  assign marquee_slides_per_view = 100 | divided_by: slides_per_view | at_least: 1 | prepend: '--slides-per-view: ' | append: 'vw;'
-  assign marquee_autoplay = autoplay | times: 10 | prepend: '--animation-speed:' | append: 's;'
-
-  # Check Enough Slides to Loop
-  assign min_blocks = slides_per_view | times: 4
-  assign repeat_times = min_blocks | plus: 0.0 | divided_by: blocks.size | ceil | at_least: 1 | at_most: 10
+  assign min_blocks = 12
+  assign repeat_times = min_blocks | plus: 0.0 | divided_by: blocks.size | ceil | at_least: 2 | at_most: 20
+  assign animation_duration = autoplay | at_least: 1 | times: 10 | times: repeat_times
+  assign marquee_autoplay = animation_duration | prepend: '--animation-speed:' | append: 's;'
 -%}
 
 {%- if blocks.size > 0 -%}
-  <div
-    class="announcement-bar marquee  flex-1 flex-start align-center relative"
-    style="{{- bg | prepend: 'background: ' | append: ';' | default: '' -}} {{- color | prepend: 'color: ' | append: ';' | default: '' -}}{{- marquee_autoplay -}}{{- marquee_slides_per_view -}}"
-  >
-    {%- for i in (1..2) -%}
-      <div class="animation-container flex-start align-center">
-        {%- for i in (1..repeat_times) -%}
-          {%- for block in blocks -%}
-            {%- liquid
-              assign text = block.settings.text
-              assign link = block.settings.link
-              assign link_text = block.settings.link_text
-            -%}
+    <div
+      class="announcement-bar marquee section-container {{ section_styling }} flex-1 flex-start align-center relative"
+      style="{% if style_selector == 'custom' %}background: {{ background_color }}; color: {{ text_color }};--custom-text-color: {{ text_color }};{% endif %}{{- marquee_autoplay -}}"
+    >
+      {%- for i in (1..2) -%}
+        <div class="animation-container flex-start align-center">
+          {%- for i in (1..repeat_times) -%}
+            {%- for block in blocks -%}
+              {%- liquid
+                assign text = block.settings.text
+                assign link = block.settings.link
+                assign link_text = block.settings.link_text
+              -%}
 
-            {%- if link != blank -%}
-              <a
-                class="marquee-slide"
-                href="{{- link -}}"
-                {%- if link_text != blank -%}
-                  aria-label="{{- 'sections.header.link_to' | t }}: {{ link_text | escape }}"
-                {%- endif -%}
-                {{ block.shopify_attributes }}
-              >
-                {{- text -}}
-              </a>
-            {%- else -%}
-              <div class="marquee-slide">
-                {{- text -}}
-              </div>
-            {%- endif -%}
+              {%- if link != blank -%}
+                <a
+                  class="marquee-slide"
+                  href="{{- link -}}"
+                  aria-label="{{- link_text | prepend: 'Link to: ' -}}"
+                  {{ block.shopify_attributes }}
+                >
+                  {{- text -}}
+                </a>
+              {%- else -%}
+                <div class="marquee-slide">
+                  {{- text -}}
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
           {%- endfor -%}
-        {%- endfor -%}
-      </div>
-    {%- endfor -%}
-  </div>
+        </div>
+      {%- endfor -%}
+
+    </div>
 {%- endif -%}
+
+{% style %}
+  #shopify-section-{{ section.id }} .announcement-bar .animation-container {
+    animation-duration: {{ animation_duration }}s;
+  }
+{% endstyle %}
 
 {% stylesheet %}
   section.announcement-bar-section {
@@ -81,8 +85,6 @@
   section.announcement-bar-section .announcement-bar {
     overflow: visible;
     min-height: 30px;
-    background-color: var(--brand-color-1);
-    color: #fff;
   }
 
   section.announcement-bar-section .announcement-bar .marquee-slide {
@@ -108,10 +110,11 @@
   }
 
   section.announcement-bar-section .announcement-bar.marquee {
+    --marquee-gap: 40px;
     width: 100%;
     overflow: hidden;
     isolation: isolate;
-    gap: 40px;
+    gap: var(--marquee-gap);
   }
 
   section.announcement-bar-section .announcement-bar.marquee:hover .animation-container {
@@ -120,22 +123,19 @@
 
   section.announcement-bar-section .announcement-bar.marquee .animation-container {
     z-index: 1;
-    gap: 40px;
+    flex-flow: row nowrap;
+    flex-shrink: 0;
+    width: max-content;
+    gap: var(--marquee-gap);
+    animation-name: infiniteScroll;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
     animation-play-state: running;
-    animation: infiniteScroll 10s linear infinite;
-    animation-duration: var(--animation-speed);
   }
 
   section.announcement-bar-section .announcement-bar.marquee .animation-container .marquee-slide {
-    flex: 1;
-    min-width: max-content;
+    flex-shrink: 0;
     white-space: nowrap;
-  }
-
-  @media (max-width: 768px) {
-    section.announcement-bar-section .announcement-bar.marquee .animation-container .marquee-slide {
-      min-width: 100vw;
-    }
   }
 
   section.announcement-bar-section
@@ -152,133 +152,121 @@
       translate: 0% 0%;
     }
     100% {
-      translate: calc(-100% - 40px) 0%;
+      translate: calc(-100% - var(--marquee-gap)) 0%;
     }
   }
+
 {% endstylesheet %}
 
-{% comment %}
-  <script>
-      document.addEventListener('DOMContentLoaded', function() {
-          const body_el = document.querySelector('body');
-          const annoncement_bar = document.querySelector('.announcement-bar-section');
-
-          if (!annoncement_bar) return;
-
-          const announcement_bar_height = annoncement_bar ? annoncement_bar.offsetHeight : 0;
-          body_el.style = `--announcement-bar-height: ${announcement_bar_height}px;`;
-
-          let lastScrollTop = 0;
-
-          function setScrollClass() {
-          const scrollTop = window.scrollY;
-
-          if (scrollTop === 0) {
-              body_el.classList.remove('is-scrolled-up', 'is-scrolled-down');
-              return;
-          }
-
-
-          if (scrollTop > lastScrollTop) {
-              body_el.classList.add('is-scrolled-down');
-              body_el.classList.remove('is-scrolled-up');
-
-          } else if (scrollTop < lastScrollTop) {
-
-              body_el.classList.add('is-scrolled-up');
-              body_el.classList.remove('is-scrolled-down');
-          }
-
-          lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-          }
-
-          setScrollClass();
-
-          window.addEventListener('scroll', (e) => {
-              setScrollClass();
-          });
-      });
-  </script>
-{% endcomment %}
-
 {% schema %}
-{
-  "name": "Announcement Bar",
-  "tag": "section",
-  "class": "announcement-bar-section sticky",
-  "settings": [
-    {
-      "type": "header",
-      "content": "Style Settings"
-    },
-    {
-      "type": "color",
-      "id": "background_color",
-      "label": "Background Colour",
-      "default": "#30292f"
-    },
-    {
-      "type": "color",
-      "id": "text_color",
-      "label": "Text Colour",
-      "default": "#ffffff"
-    },
-    {
-      "type": "header",
-      "content": "Behaviour Settings"
-    },
-    {
-      "type": "range",
-      "min": 0,
-      "max": 15,
-      "step": 1,
-      "unit": "s",
-      "id": "autoplay",
-      "label": "Autoplay Speed",
-      "default": 5
-    },
-    {
-      "type": "range",
-      "min": 1,
-      "max": 4,
-      "step": 1,
-      "id": "slides_per_view",
-      "label": "Slides in View (Desktop)",
-      "info": "On tablet/mobile this defaults to 1 slide per view",
-      "default": 1
-    }
-  ],
-  "blocks": [
-    {
-      "name": "Slide",
-      "type": "slide",
-      "settings": [
-        {
-          "type": "inline_richtext",
-          "id": "text",
-          "label": "Text"
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "Link"
-        },
-        {
-          "type": "text",
-          "id": "link_text",
-          "info": "This is used for accessibility purposes and will be read by screen readers.",
-          "label": "Link Text"
-        }
-      ]
-    }
-  ],
-  "enabled_on": {
-    "groups": ["header"]
-  },
-  "presets": [
-    {
-      "name": "Announcement Bar"
-    }
-  ]
-}
+  {
+    "name": "Announcement Bar",
+    "tag": "section",
+    "class": "announcement-bar-section sticky",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Styling"
+      },
+      {
+        "type": "select",
+        "id": "style_selector",
+        "label": "Styling Type",
+        "options": [
+          {
+            "value": "theme",
+            "label": "Theme"
+          },
+          {
+            "value": "custom",
+            "label": "Custom"
+          }
+        ],
+        "default": "theme"
+      },
+      {
+        "type": "select",
+        "id": "section_styling",
+        "label": "Section Style",
+        "options": [
+          {
+            "value": "primary",
+            "label": "Primary"
+          },
+          {
+            "value": "secondary",
+            "label": "Secondary"
+          },
+          {
+            "value": "third",
+            "label": "Third"
+          },
+          {
+            "value": "fourth",
+            "label": "Fourth"
+          }
+        ],
+        "default": "primary",
+        "visible_if": "{{ section.settings.style_selector == 'theme' }}"
+      },
+      {
+        "type": "color_background",
+        "id": "background_color",
+        "label": "Background Colour",
+        "default": "linear-gradient(#ffffff, #ffffff)",
+        "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text Colour",
+        "default": "#393939",
+        "visible_if": "{{ section.settings.style_selector == 'custom' }}"
+      },
+      {
+        "type": "header",
+        "content": "Behaviour Settings"
+      },
+      {
+        "type": "range",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "unit": "s",
+        "id": "autoplay",
+        "label": "Scroll duration",
+        "info": "Higher values scroll slower. Lower values scroll faster.",
+        "default": 5
+      }
+    ],
+    "blocks": [
+      {
+        "name": "Slide",
+        "type": "slide",
+        "settings": [
+          {
+            "type": "inline_richtext",
+            "id": "text",
+            "label": "Text"
+          },
+          {
+            "type": "url",
+            "id": "link",
+            "label": "Link"
+          },
+          {
+            "type": "text",
+            "id": "link_text",
+            "info": "This is used for accessibility purposes and will be read by screen readers.",
+            "label": "Label Text"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Announcement Bar"
+      }
+    ]
+  }
 {% endschema %}

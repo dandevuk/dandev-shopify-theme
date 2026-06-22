@@ -32,7 +32,7 @@
               "type": "richtext",
               "name": "Richtext",
               "settings": {
-                "richtext": "<p>Add text here to go under the heading</p>"
+                "richtext": "<p>Sweaty palms. Overthinking everything. Saying 'you too' when the waiter says enjoy your meal. Welcome home. Awkward AF is for the beautifully anxious — wear it like you meant to.</p>"
               },
               "blocks": {}
             },
@@ -46,8 +46,8 @@
                 "link_jJnXBp": {
                   "type": "link",
                   "settings": {
-                    "link_text": "All Collections",
-                    "link": "shopify://collections",
+                    "link_text": "Own your awkward",
+                    "link": "shopify://collections/awkward-af",
                     "link_title": "Link Title",
                     "link_style": "button-1",
                     "external_link": false
@@ -78,11 +78,11 @@
         "mobile_height": 400,
         "layout_style": "full-width",
         "style_selector": "theme",
-        "section_styling": "third",
+        "section_styling": "primary",
         "background_color": "linear-gradient(#ffffff, #ffffff)",
         "text_color": "#393939",
         "overlay_type": "theme",
-        "overlay_styling": "primary",
+        "overlay_styling": "secondary",
         "overlay_color": "linear-gradient(#ffffff, #ffffff)",
         "text_content_horizontal_position": "span-5",
         "text_content_vertical_position": "align-end",
@@ -210,7 +210,7 @@
             "autoplay": false,
             "autoplay_delay": 3,
             "navigation_display": "desktop-navigation",
-            "navigation_style": "inline",
+            "navigation_style": "default",
             "pagination_display": "desktop",
             "scrollbar_display": "none"
           },
