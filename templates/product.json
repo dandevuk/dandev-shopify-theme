@@ -30,10 +30,8 @@
           "type": "_product-awkward-switch",
           "name": "Awkward Switch",
           "settings": {
-            "switch_to_awkward_text": "Make things awkward",
-            "switch_to_awkward_image": "shopify://shop_images/awkward-smiley.png",
-            "switch_to_not_awkward_text": "Err... I'm too cool for this awkwardness",
-            "switch_to_not_awkward_image": "shopify://shop_images/cool-smiley.png"
+            "switch_to_awkward_text": "😬 Make things awkward",
+            "switch_to_not_awkward_text": "😎 Err... I'm too cool for this awkwardness"
           },
           "blocks": {}
         },
