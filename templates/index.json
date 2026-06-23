@@ -286,11 +286,13 @@
           "type": "_slider-collections",
           "settings": {
             "block_collections": [
-              "best-sellers",
-              "frontpage",
               "test-1",
               "test-2",
-              "test-3"
+              "test-3",
+              "awkward-af",
+              "frontpage",
+              "best-sellers",
+              "t-shirts"
             ],
             "show_advanced_settings": true,
             "slider_overflow": "mobile-slider-overflow",
