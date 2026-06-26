@@ -97,6 +97,7 @@
         "footer_accordion_item_gfJpeH"
       ],
       "settings": {
+        "logo": "shopify://shop_images/awkward-long.png",
         "style_selector": "theme",
         "section_styling": "primary",
         "background_color": "linear-gradient(#ffffff, #ffffff)",
