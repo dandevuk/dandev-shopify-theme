@@ -31,7 +31,7 @@
           "name": "Awkward Switch",
           "settings": {
             "switch_to_awkward_text": "😬 Make things awkward",
-            "switch_to_not_awkward_text": "😎 Err... I'm too cool for this awkwardness"
+            "switch_to_not_awkward_text": "😎 Nope. Too normal for this. (Lies.)"
           },
           "blocks": {}
         },
