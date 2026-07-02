@@ -199,7 +199,7 @@
         "slider_products_ApGHch": {
           "type": "_slider-products",
           "settings": {
-            "block_collection": "best-sellers",
+            "block_collection": "awkward-af",
             "block_products": [],
             "show_advanced_settings": true,
             "slider_overflow": "mobile-slider-overflow",
@@ -230,7 +230,7 @@
           "type": "heading",
           "static": true,
           "settings": {
-            "heading": "Featured Products",
+            "heading": "Awkward AF T-Shirts",
             "heading_type": "h2",
             "heading_size": "heading-h1"
           },
