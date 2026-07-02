@@ -249,9 +249,9 @@
           "type": "link",
           "static": true,
           "settings": {
-            "link_text": "Link Text",
-            "link": "",
-            "link_title": "Link Title",
+            "link_text": "View the full collection",
+            "link": "shopify://collections/awkward-af",
+            "link_title": "View the full Awkward AF collection",
             "link_style": "button-1",
             "external_link": false
           },
@@ -335,9 +335,9 @@
           "type": "link",
           "static": true,
           "settings": {
-            "link_text": "Link Text",
-            "link": "",
-            "link_title": "Link Title",
+            "link_text": "View the full collection",
+            "link": "shopify://collections/fine-print",
+            "link_title": "View the full Fine Print collection",
             "link_style": "button-1",
             "external_link": false
           },
@@ -421,9 +421,9 @@
           "type": "link",
           "static": true,
           "settings": {
-            "link_text": "Link Text",
-            "link": "",
-            "link_title": "Link Title",
+            "link_text": "View the full collection",
+            "link": "shopify://collections/talking-to-myself",
+            "link_title": "View the full Talking to Myself collection",
             "link_style": "button-1",
             "external_link": false
           },
