@@ -230,7 +230,7 @@
           "type": "heading",
           "static": true,
           "settings": {
-            "heading": "Awkward AF T-Shirts",
+            "heading": "Awkward AF",
             "heading_type": "h2",
             "heading_size": "heading-h1"
           },
@@ -266,6 +266,178 @@
       },
       "block_order": [
         "slider_products_ApGHch"
+      ],
+      "name": "Product Card Slider",
+      "settings": {
+        "style_selector": "theme",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "background_image_type": "none",
+        "background_image_theme": "1",
+        "page_width": "page-width",
+        "vertical_spacing": "vertical-margin"
+      }
+    },
+    "slider_t6gWc3": {
+      "type": "slider",
+      "blocks": {
+        "slider_products_cfU9gT": {
+          "type": "_slider-products",
+          "settings": {
+            "block_collection": "fine-print",
+            "block_products": [],
+            "show_advanced_settings": true,
+            "slider_overflow": "mobile-slider-overflow",
+            "custom_layout": false,
+            "loop": false,
+            "centered_slides": "none",
+            "initial_slide": 0,
+            "autoplay": false,
+            "autoplay_delay": 3,
+            "navigation_display": "desktop-navigation",
+            "navigation_style": "default",
+            "pagination_display": "desktop",
+            "scrollbar_display": "none"
+          },
+          "blocks": {
+            "product-card": {
+              "type": "_product-card",
+              "static": true,
+              "settings": {
+                "show_quickview_button": true
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": []
+        },
+        "heading": {
+          "type": "heading",
+          "static": true,
+          "settings": {
+            "heading": "Read the fine print",
+            "heading_type": "h2",
+            "heading_size": "heading-h1"
+          },
+          "blocks": {}
+        },
+        "richtext": {
+          "type": "richtext",
+          "disabled": true,
+          "static": true,
+          "settings": {
+            "richtext": "<p>Add text here</p>"
+          },
+          "blocks": {}
+        },
+        "link": {
+          "type": "link",
+          "static": true,
+          "settings": {
+            "link_text": "Link Text",
+            "link": "",
+            "link_title": "Link Title",
+            "link_style": "button-1",
+            "external_link": false
+          },
+          "blocks": {}
+        },
+        "slider-navigation-arrows": {
+          "type": "_slider-navigation-arrows",
+          "static": true,
+          "settings": {},
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "slider_products_cfU9gT"
+      ],
+      "name": "Product Card Slider",
+      "settings": {
+        "style_selector": "theme",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "background_image_type": "none",
+        "background_image_theme": "1",
+        "page_width": "page-width",
+        "vertical_spacing": "vertical-margin"
+      }
+    },
+    "slider_B7FdVG": {
+      "type": "slider",
+      "blocks": {
+        "slider_products_hLGrai": {
+          "type": "_slider-products",
+          "settings": {
+            "block_collection": "talking-to-myself",
+            "block_products": [],
+            "show_advanced_settings": true,
+            "slider_overflow": "mobile-slider-overflow",
+            "custom_layout": false,
+            "loop": false,
+            "centered_slides": "none",
+            "initial_slide": 0,
+            "autoplay": false,
+            "autoplay_delay": 3,
+            "navigation_display": "desktop-navigation",
+            "navigation_style": "default",
+            "pagination_display": "desktop",
+            "scrollbar_display": "none"
+          },
+          "blocks": {
+            "product-card": {
+              "type": "_product-card",
+              "static": true,
+              "settings": {
+                "show_quickview_button": true
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": []
+        },
+        "heading": {
+          "type": "heading",
+          "static": true,
+          "settings": {
+            "heading": "Talking to yourself??",
+            "heading_type": "h2",
+            "heading_size": "heading-h1"
+          },
+          "blocks": {}
+        },
+        "richtext": {
+          "type": "richtext",
+          "disabled": true,
+          "static": true,
+          "settings": {
+            "richtext": "<p>Add text here</p>"
+          },
+          "blocks": {}
+        },
+        "link": {
+          "type": "link",
+          "static": true,
+          "settings": {
+            "link_text": "Link Text",
+            "link": "",
+            "link_title": "Link Title",
+            "link_style": "button-1",
+            "external_link": false
+          },
+          "blocks": {}
+        },
+        "slider-navigation-arrows": {
+          "type": "_slider-navigation-arrows",
+          "static": true,
+          "settings": {},
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "slider_products_hLGrai"
       ],
       "name": "Product Card Slider",
       "settings": {
@@ -576,6 +748,8 @@
     "hero_rtyajP",
     "slider_XxWG8i",
     "slider_e6Yp9W",
+    "slider_t6gWc3",
+    "slider_B7FdVG",
     "slider_igQG9A",
     "slider_hrEXAy",
     "slider_h7JJLB",
