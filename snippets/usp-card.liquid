@@ -18,7 +18,7 @@
     {%- if image != blank -%}
       <div
         class="flex-center align-center {% if usp_size == "large" %}mb-2{% endif %}"
-        style="{%- if usp_size == "large" -%}max-height:60px;{%- else -%}max-height:120px;{%- endif -%}"
+        style="{%- if usp_size == "large" -%}max-height:60px;{%- else -%}height:120px;{%- endif -%}"
       >
         {%- render 'image', image: image, max_width: 100, use_placeholder: true, lazy: lazy, class: 'object-contain', context_text: heading -%}
       </div>
