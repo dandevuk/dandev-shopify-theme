@@ -58,7 +58,7 @@
               "settings": {
                 "link_title": "Collections",
                 "link_url": "shopify://collections",
-                "open_to_custiomise": true
+                "open_to_custiomise": false
               },
               "blocks": {
                 "drop_down_link_group_jaLrFU": {
@@ -255,14 +255,14 @@
               "type": "_mobile-mega-menu_accordion",
               "name": "Accordion Menu",
               "settings": {
-                "title": "Collection 1"
+                "title": "Collections"
               },
               "blocks": {
                 "mobile_mega_menu_link_group_DMjcgU": {
                   "type": "_mobile-mega-menu_link-group",
                   "name": "Mobile Link Group",
                   "settings": {
-                    "title": "Collections",
+                    "title": "",
                     "menu": "collections"
                   },
                   "blocks": {}
