@@ -329,7 +329,7 @@
             "link_text": "View the full collection",
             "link": "shopify://collections/fine-print",
             "link_title": "View the full Fine Print collection",
-            "link_style": "button-1",
+            "link_style": "button-3",
             "external_link": false
           },
           "blocks": {}
