@@ -37,10 +37,11 @@
       ],
       "name": "Announcement Bar",
       "settings": {
+        "style_selector": "theme",
+        "section_styling": "primary",
         "background_color": "#000000",
         "text_color": "#ffffff",
-        "autoplay": 3,
-        "slides_per_view": 1
+        "autoplay": 3
       }
     },
     "header": {
@@ -443,7 +444,10 @@
     },
     "cart-recommendations": {
       "type": "cart-recommendations",
-      "settings": {}
+      "settings": {
+        "heading": "Recommended for you",
+        "limit": 8
+      }
     },
     "cart-recommendations-modal": {
       "type": "cart-recommendations-modal",
