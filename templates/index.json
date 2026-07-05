@@ -91,20 +91,20 @@
         "truncate_lines": 3
       }
     },
-    "slider_XxWG8i": {
+    "slider_h7JJLB": {
       "type": "slider",
       "blocks": {
-        "slider_products_cta_qTy6t4": {
-          "type": "_slider-products-cta",
+        "slider_usps_MjAE3q": {
+          "type": "_slider-usps",
           "settings": {
-            "block_collection": "best-sellers",
-            "block_products": [],
+            "usp_group": "usp-group-9h9i2pou",
+            "usps": [],
             "show_advanced_settings": true,
-            "slider_overflow": "desktop-slider-overflow mobile-slider-overflow",
+            "slider_overflow": "mobile-slider-overflow",
             "custom_layout": true,
-            "slides_per_view_mobile": 1.2,
-            "slides_per_view_tablet": 2.2,
-            "slides_per_view_desktop": 3,
+            "slides_per_view_mobile": 1.8,
+            "slides_per_view_tablet": 2.8,
+            "slides_per_view_desktop": 4,
             "slides_per_view_large_desktop": 4,
             "loop": false,
             "centered_slides": "none",
@@ -114,25 +114,14 @@
             "navigation_display": "desktop-navigation",
             "navigation_style": "default",
             "pagination_display": "desktop",
-            "scrollbar_display": "both"
+            "scrollbar_display": "none"
           },
           "blocks": {
-            "product-card": {
-              "type": "_product-card",
+            "usp": {
+              "type": "_usp",
               "static": true,
               "settings": {
-                "show_quickview_button": true
-              },
-              "blocks": {}
-            },
-            "cta": {
-              "type": "_cta",
-              "static": true,
-              "settings": {
-                "cta": "test-1",
-                "in_mega_menu": false,
-                "heading_size": "heading-h4",
-                "style": "image_card"
+                "usp_size": "small"
               },
               "blocks": {}
             }
@@ -141,9 +130,10 @@
         },
         "heading": {
           "type": "heading",
+          "disabled": true,
           "static": true,
           "settings": {
-            "heading": "Featured Products with CTA",
+            "heading": "USP Slider",
             "heading_type": "h2",
             "heading_size": "heading-h1"
           },
@@ -160,10 +150,11 @@
         },
         "link": {
           "type": "link",
+          "disabled": true,
           "static": true,
           "settings": {
             "link_text": "Link Text",
-            "link": "shopify://collections/best-sellers",
+            "link": "",
             "link_title": "Link Title",
             "link_style": "button-1",
             "external_link": false
@@ -172,16 +163,16 @@
         },
         "slider-navigation-arrows": {
           "type": "_slider-navigation-arrows",
+          "disabled": true,
           "static": true,
           "settings": {},
           "blocks": {}
         }
       },
       "block_order": [
-        "slider_products_cta_qTy6t4"
+        "slider_usps_MjAE3q"
       ],
-      "disabled": true,
-      "name": "Products with CTA Slider",
+      "name": "USP Slider",
       "settings": {
         "style_selector": "theme",
         "section_styling": "primary",
@@ -230,7 +221,7 @@
           "type": "heading",
           "static": true,
           "settings": {
-            "heading": "Awkward AF",
+            "heading": "Awkward As Fuck",
             "heading_type": "h2",
             "heading_size": "heading-h1"
           },
@@ -356,13 +347,13 @@
       "name": "Product Card Slider",
       "settings": {
         "style_selector": "theme",
-        "section_styling": "primary",
+        "section_styling": "third",
         "background_color": "linear-gradient(#ffffff, #ffffff)",
         "text_color": "#393939",
         "background_image_type": "none",
         "background_image_theme": "1",
         "page_width": "page-width",
-        "vertical_spacing": "vertical-margin"
+        "vertical_spacing": "vertical-padding"
       }
     },
     "slider_B7FdVG": {
@@ -451,271 +442,6 @@
         "vertical_spacing": "vertical-margin"
       }
     },
-    "slider_igQG9A": {
-      "type": "slider",
-      "blocks": {
-        "slider_collections_GRf4zk": {
-          "type": "_slider-collections",
-          "settings": {
-            "block_collections": [
-              "test-1",
-              "test-2",
-              "test-3",
-              "awkward-af",
-              "frontpage",
-              "best-sellers",
-              "t-shirts"
-            ],
-            "show_advanced_settings": true,
-            "slider_overflow": "mobile-slider-overflow",
-            "custom_layout": false,
-            "loop": false,
-            "centered_slides": "none",
-            "initial_slide": 0,
-            "autoplay": false,
-            "autoplay_delay": 3,
-            "navigation_display": "desktop-navigation",
-            "navigation_style": "default",
-            "pagination_display": "desktop",
-            "scrollbar_display": "both"
-          },
-          "blocks": {
-            "collection-card": {
-              "type": "_collection-card",
-              "static": true,
-              "settings": {
-                "card_style": "square"
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": []
-        },
-        "heading": {
-          "type": "heading",
-          "static": true,
-          "settings": {
-            "heading": "Featured Collections",
-            "heading_type": "h2",
-            "heading_size": "heading-h1"
-          },
-          "blocks": {}
-        },
-        "richtext": {
-          "type": "richtext",
-          "disabled": true,
-          "static": true,
-          "settings": {
-            "richtext": "<p>Add text here</p>"
-          },
-          "blocks": {}
-        },
-        "link": {
-          "type": "link",
-          "static": true,
-          "settings": {
-            "link_text": "Link Text",
-            "link": "",
-            "link_title": "Link Title",
-            "link_style": "button-1",
-            "external_link": false
-          },
-          "blocks": {}
-        },
-        "slider-navigation-arrows": {
-          "type": "_slider-navigation-arrows",
-          "static": true,
-          "settings": {},
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "slider_collections_GRf4zk"
-      ],
-      "name": "Collection Card Slider",
-      "settings": {
-        "style_selector": "theme",
-        "section_styling": "secondary",
-        "background_color": "linear-gradient(#ffffff, #ffffff)",
-        "text_color": "#393939",
-        "background_image_type": "none",
-        "background_image_theme": "1",
-        "page_width": "page-width",
-        "vertical_spacing": "vertical-padding"
-      }
-    },
-    "slider_hrEXAy": {
-      "type": "slider",
-      "blocks": {
-        "slider_articles_zhYNzW": {
-          "type": "_slider-articles",
-          "settings": {
-            "block_blog": "news",
-            "block_articles": [],
-            "show_advanced_settings": false,
-            "slider_overflow": "mobile-slider-overflow",
-            "custom_layout": false,
-            "loop": false,
-            "centered_slides": "none",
-            "initial_slide": 0,
-            "autoplay": false,
-            "autoplay_delay": 3,
-            "navigation_display": "desktop-navigation",
-            "navigation_style": "default",
-            "pagination_display": "desktop",
-            "scrollbar_display": "none"
-          },
-          "blocks": {
-            "article-card": {
-              "type": "_article-card",
-              "static": true,
-              "settings": {
-                "card_style": "square"
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": []
-        },
-        "heading": {
-          "type": "heading",
-          "static": true,
-          "settings": {
-            "heading": "Latest News",
-            "heading_type": "h2",
-            "heading_size": "heading-h1"
-          },
-          "blocks": {}
-        },
-        "richtext": {
-          "type": "richtext",
-          "static": true,
-          "settings": {
-            "richtext": "<p>Add text here</p>"
-          },
-          "blocks": {}
-        },
-        "link": {
-          "type": "link",
-          "static": true,
-          "settings": {
-            "link_text": "Link Text",
-            "link": "",
-            "link_title": "Link Title",
-            "link_style": "button-1",
-            "external_link": false
-          },
-          "blocks": {}
-        },
-        "slider-navigation-arrows": {
-          "type": "_slider-navigation-arrows",
-          "static": true,
-          "settings": {},
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "slider_articles_zhYNzW"
-      ],
-      "disabled": true,
-      "name": "Article Slider",
-      "settings": {
-        "style_selector": "theme",
-        "section_styling": "primary",
-        "background_color": "linear-gradient(#ffffff, #ffffff)",
-        "text_color": "#393939",
-        "background_image_type": "none",
-        "background_image_theme": "1",
-        "page_width": "page-width",
-        "vertical_spacing": "vertical-margin"
-      }
-    },
-    "slider_h7JJLB": {
-      "type": "slider",
-      "blocks": {
-        "slider_usps_MjAE3q": {
-          "type": "_slider-usps",
-          "settings": {
-            "usp_group": "homepage",
-            "usps": [],
-            "show_advanced_settings": false,
-            "slider_overflow": "mobile-slider-overflow",
-            "custom_layout": false,
-            "loop": false,
-            "centered_slides": "none",
-            "initial_slide": 0,
-            "autoplay": false,
-            "autoplay_delay": 3,
-            "navigation_display": "desktop-navigation",
-            "navigation_style": "default",
-            "pagination_display": "desktop",
-            "scrollbar_display": "none"
-          },
-          "blocks": {
-            "usp": {
-              "type": "_usp",
-              "static": true,
-              "settings": {
-                "usp_size": "large"
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": []
-        },
-        "heading": {
-          "type": "heading",
-          "static": true,
-          "settings": {
-            "heading": "USP Slider",
-            "heading_type": "h2",
-            "heading_size": "heading-h1"
-          },
-          "blocks": {}
-        },
-        "richtext": {
-          "type": "richtext",
-          "static": true,
-          "settings": {
-            "richtext": "<p>Add text here</p>"
-          },
-          "blocks": {}
-        },
-        "link": {
-          "type": "link",
-          "static": true,
-          "settings": {
-            "link_text": "Link Text",
-            "link": "",
-            "link_title": "Link Title",
-            "link_style": "button-1",
-            "external_link": false
-          },
-          "blocks": {}
-        },
-        "slider-navigation-arrows": {
-          "type": "_slider-navigation-arrows",
-          "static": true,
-          "settings": {},
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "slider_usps_MjAE3q"
-      ],
-      "disabled": true,
-      "name": "USP Slider",
-      "settings": {
-        "style_selector": "theme",
-        "section_styling": "primary",
-        "background_color": "linear-gradient(#ffffff, #ffffff)",
-        "text_color": "#393939",
-        "background_image_type": "none",
-        "background_image_theme": "1",
-        "page_width": "page-width",
-        "vertical_spacing": "vertical-margin"
-      }
-    },
     "cta_banner_CPXmnn": {
       "type": "cta-banner",
       "blocks": {
@@ -731,7 +457,6 @@
           "blocks": {}
         }
       },
-      "disabled": true,
       "name": "CTA Banner",
       "settings": {
         "page_width": "page-width--full",
@@ -746,13 +471,10 @@
   },
   "order": [
     "hero_rtyajP",
-    "slider_XxWG8i",
+    "slider_h7JJLB",
     "slider_e6Yp9W",
     "slider_t6gWc3",
     "slider_B7FdVG",
-    "slider_igQG9A",
-    "slider_hrEXAy",
-    "slider_h7JJLB",
     "cta_banner_CPXmnn"
   ]
 }

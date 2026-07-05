@@ -106,7 +106,7 @@ quick-view-inner .blaze-slider {
   padding: 0;
   border: 0;
   border-radius: 50%;
-  background-color: var(--brand-color-3);
+  background-color: var(--text-color);
   color: transparent;
   font-size: 0;
   line-height: 0;
