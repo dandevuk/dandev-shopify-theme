@@ -58,28 +58,10 @@
               "settings": {
                 "link_title": "Collections",
                 "link_url": "shopify://collections",
-                "open_to_custiomise": false
+                "open_to_custiomise": true
               },
               "blocks": {
                 "drop_down_link_group_jaLrFU": {
-                  "type": "_drop-down_link-group",
-                  "name": "Drop Down Link Group",
-                  "settings": {
-                    "menu": "collections",
-                    "link_title": ""
-                  },
-                  "blocks": {}
-                },
-                "drop_down_link_group_DhqtXk": {
-                  "type": "_drop-down_link-group",
-                  "name": "Drop Down Link Group",
-                  "settings": {
-                    "menu": "collections",
-                    "link_title": ""
-                  },
-                  "blocks": {}
-                },
-                "drop_down_link_group_Mt9wtW": {
                   "type": "_drop-down_link-group",
                   "name": "Drop Down Link Group",
                   "settings": {
@@ -113,8 +95,6 @@
               },
               "block_order": [
                 "drop_down_link_group_jaLrFU",
-                "drop_down_link_group_DhqtXk",
-                "drop_down_link_group_Mt9wtW",
                 "cta_TcX399",
                 "cta_tKH7Ra"
               ]
@@ -122,6 +102,7 @@
             "top_level_drop_down_XDH7fc": {
               "type": "_top-level_drop-down",
               "name": "Top Level Drop Down",
+              "disabled": true,
               "settings": {
                 "link_title": "Collections",
                 "link_url": "shopify://collections",
@@ -177,6 +158,7 @@
             "top_level_drop_down_GiExaP": {
               "type": "_top-level_drop-down",
               "name": "Top Level Drop Down",
+              "disabled": true,
               "settings": {
                 "link_title": "Collections",
                 "link_url": "shopify://collections",
@@ -232,6 +214,7 @@
             "top_level_link_gfNV78": {
               "type": "_top-level_link",
               "name": "Top Level Link",
+              "disabled": true,
               "settings": {
                 "link_title": "Link 1",
                 "link_url": "shopify://pages/contact",
@@ -243,6 +226,7 @@
             "top_level_link_w6e98F": {
               "type": "_top-level_link",
               "name": "Top Level Link",
+              "disabled": true,
               "settings": {
                 "link_title": "Link 2",
                 "link_url": "shopify://pages/test-1",
@@ -278,7 +262,7 @@
                   "type": "_mobile-mega-menu_link-group",
                   "name": "Mobile Link Group",
                   "settings": {
-                    "title": "Collection 1",
+                    "title": "Collections",
                     "menu": "collections"
                   },
                   "blocks": {}
@@ -286,6 +270,7 @@
                 "mobile_mega_menu_link_group_zwPQix": {
                   "type": "_mobile-mega-menu_link-group",
                   "name": "Mobile Link Group",
+                  "disabled": true,
                   "settings": {
                     "title": "Collection 2",
                     "menu": "collections"
@@ -295,6 +280,7 @@
                 "mobile_cta_group_V488pj": {
                   "type": "_mobile-cta-group",
                   "name": "Mobile CTA Group",
+                  "disabled": true,
                   "settings": {},
                   "blocks": {
                     "cta_pYU3eA": {
@@ -323,6 +309,7 @@
             "mobile_mega_menu_accordion_TBbjgX": {
               "type": "_mobile-mega-menu_accordion",
               "name": "Accordion Menu",
+              "disabled": true,
               "settings": {
                 "title": "Collection 1"
               },
@@ -376,6 +363,7 @@
             "mobile_mega_menu_accordion_gg6AaB": {
               "type": "_mobile-mega-menu_accordion",
               "name": "Accordion Menu",
+              "disabled": true,
               "settings": {
                 "title": "Collection 1"
               },
