@@ -49,7 +49,7 @@
           "name": "Accordion Menu",
           "settings": {
             "title": "Collections",
-            "footer_links": ""
+            "footer_links": "collections"
           },
           "blocks": {}
         },
