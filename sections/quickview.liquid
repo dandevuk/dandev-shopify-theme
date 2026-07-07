@@ -38,9 +38,9 @@
         {%- capture form_content -%}
           {%- render 'product-title', tag: 'h2', style: 'heading-h2' -%}
           {%- render 'product-variant-prices', product: product, price_format: 'variant_price' -%}
-          {%- render 'variant-selector', product: product, section_id: section.id, option_type: 'select' -%}
+          {%- render 'variant-selector', product: product, section_id: section.id, option_type: 'radios' -%}
           {%- render 'selling-plan-selector', product: product, section_id: section.id, option_type: 'select' -%}
-          {%- render 'product-submit-wrapper', hide_wishlist_button: true, card: true -%}
+          {%- render 'product-submit-wrapper', hide_wishlist_button: true, card: true, add_to_cart_style: 'button-3' -%}
         {%- endcapture -%}
         {%- assign section_id = section.id -%}
         {%- render 'product-form',
@@ -80,6 +80,7 @@
   quickview-modal .quick-view-wrapper quick-view-inner {
     transform: translateX(100%);
     transition: transform 0.3s ease-in-out;
+    border-left: 2px solid var(--text-color);
   }
 
   quickview-modal[open] .quick-view-wrapper quick-view-inner {
@@ -110,11 +111,5 @@
 
   quickview-modal .custom-select-option-name {
     display: inline-flex !important;
-  }
-
-  quickview-modal .quickview-selects,
-  quickview-modal .variant-price-wrapper {
-    padding-bottom: var(--content-spacing-3);
-    border-bottom: 1px solid var(--brand-color-5);
   }
 {%- endstylesheet -%}

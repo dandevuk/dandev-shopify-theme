@@ -11,6 +11,9 @@
   data-product-url="{{ product.url }}"
 >
   {%- for option in product.options_with_values -%}
+    {%- if option.values.size == 1 -%}
+      {%- continue -%}
+    {%- endif -%}
     {%- if option_type == 'select' -%}
       <fieldset class="variant-selector option flex flex-col g-1 dropdown-style flex-1">
         <legend class="bold">{{ option.name }}</legend>

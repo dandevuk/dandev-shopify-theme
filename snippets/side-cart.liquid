@@ -422,7 +422,7 @@
     display: flex;
     align-items: center;
     height: 60px;
-    background-color: var(--brand-color-1);
+    background-color: var(--brand-color-2);
   }
   .side-cart-tabs #sidecart-tab-cart {
     justify-content: center;
@@ -456,25 +456,25 @@
 
   /* Not Active Tab */
   button[data-cart-tab] {
-    background-color: var(--text-color);
-    color: var(--text-color-alternate);
+    background-color: var(--brand-color-2);
+    color: var(--text-color);
     cursor: pointer;
     transition: 150ms ease;
     stroke: var(--text-color-alternate);
   }
 
   button[data-cart-tab] svg path {
-    stroke: var(--text-color-alternate);
+    stroke: var(--text-color);
   }
 
   /* Active Tab */
   button[data-cart-tab][aria-selected='true'] {
-    background-color: var(--text-color-alternate);
-    color: var(--text-color);
+    background-color: var(--text-color);
+    color: var(--brand-color-2);
   }
 
   button[data-cart-tab][aria-selected='true'] svg path {
-    stroke: var(--text-color);
+    stroke: var(--brand-color-2);
   }
 
   /* Base divider setup (but not active yet) */

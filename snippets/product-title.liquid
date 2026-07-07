@@ -6,6 +6,8 @@
     assign product = closest.product
   endif
 
+  assign product_style = product.metafields.custom.product_style
+
   assign awkward_product_tag_image = settings.awkward_product_tag_image
   assign is_awkward_product = product.metafields.custom.is_awkward
 -%}
@@ -20,5 +22,9 @@
 
   {% else %}
     <{{ tag }} class="product-title {{ style }} m-0">{{ product.title }}</{{ tag }}>
+  {%- endif -%}
+  <h2 class="product-style heading-h4 m-0">{{ product_style }}Porduct style</h2>
+  {%- if product_style != blank -%}
+    <h2 class="product-style heading-h4 m-0">{{ product_style }}</h2>
   {%- endif -%}
 </div>
