@@ -553,7 +553,7 @@
       "error_heading": "Please adjust the following:",
       "checkboxes": {
         "tc": "By submitting this form, you agree to our terms and conditions.",
-        "marketing": "By submitting this form, you agree to receive occasional marketing updates, offers, and news from Wrexham A.F.C. You can unsubscribe anytime."
+        "marketing": "By submitting this form, you agree to receive occasional marketing updates, offers, and news. You can unsubscribe anytime."
       },
       "placeholders": {
         "nature_of_enquiry": "General enquiry",
