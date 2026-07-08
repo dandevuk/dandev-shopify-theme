@@ -211,6 +211,17 @@
                 "cta_WaJPcQ"
               ]
             },
+            "top_level_link_w6e98F": {
+              "type": "_top-level_link",
+              "name": "Top Level Link",
+              "settings": {
+                "link_title": "About",
+                "link_url": "shopify://pages/about",
+                "button": false,
+                "button_style": "button-2"
+              },
+              "blocks": {}
+            },
             "top_level_link_gfNV78": {
               "type": "_top-level_link",
               "name": "Top Level Link",
@@ -221,26 +232,14 @@
                 "button_style": "button-1"
               },
               "blocks": {}
-            },
-            "top_level_link_w6e98F": {
-              "type": "_top-level_link",
-              "name": "Top Level Link",
-              "disabled": true,
-              "settings": {
-                "link_title": "Link 2",
-                "link_url": "shopify://pages/test-1",
-                "button": false,
-                "button_style": "button-2"
-              },
-              "blocks": {}
             }
           },
           "block_order": [
             "top_level_drop_down_6QebDx",
             "top_level_drop_down_XDH7fc",
             "top_level_drop_down_GiExaP",
-            "top_level_link_gfNV78",
-            "top_level_link_w6e98F"
+            "top_level_link_w6e98F",
+            "top_level_link_gfNV78"
           ]
         },
         "mobile-mega-menu": {
