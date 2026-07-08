@@ -249,83 +249,41 @@
             "open_to_custiomise": false
           },
           "blocks": {
-            "mobile_mega_menu_accordion_8w6c4W": {
-              "type": "_mobile-mega-menu_accordion",
-              "name": "Accordion Menu",
+            "top_level_link_AGEQXR": {
+              "type": "_top-level_link",
+              "name": "Top Level Link",
               "settings": {
-                "title": "Collections"
+                "link_title": "About",
+                "link_url": "shopify://pages/about",
+                "button": false,
+                "button_style": "button-2"
               },
-              "blocks": {
-                "mobile_mega_menu_link_group_DMjcgU": {
-                  "type": "_mobile-mega-menu_link-group",
-                  "name": "Mobile Link Group",
-                  "settings": {
-                    "title": "",
-                    "menu": "collections"
-                  },
-                  "blocks": {}
-                },
-                "mobile_mega_menu_link_group_zwPQix": {
-                  "type": "_mobile-mega-menu_link-group",
-                  "name": "Mobile Link Group",
-                  "disabled": true,
-                  "settings": {
-                    "title": "Collection 2",
-                    "menu": "collections"
-                  },
-                  "blocks": {}
-                },
-                "mobile_cta_group_V488pj": {
-                  "type": "_mobile-cta-group",
-                  "name": "Mobile CTA Group",
-                  "disabled": true,
-                  "settings": {},
-                  "blocks": {
-                    "cta_pYU3eA": {
-                      "type": "_cta",
-                      "name": "CTA",
-                      "settings": {
-                        "cta": "test-1",
-                        "in_mega_menu": true,
-                        "heading_size": "heading-h4",
-                        "style": "image_card"
-                      },
-                      "blocks": {}
-                    }
-                  },
-                  "block_order": [
-                    "cta_pYU3eA"
-                  ]
-                }
+              "blocks": {}
+            },
+            "top_level_link_Y6TjxT": {
+              "type": "_top-level_link",
+              "name": "Top Level Link",
+              "settings": {
+                "link_title": "Contact",
+                "link_url": "shopify://pages/contact",
+                "button": false,
+                "button_style": "button-2"
               },
-              "block_order": [
-                "mobile_mega_menu_link_group_DMjcgU",
-                "mobile_mega_menu_link_group_zwPQix",
-                "mobile_cta_group_V488pj"
-              ]
+              "blocks": {}
             },
             "mobile_mega_menu_accordion_TBbjgX": {
               "type": "_mobile-mega-menu_accordion",
               "name": "Accordion Menu",
               "disabled": true,
               "settings": {
-                "title": "Collection 1"
+                "title": "Collections"
               },
               "blocks": {
                 "mobile_mega_menu_link_group_PEkpCC": {
                   "type": "_mobile-mega-menu_link-group",
                   "name": "Mobile Link Group",
                   "settings": {
-                    "title": "Collection 1",
-                    "menu": "collections"
-                  },
-                  "blocks": {}
-                },
-                "mobile_mega_menu_link_group_ky7rfc": {
-                  "type": "_mobile-mega-menu_link-group",
-                  "name": "Mobile Link Group",
-                  "settings": {
-                    "title": "Collection 2",
+                    "title": "",
                     "menu": "collections"
                   },
                   "blocks": {}
@@ -354,7 +312,6 @@
               },
               "block_order": [
                 "mobile_mega_menu_link_group_PEkpCC",
-                "mobile_mega_menu_link_group_ky7rfc",
                 "mobile_cta_group_Mk6nwQ"
               ]
             },
@@ -414,7 +371,8 @@
             }
           },
           "block_order": [
-            "mobile_mega_menu_accordion_8w6c4W",
+            "top_level_link_AGEQXR",
+            "top_level_link_Y6TjxT",
             "mobile_mega_menu_accordion_TBbjgX",
             "mobile_mega_menu_accordion_gg6AaB"
           ]
