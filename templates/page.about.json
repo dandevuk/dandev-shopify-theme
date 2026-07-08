@@ -1,0 +1,514 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "page_header_4Wq8WV": {
+      "type": "page-header",
+      "blocks": {
+        "section_content_H9C6f6": {
+          "type": "section-content",
+          "settings": {
+            "content_spacing": "g-2"
+          },
+          "blocks": {
+            "heading_6eTqtm": {
+              "type": "heading",
+              "name": "Heading",
+              "settings": {
+                "heading": "ABOUT AWKWARD AF",
+                "heading_type": "h2",
+                "heading_size": "heading-h1"
+              },
+              "blocks": {}
+            },
+            "richtext_ELA9jX": {
+              "type": "richtext",
+              "name": "Richtext",
+              "disabled": true,
+              "settings": {
+                "richtext": "<p>It wasn't laziness. It was anxiety. (We know now.)</p><p>Awkward AF wasn't born in a boardroom. It was born from that very specific moment where you look back at your younger self and think: I wasn't lazy. I wasn't difficult. I was just really, really struggling.</p>"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "heading_6eTqtm",
+            "richtext_ELA9jX"
+          ]
+        }
+      },
+      "block_order": [
+        "section_content_H9C6f6"
+      ],
+      "name": "Page Header",
+      "settings": {
+        "style_selector": "theme",
+        "section_styling": "secondary",
+        "background_color": "linear-gradient(180deg, rgba(230, 27, 27, 1), rgba(255, 255, 255, 1) 100%)",
+        "text_color": "#0cecf8",
+        "overlay_type": "none",
+        "overlay_styling": "primary",
+        "overlay_color": "linear-gradient(0deg, rgba(12, 12, 12, 0.4), rgba(12, 12, 12, 1) 100%)",
+        "layout_style": "full-width",
+        "text_alignment": "center",
+        "truncate_text": false,
+        "truncate_lines": 3
+      }
+    },
+    "text_section": {
+      "type": "text-section",
+      "blocks": {
+        "id": {
+          "type": "section-content",
+          "static": true,
+          "settings": {
+            "content_spacing": "g-1"
+          },
+          "blocks": {
+            "heading_ft6Xne": {
+              "type": "heading",
+              "name": "Heading",
+              "settings": {
+                "heading": "It wasn't laziness. It was anxiety. (We know now.)",
+                "heading_type": "h2",
+                "heading_size": "heading-h2"
+              },
+              "blocks": {}
+            },
+            "richtext_bRQ6qi": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "richtext": "<p>Awkward AF wasn't born in a boardroom. It was born from that very specific moment where you look back at your younger self and think: I wasn't lazy. I wasn't difficult. I was just really, really struggling.</p><p>For years, anxiety made the world feel heavier than it looked. Social situations that seemed simple to everyone else felt like navigating a minefield in flip-flops. Motivation wasn't missing, it was buried under a mountain of \"what if everything goes wrong.\" From the outside, it probably just looked like not trying very hard.</p><p>Turns out, that's a surprisingly relatable experience.</p>"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "heading_ft6Xne",
+            "richtext_bRQ6qi"
+          ]
+        }
+      },
+      "name": "Text Section",
+      "settings": {
+        "style_selector": "theme",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "text_alignment": "text-center",
+        "page_width": "page-width--narrow",
+        "vertical_spacing": "vertical-margin",
+        "custom_spacing": false,
+        "top_spacing": 120,
+        "bottom_spacing": 120,
+        "top_spacing_mobile": 60,
+        "bottom_spacing_mobile": 60,
+        "id_text": ""
+      }
+    },
+    "text_media_qVDiEJ": {
+      "type": "text-media",
+      "blocks": {
+        "section_content_cgyQXH": {
+          "type": "section-content",
+          "settings": {
+            "content_spacing": "g-3"
+          },
+          "blocks": {
+            "heading_HMgxkX": {
+              "type": "heading",
+              "name": "Heading",
+              "settings": {
+                "heading": "The bit where it started to make sense",
+                "heading_type": "h2",
+                "heading_size": "heading-h2"
+              },
+              "blocks": {}
+            },
+            "richtext_kyB9GB": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "richtext": "<p>After finally getting some help (the kind that actually made a difference), the clouds started shifting. Confidence crept in. Anxiety crept out. Mostly.</p><p>With a bit of distance from the chaos, we started to see what it actually was. Anxiety. Awkwardness. The overthinking. Once you can name it, you can own it. And once you own it, it loses its power.</p>"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "heading_HMgxkX",
+            "richtext_kyB9GB"
+          ]
+        }
+      },
+      "block_order": [
+        "section_content_cgyQXH"
+      ],
+      "name": "Text Media",
+      "settings": {
+        "content_type": "image",
+        "html_embed_content": "",
+        "image": "shopify://shop_images/anxiety-line-drawing_fe01f275-4cea-496d-9f73-f9f1e3ad59cd.png",
+        "image_display": "contain",
+        "lazy_load": true,
+        "video_type": "shopify",
+        "video_url": "https://www.youtube.com/watch?v=XXXXXXXX",
+        "video_display": "object-contain",
+        "controls_type": "default",
+        "autoplay": false,
+        "muted": true,
+        "loop": true,
+        "preload": true,
+        "style_selector": "theme",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "background_image_type": "none",
+        "background_image_theme": "1",
+        "container_style_selector": "theme",
+        "container_section_styling": "primary",
+        "container_background_color": "linear-gradient(#ffffff, #ffffff)",
+        "container_text_color": "#393939",
+        "container_background_image_type": "none",
+        "container_background_image_theme": "1",
+        "remove_text_padding": true,
+        "vertical_text_alignment": "align-center",
+        "horizontal_layout": "section-text-left",
+        "vertical_layout": "text-bottom",
+        "page_width": "page-width",
+        "vertical_spacing": "vertical-margin",
+        "custom_spacing": false,
+        "top_spacing": 120,
+        "bottom_spacing": 120,
+        "top_spacing_mobile": 60,
+        "bottom_spacing_mobile": 60,
+        "id_text": ""
+      }
+    },
+    "text_media_XKrRRq": {
+      "type": "text-media",
+      "blocks": {
+        "section_content_33yWXy": {
+          "type": "section-content",
+          "settings": {
+            "content_spacing": "g-3"
+          },
+          "blocks": {
+            "heading_ehd8hh": {
+              "type": "heading",
+              "name": "Heading",
+              "settings": {
+                "heading": "Who this is for",
+                "heading_type": "h2",
+                "heading_size": "heading-h2"
+              },
+              "blocks": {}
+            },
+            "richtext_nCQ6rg": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "richtext": "<p>This is for the overthinkers. The quietly anxious. The neurodivergent. The \"I'm fine\" crowd who are very much not always fine. The people who laugh at themselves because it's genuinely the best coping mechanism going.</p><p>If you have to ask what \"it\" is, you probably still get it.</p>"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "heading_ehd8hh",
+            "richtext_nCQ6rg"
+          ]
+        }
+      },
+      "block_order": [
+        "section_content_33yWXy"
+      ],
+      "name": "Text Media",
+      "settings": {
+        "content_type": "image",
+        "html_embed_content": "",
+        "image": "shopify://shop_images/who-this-is-for-image.png",
+        "image_display": "contain",
+        "lazy_load": true,
+        "video_type": "shopify",
+        "video_url": "https://www.youtube.com/watch?v=XXXXXXXX",
+        "video_display": "object-contain",
+        "controls_type": "default",
+        "autoplay": false,
+        "muted": true,
+        "loop": true,
+        "preload": true,
+        "style_selector": "theme",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "background_image_type": "none",
+        "background_image_theme": "1",
+        "container_style_selector": "theme",
+        "container_section_styling": "primary",
+        "container_background_color": "linear-gradient(#ffffff, #ffffff)",
+        "container_text_color": "#393939",
+        "container_background_image_type": "none",
+        "container_background_image_theme": "1",
+        "remove_text_padding": true,
+        "vertical_text_alignment": "align-center",
+        "horizontal_layout": "section-text-right",
+        "vertical_layout": "text-bottom",
+        "page_width": "page-width",
+        "vertical_spacing": "vertical-margin",
+        "custom_spacing": false,
+        "top_spacing": 120,
+        "bottom_spacing": 120,
+        "top_spacing_mobile": 60,
+        "bottom_spacing_mobile": 60,
+        "id_text": ""
+      }
+    },
+    "text_media_Vm4d86": {
+      "type": "text-media",
+      "blocks": {
+        "section_content_mBbByt": {
+          "type": "section-content",
+          "settings": {
+            "content_spacing": "g-3"
+          },
+          "blocks": {
+            "heading_Ved6ag": {
+              "type": "heading",
+              "name": "Heading",
+              "settings": {
+                "heading": "Giving a bit back",
+                "heading_type": "h2",
+                "heading_size": "heading-h2"
+              },
+              "blocks": {}
+            },
+            "richtext_Ye4J7M": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "richtext": "<p>Laughing about the hard stuff helps. But sometimes you need more than a hoodie. That's why [X]% of every order goes to Mind, a mental health charity doing the actual, unglamorous work of helping people get support.</p><p>We're a small brand, so it's a small percentage for now. But it's real, and it grows as we do.</p>"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "heading_Ved6ag",
+            "richtext_Ye4J7M"
+          ]
+        }
+      },
+      "block_order": [
+        "section_content_mBbByt"
+      ],
+      "name": "Text Media",
+      "settings": {
+        "content_type": "image",
+        "html_embed_content": "",
+        "image": "shopify://shop_images/Mind_Squiggle_Wordmark_White_RGB.png",
+        "image_display": "contain",
+        "lazy_load": true,
+        "video_type": "shopify",
+        "video_url": "https://www.youtube.com/watch?v=XXXXXXXX",
+        "video_display": "object-contain",
+        "controls_type": "default",
+        "autoplay": false,
+        "muted": true,
+        "loop": true,
+        "preload": true,
+        "style_selector": "theme",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "background_image_type": "none",
+        "background_image_theme": "1",
+        "container_style_selector": "theme",
+        "container_section_styling": "primary",
+        "container_background_color": "linear-gradient(#ffffff, #ffffff)",
+        "container_text_color": "#393939",
+        "container_background_image_type": "none",
+        "container_background_image_theme": "1",
+        "remove_text_padding": true,
+        "vertical_text_alignment": "align-center",
+        "horizontal_layout": "section-text-left",
+        "vertical_layout": "text-bottom",
+        "page_width": "page-width",
+        "vertical_spacing": "vertical-margin",
+        "custom_spacing": false,
+        "top_spacing": 120,
+        "bottom_spacing": 120,
+        "top_spacing_mobile": 60,
+        "bottom_spacing_mobile": 60,
+        "id_text": ""
+      }
+    },
+    "text_media_MfaVGT": {
+      "type": "text-media",
+      "blocks": {
+        "section_content_rpYLm7": {
+          "type": "section-content",
+          "settings": {
+            "content_spacing": "g-3"
+          },
+          "blocks": {
+            "heading_RNxPpm": {
+              "type": "heading",
+              "name": "Heading",
+              "settings": {
+                "heading": "Who's actually behind this",
+                "heading_type": "h2",
+                "heading_size": "heading-h2"
+              },
+              "blocks": {}
+            },
+            "richtext_cQPtVn": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "richtext": "<p>One person. No investors, no boardroom, no marketing team humble bragging on LinkedIn in the background. Just someone who's been in it, found their way through some of it, and decided the best way to talk about the rest of it was on a t-shirt.</p><p>Design, copy, replying to your DMs. All the same person. Probably slightly overwhelmed. Definitely wouldn't have it any other way.</p>"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "heading_RNxPpm",
+            "richtext_cQPtVn"
+          ]
+        }
+      },
+      "block_order": [
+        "section_content_rpYLm7"
+      ],
+      "name": "Text Media",
+      "settings": {
+        "content_type": "image",
+        "html_embed_content": "",
+        "image": "shopify://shop_images/aaf-logo-badge.png",
+        "image_display": "contain",
+        "lazy_load": true,
+        "video_type": "shopify",
+        "video_url": "https://www.youtube.com/watch?v=XXXXXXXX",
+        "video_display": "object-contain",
+        "controls_type": "default",
+        "autoplay": false,
+        "muted": true,
+        "loop": true,
+        "preload": true,
+        "style_selector": "theme",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "background_image_type": "none",
+        "background_image_theme": "1",
+        "container_style_selector": "theme",
+        "container_section_styling": "primary",
+        "container_background_color": "linear-gradient(#ffffff, #ffffff)",
+        "container_text_color": "#393939",
+        "container_background_image_type": "none",
+        "container_background_image_theme": "1",
+        "remove_text_padding": true,
+        "vertical_text_alignment": "align-center",
+        "horizontal_layout": "section-text-right",
+        "vertical_layout": "text-bottom",
+        "page_width": "page-width",
+        "vertical_spacing": "vertical-margin",
+        "custom_spacing": false,
+        "top_spacing": 120,
+        "bottom_spacing": 120,
+        "top_spacing_mobile": 60,
+        "bottom_spacing_mobile": 60,
+        "id_text": ""
+      }
+    },
+    "text_section_YjQ7gG": {
+      "type": "text-section",
+      "blocks": {
+        "id": {
+          "type": "section-content",
+          "static": true,
+          "settings": {
+            "content_spacing": "g-3"
+          },
+          "blocks": {
+            "heading_mXKzgF": {
+              "type": "heading",
+              "name": "Heading",
+              "settings": {
+                "heading": "Come be awkward with us",
+                "heading_type": "h2",
+                "heading_size": "heading-h2"
+              },
+              "blocks": {}
+            },
+            "richtext_Mkzae7": {
+              "type": "richtext",
+              "settings": {
+                "richtext": "<p>Awkward AF isn't just one story. It's everyone's. If you've got a moment that's a bit too relatable, we want to hear it eventually. No pressure though. Obviously.</p><p>For the weirdos. By a weirdo. With love.</p>"
+              },
+              "blocks": {}
+            },
+            "links_container_DdMMf9": {
+              "type": "links-container",
+              "name": "Links Container",
+              "settings": {
+                "content_spacing": "g-1"
+              },
+              "blocks": {
+                "link_AMYAQD": {
+                  "type": "link",
+                  "settings": {
+                    "link_text": "Might as well look at the t-shirts",
+                    "link": "shopify://collections",
+                    "link_title": "Link Title",
+                    "link_style": "button-1",
+                    "external_link": false
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "link_AMYAQD"
+              ]
+            }
+          },
+          "block_order": [
+            "heading_mXKzgF",
+            "richtext_Mkzae7",
+            "links_container_DdMMf9"
+          ]
+        }
+      },
+      "name": "Text Section",
+      "settings": {
+        "style_selector": "theme",
+        "section_styling": "secondary",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "text_alignment": "text-center",
+        "page_width": "page-width--narrow",
+        "vertical_spacing": "vertical-padding",
+        "custom_spacing": false,
+        "top_spacing": 120,
+        "bottom_spacing": 120,
+        "top_spacing_mobile": 60,
+        "bottom_spacing_mobile": 60,
+        "id_text": ""
+      }
+    }
+  },
+  "order": [
+    "page_header_4Wq8WV",
+    "text_section",
+    "text_media_qVDiEJ",
+    "text_media_XKrRRq",
+    "text_media_Vm4d86",
+    "text_media_MfaVGT",
+    "text_section_YjQ7gG"
+  ]
+}
