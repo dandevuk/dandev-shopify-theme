@@ -214,12 +214,11 @@
             "top_level_link_gfNV78": {
               "type": "_top-level_link",
               "name": "Top Level Link",
-              "disabled": true,
               "settings": {
-                "link_title": "Link 1",
+                "link_title": "Contact",
                 "link_url": "shopify://pages/contact",
                 "button": false,
-                "button_style": "button-2"
+                "button_style": "button-1"
               },
               "blocks": {}
             },
