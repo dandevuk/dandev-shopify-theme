@@ -246,35 +246,12 @@
           "type": "_mobile-mega-menu",
           "static": true,
           "settings": {
-            "open_to_custiomise": false
+            "open_to_custiomise": true
           },
           "blocks": {
-            "top_level_link_AGEQXR": {
-              "type": "_top-level_link",
-              "name": "Top Level Link",
-              "settings": {
-                "link_title": "About",
-                "link_url": "shopify://pages/about",
-                "button": false,
-                "button_style": "button-2"
-              },
-              "blocks": {}
-            },
-            "top_level_link_Y6TjxT": {
-              "type": "_top-level_link",
-              "name": "Top Level Link",
-              "settings": {
-                "link_title": "Contact",
-                "link_url": "shopify://pages/contact",
-                "button": false,
-                "button_style": "button-2"
-              },
-              "blocks": {}
-            },
             "mobile_mega_menu_accordion_TBbjgX": {
               "type": "_mobile-mega-menu_accordion",
               "name": "Accordion Menu",
-              "disabled": true,
               "settings": {
                 "title": "Collections"
               },
@@ -314,6 +291,28 @@
                 "mobile_mega_menu_link_group_PEkpCC",
                 "mobile_cta_group_Mk6nwQ"
               ]
+            },
+            "top_level_link_AGEQXR": {
+              "type": "_top-level_link",
+              "name": "Top Level Link",
+              "settings": {
+                "link_title": "About",
+                "link_url": "shopify://pages/about",
+                "button": false,
+                "button_style": "button-2"
+              },
+              "blocks": {}
+            },
+            "top_level_link_Y6TjxT": {
+              "type": "_top-level_link",
+              "name": "Top Level Link",
+              "settings": {
+                "link_title": "Contact",
+                "link_url": "shopify://pages/contact",
+                "button": false,
+                "button_style": "button-2"
+              },
+              "blocks": {}
             },
             "mobile_mega_menu_accordion_gg6AaB": {
               "type": "_mobile-mega-menu_accordion",
@@ -371,9 +370,9 @@
             }
           },
           "block_order": [
+            "mobile_mega_menu_accordion_TBbjgX",
             "top_level_link_AGEQXR",
             "top_level_link_Y6TjxT",
-            "mobile_mega_menu_accordion_TBbjgX",
             "mobile_mega_menu_accordion_gg6AaB"
           ]
         }
