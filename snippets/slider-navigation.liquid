@@ -6,7 +6,7 @@
 -%}
 
 <div
-  class="{{ arrows_class }} flex-between g-1 {% if navigation_style == 'inline' %}inline w-100{% else %}max-w-max{% endif %}{% if hide_on_mobile == true %} to-sm-hidden{% endif %}"
+  class="{{ arrows_class }} {{ custom_class }} flex-between g-1 {% if navigation_style == 'inline' %}inline w-100{% else %}max-w-max{% endif %}{% if hide_on_mobile == true %} to-sm-hidden{% endif %}"
   {{ shopify_attributes }}
 >
   <button type="button" class="{{ prev_button_class }}" aria-label="Previous slide">

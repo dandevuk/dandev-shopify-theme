@@ -163,7 +163,7 @@
   class="gallery-container gallery-layout sticky flex {% if thumb_positioning == 'under' and style == 'slider' %}flex-col-reverse{% endif %} to-md-flex-col-reverse {{ gallery_opacity_class }} h-100 {% if has_multiple_media %}g-2{% endif %}"
 >
   {%- if has_multiple_media and style == 'slider' -%}
-    <div class="thumb-gallery to-md-w-100 {% if thumb_positioning == 'under' and style == 'slider' %}under{% endif %}">
+    <div class="thumb-gallery to-md-w-100 to-sm-hidden {% if thumb_positioning == 'under' and style == 'slider' %}under{% endif %}">
       {%- capture thumb_slides -%}
         {%- for media in product.media -%}
           {%- liquid
@@ -440,14 +440,16 @@
             id="{{ main_gallery_nav_id }}"
             class="main-gallery-navigation"
           >
-            {%- render 'slider-navigation', navigation_style: 'inline' -%}
+            {%- render 'slider-navigation', navigation_style: 'inline', custom_class: 'to-sm-hidden' -%}
           </div>
           <div class="blaze-track-container">
             <div class="blaze-track">
               {{ main_slides }}
             </div>
           </div>
-          <div class="blaze-pagination slider-pagination g-1 flex-center relative mt-4"></div>
+          <div class="blaze-scrollbar mt-8 from-sm-hidden" data-blaze-scrollbar hidden aria-hidden="true">
+            <span class="blaze-scrollbar-thumb" data-blaze-scrollbar-thumb></span>
+          </div>
         </div>
 
         {%- if has_multiple_media and style == 'slider' -%}
