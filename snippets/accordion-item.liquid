@@ -219,6 +219,10 @@
   }
 
   .panel {
+    /* As a flex item, overflow:hidden gives this an automatic min-height
+       of 0, so sibling items (e.g. h-100 link-groups) can squeeze it
+       below its content size while max-height is transitioning. */
+    flex-shrink: 0;
     transition: max-height 0.2s ease-out;
   }
 {% endstylesheet %}

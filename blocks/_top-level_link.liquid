@@ -1,12 +1,12 @@
 <div
-  class="link-group h-100 w-100 flex align-center relative pl-1 pr-1 pb-3 pt-3"
+  class="link-group h-100 w-100 flex align-center relative pr-1 pb-3 pt-3"
   {{ block.shopify_attributes }}
 >
-  <div class="top-level-link h-100 w-100 flex-center align-center inline-flex relative m-0 cursor-pointer g-3 no-decoration">
+  <div class="top-level-link h-100 w-100 flex align-center inline-flex relative m-0 cursor-pointer g-3 no-decoration">
     <a
       href="{{ block.settings.link_url }}"
       aria-label="Link to {{ block.settings.link_title }}"
-      class="{% if block.settings.animate_underline == true %}flex-center align-center h-100 w-100 g-3 {% endif %} no-decoration {% if block.settings.button == true %}{{ block.settings.button_style }}{% endif %}"
+      class="{% if block.settings.animate_underline == true %}flex-center align-center h-100 w-100 g-3 {% endif %} no-decoration large-body-text{% if block.settings.button == true %}{{ block.settings.button_style }}{% endif %}"
     >
       <span class="cursor-pointer g-3 no-decoration white-space-nowrap">{{ block.settings.link_title }}</span>
     </a>

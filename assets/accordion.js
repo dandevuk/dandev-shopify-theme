@@ -34,6 +34,44 @@ export class AccordionController {
     }
   }
 
+  // Expand the panel. A pixel value is used only to drive the opening
+  // transition; once it finishes we release the cap to `none` so the
+  // panel always matches its real content height (fonts swapping in,
+  // images loading, blocks being added, text reflowing on resize, etc.
+  // can no longer leave content clipped behind a stale snapshot).
+  openPanel(panel) {
+    if (!panel) return;
+    panel.style.maxHeight = panel.scrollHeight + "px";
+
+    const clearCap = (e) => {
+      if (e && e.propertyName !== "max-height") return;
+      panel.removeEventListener("transitionend", clearCap);
+      if (panel.style.maxHeight !== "0px") {
+        panel.style.maxHeight = "none";
+      }
+    };
+    panel.addEventListener("transitionend", clearCap);
+  }
+
+  // Collapse the panel. If it's currently uncapped (`none`), first pin it
+  // to its current rendered height so the transition has a numeric value
+  // to animate from, then collapse to 0 on the next frame.
+  closePanel(panel) {
+    if (!panel) return;
+
+    if (panel.style.maxHeight === "none" || panel.style.maxHeight === "") {
+      panel.style.maxHeight = panel.scrollHeight + "px";
+      // Force layout so the browser registers the pinned height before
+      // we change it again, otherwise the two assignments coalesce and
+      // the closing transition never animates.
+      void panel.offsetHeight;
+    }
+
+    requestAnimationFrame(() => {
+      panel.style.maxHeight = "0px";
+    });
+  }
+
   toggleAccordion(e) {
     // Support clicks on child elements inside the button by locating the nearest .accordion
     const accordion = e.target && e.target.closest ? e.target.closest(".accordion") : null;
@@ -53,7 +91,7 @@ export class AccordionController {
       if (isActive) {
         accordion.classList.remove("active");
         accordion.setAttribute("aria-expanded", "false");
-        if (panel) panel.style.maxHeight = null;
+        this.closePanel(panel);
         // Notify consumers that an accordion was collapsed
         window.dispatchEvent(
           new CustomEvent("accordion:change", { detail: { accordion, expanded: false } }),
@@ -61,7 +99,7 @@ export class AccordionController {
       } else {
         accordion.classList.add("active");
         accordion.setAttribute("aria-expanded", "true");
-        if (panel) panel.style.maxHeight = panel.scrollHeight + "px";
+        this.openPanel(panel);
         void this.initPanelSlider(panel);
         // Notify consumers that an accordion was expanded
         window.dispatchEvent(
@@ -84,7 +122,7 @@ export class AccordionController {
         if (wasActive) {
           acc.classList.remove("active");
           acc.setAttribute("aria-expanded", "false");
-          if (accPanel) accPanel.style.maxHeight = null;
+          this.closePanel(accPanel);
           // Notify consumers that an accordion was collapsed
           window.dispatchEvent(
             new CustomEvent("accordion:change", { detail: { accordion: acc, expanded: false } }),
@@ -92,7 +130,7 @@ export class AccordionController {
         } else {
           acc.classList.add("active");
           acc.setAttribute("aria-expanded", "true");
-          if (accPanel) accPanel.style.maxHeight = accPanel.scrollHeight + "px";
+          this.openPanel(accPanel);
           void this.initPanelSlider(accPanel);
           // Notify consumers that an accordion was expanded
           window.dispatchEvent(
@@ -103,7 +141,7 @@ export class AccordionController {
         // Ensure others are closed
         acc.classList.remove("active");
         acc.setAttribute("aria-expanded", "false");
-        if (accPanel) accPanel.style.maxHeight = null;
+        this.closePanel(accPanel);
         // Notify consumers that an accordion was collapsed
         window.dispatchEvent(
           new CustomEvent("accordion:change", { detail: { accordion: acc, expanded: false } }),
@@ -112,5 +150,3 @@ export class AccordionController {
     });
   }
 }
-
-

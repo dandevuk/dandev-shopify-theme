@@ -2,18 +2,21 @@
     {% content_for 'blocks' %}
 {%- endcapture -%}
 
-{%- render 'accordion-item',
-  question: block.settings.title,
-  content: accordion,
-  heading_tag: 'h3',
-  heading_size: 'heading-h3',
-  shopify_attributes: block.shopify_attributes
--%}
+<div>
+  {%- render 'accordion-item',
+    question: block.settings.title,
+    content: accordion,
+    heading_tag: 'div',
+    heading_size: '',
+    shopify_attributes: block.shopify_attributes
+  -%}
+</div>
 
 {% stylesheet %}
   .mobile-menu-outer-wrapper .mobile-menu .mobile-menu-navigation .accordion {
-    padding-top: var(--content-spacing-1);
-    padding-bottom: var(--content-spacing-1);
+    padding-top: var(--content-spacing-3);
+    padding-bottom: var(--content-spacing-3);
+    font-size: 24px;
   }
   .mobile-menu-outer-wrapper .mobile-menu .mobile-menu-navigation .accordion .accordion__question {
     color: var(--brand-color-2);
