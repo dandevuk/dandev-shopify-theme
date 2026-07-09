@@ -136,7 +136,7 @@ quick-view-inner .blaze-slider {
   max-width: 100%;
   height: 4px;
   border-radius: 999px;
-  background-color: color-mix(in srgb, var(--brand-color-1) 22%, transparent);
+  background-color: color-mix(in srgb, var(--text-color) 22%, transparent);
   overflow: hidden;
   touch-action: none;
   cursor: pointer;

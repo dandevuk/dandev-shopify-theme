@@ -19,6 +19,19 @@
     {{ 'blaze.css' | asset_url | stylesheet_tag }}
     {{ 'slider-overrides.css' | asset_url | stylesheet_tag }}
 
+    {%- if product.metafields.theme.colour != blank or product.metafields.theme.background_colour != blank -%}
+      <style>
+        :root {
+          {%- if product.metafields.theme.colour != blank -%}
+          --text-color: {{ product.metafields.theme.colour }};
+          {%- endif -%}
+          {%- if product.metafields.theme.background_colour != blank -%}
+            --body-background-color: {{ product.metafields.theme.background_colour }};
+          {%- endif -%}
+        }
+      </style>
+    {%- endif -%}
+
     {% comment %} Preconnect to Shopify asset domains to speed up hero media fetches {% endcomment %}
     <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.shopify.com">
