@@ -314,7 +314,7 @@
               "type": "heading",
               "name": "Heading",
               "settings": {
-                "heading": "The Design",
+                "heading": "Fine Print",
                 "heading_type": "h2",
                 "heading_size": "heading-h1"
               },
@@ -324,7 +324,7 @@
               "type": "richtext",
               "name": "Richtext",
               "settings": {
-                "richtext": "{{ closest.product.description }}"
+                "richtext": "<p>For everyone holding it together in public. These are the things you say when someone asks how you're doing and what you actually mean. Socially acceptable on the outside. Quietly devastating underneath. Read the small print.</p>"
               },
               "blocks": {}
             }
@@ -342,7 +342,7 @@
       "settings": {
         "content_type": "image",
         "html_embed_content": "",
-        "image": "{{ product.metafields.images.design.value }}",
+        "image": "shopify://shop_images/anxiety-line-drawing_fe01f275-4cea-496d-9f73-f9f1e3ad59cd.png",
         "image_display": "contain",
         "lazy_load": true,
         "video_type": "shopify",
@@ -366,7 +366,7 @@
         "container_background_image_type": "theme",
         "container_background_image_theme": "2",
         "remove_text_padding": true,
-        "vertical_text_alignment": "align-start",
+        "vertical_text_alignment": "align-center",
         "horizontal_layout": "section-text-left",
         "vertical_layout": "text-top",
         "page_width": "page-width",
