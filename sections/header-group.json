@@ -246,7 +246,7 @@
           "type": "_mobile-mega-menu",
           "static": true,
           "settings": {
-            "open_to_custiomise": true
+            "open_to_custiomise": false
           },
           "blocks": {
             "mobile_mega_menu_accordion_TBbjgX": {
