@@ -34,16 +34,16 @@
       "name": "FAQ Grid",
       "settings": {
         "faq_groups": [
-          "group-name",
-          "test-1",
-          "lorem-group"
+          "delivery",
+          "returns",
+          "delivery-worries"
         ],
         "placeholder_text": "Search FAQs...",
         "style_selector": "theme",
         "section_styling": "primary",
         "background_color": "linear-gradient(#ffffff, #ffffff)",
         "text_color": "#393939",
-        "faq_style_selector": "custom",
+        "faq_style_selector": "theme",
         "faq_section_styling": "primary",
         "faq_background_color": "linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)",
         "faq_text_color": "#1d1d1d",

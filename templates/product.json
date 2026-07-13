@@ -240,7 +240,7 @@
                 "heading_type": "h2",
                 "heading_size": "heading-h3",
                 "content_type": "richtext",
-                "richtext_content": "<p>Delivery Information</p>",
+                "richtext_content": "<p><strong>Do you ship internationally?</strong><br/>Yes, US, UK, Germany, Italy, France, Australia, Canada and pretty much everywhere else too.<br/><br/><strong>How long will my order take?</strong><br/>Everything's made when you order it, so give us a sec. Production takes about 48 hours, then it's off with the courier. From there: UK is 6-10 working days, US/Australia/Canada 7-12, and if you're further afield, 10-30 days. Basically, the further you are, the more time to get excited.<br/><br/><strong>Wait, why does the delivery take so long?</strong><br/>Because nothing's sitting in a warehouse waiting for you specifically, we make it once you hit buy. It's slower than a shelf item, but it means less waste and no dead stock. Worth the wait, we promise.</p>",
                 "liquid_content": "",
                 "open_default": false,
                 "id_attribute": ""
