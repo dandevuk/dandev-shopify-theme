@@ -122,7 +122,8 @@
       "settings": {
         "content_type": "image",
         "html_embed_content": "",
-        "image_display": "contain",
+        "image": "{{ collection.image }}",
+        "image_display": "cover",
         "lazy_load": true,
         "video_type": "shopify",
         "video_url": "https://www.youtube.com/watch?v=XXXXXXXX",
@@ -155,7 +156,7 @@
         "bottom_spacing": 120,
         "top_spacing_mobile": 60,
         "bottom_spacing_mobile": 60,
-        "id_text": ""
+        "id_text": "collection-read-more"
       }
     },
     "faq_group_Arwa3g": {
