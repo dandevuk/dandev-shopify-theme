@@ -88,7 +88,7 @@
         "text_content_horizontal_position": "span-5",
         "text_content_vertical_position": "align-end",
         "text_alignment": "text-left",
-        "truncate_text": true,
+        "truncate_text": false,
         "truncate_lines": 3
       }
     },
