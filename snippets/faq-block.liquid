@@ -1,7 +1,7 @@
-{%- assign faqs = faqs_group.knowledgebase_faq.value -%}
+{%- assign faqs = faqs_group.faqs.value -%}
 <div class="faq-block flex-center flex-col w-100">
   {%- if title != blank -%}
-    <h2 class="heading-h2 mb-1">{{ title }}</h2>
+    <h2 class="heading-h3 mb-1">{{ title }}</h2>
   {%- endif -%}
   <div class="faq-group-content w-100">
     {%- liquid
@@ -9,9 +9,9 @@
         assign title = faq.question
         assign answer = faq.answer | metafield_tag
         if forloop.index == 1
-          render 'accordion-item', faq: true, question: title, content: answer, rte: true, active: true, heading_color: heading_color
+          render 'accordion-item', faq: true, question: title, content: answer, rte: true, active: true, heading_color: "inherit"
         else
-          render 'accordion-item', faq: true, question: title, content: answer, rte: true, heading_color: heading_color
+          render 'accordion-item', faq: true, question: title, content: answer, rte: true, heading_color: "inherit"
         endif
       endfor
     -%}
