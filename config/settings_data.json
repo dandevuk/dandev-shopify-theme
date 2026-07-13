@@ -180,7 +180,7 @@
     "klaviyo_api_key": "",
     "side_cart": true,
     "free_delivery": "50",
-    "free_gift": "100",
+    "free_gift": "",
     "recommended_product_list": [],
     "recommended_collection_list": [
       "best-sellers"

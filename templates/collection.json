@@ -104,7 +104,7 @@
               "type": "richtext",
               "name": "Richtext",
               "settings": {
-                "richtext": "<p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p><p><br/>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p><p><br/>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.</p>"
+                "richtext": "{{ closest.collection.description }}"
               },
               "blocks": {}
             }
@@ -122,7 +122,8 @@
       "settings": {
         "content_type": "image",
         "html_embed_content": "",
-        "image_display": "contain",
+        "image": "{{ collection.image }}",
+        "image_display": "cover",
         "lazy_load": true,
         "video_type": "shopify",
         "video_url": "https://www.youtube.com/watch?v=XXXXXXXX",
@@ -155,7 +156,7 @@
         "bottom_spacing": 120,
         "top_spacing_mobile": 60,
         "bottom_spacing_mobile": 60,
-        "id_text": ""
+        "id_text": "collection-read-more"
       }
     },
     "faq_group_Arwa3g": {
