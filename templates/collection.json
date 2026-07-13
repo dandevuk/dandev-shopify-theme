@@ -123,7 +123,7 @@
         "content_type": "image",
         "html_embed_content": "",
         "image": "{{ collection.image }}",
-        "image_display": "cover",
+        "image_display": "contain",
         "lazy_load": true,
         "video_type": "shopify",
         "video_url": "https://www.youtube.com/watch?v=XXXXXXXX",
@@ -146,7 +146,7 @@
         "container_background_image_type": "none",
         "container_background_image_theme": "1",
         "remove_text_padding": true,
-        "vertical_text_alignment": "align-end",
+        "vertical_text_alignment": "align-center",
         "horizontal_layout": "section-text-left",
         "vertical_layout": "text-bottom",
         "page_width": "page-width",
@@ -156,7 +156,7 @@
         "bottom_spacing": 120,
         "top_spacing_mobile": 60,
         "bottom_spacing_mobile": 60,
-        "id_text": "collection-read-more"
+        "id_text": "read-more"
       }
     },
     "faq_group_Arwa3g": {
