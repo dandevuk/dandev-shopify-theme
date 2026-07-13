@@ -183,11 +183,11 @@
             -%}
           </div>
 
-          {%- if show_quickview_button -%}
+          {%- unless show_quickview_button == false -%}
             <div class="flex g-1 text-center">
               {%- render 'quickview-button' -%}
             </div>
-          {%- endif -%}
+          {%- endunless -%}
         </div>
       </div>
     </div>

@@ -113,7 +113,9 @@
             {{ main_slides }}
           </div>
         </div>
-        <div class="blaze-pagination slider-pagination relative mt-3 mb-2 g-1"></div>
+        <div class="blaze-scrollbar mt-8 from-sm-hidden" data-blaze-scrollbar hidden aria-hidden="true">
+          <span class="blaze-scrollbar-thumb" data-blaze-scrollbar-thumb></span>
+        </div>
       </div>
     {%- else -%}
       {%- comment -%} Single media item - no slider needed {%- endcomment -%}
