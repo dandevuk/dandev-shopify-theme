@@ -493,7 +493,7 @@
       },
       "name": "FAQ Group",
       "settings": {
-        "faq_group_metaobject": "test-1",
+        "faq_group_metaobject": "delivery",
         "style_selector": "theme",
         "section_styling": "primary",
         "background_color": "linear-gradient(#ffffff, #ffffff)",
