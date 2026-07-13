@@ -432,7 +432,7 @@
         "lazy_images": false
       }
     },
-    "faq_group_rERmHC": {
+    "faq_group_4QNNT7": {
       "type": "faq-group",
       "blocks": {
         "section-content": {
@@ -442,7 +442,7 @@
             "content_spacing": "g-1"
           },
           "blocks": {
-            "heading_A9jkWd": {
+            "heading_EyqLkM": {
               "type": "heading",
               "name": "Heading",
               "settings": {
@@ -454,7 +454,7 @@
             }
           },
           "block_order": [
-            "heading_A9jkWd"
+            "heading_EyqLkM"
           ]
         },
         "section-navigation": {
@@ -462,14 +462,14 @@
           "static": true,
           "settings": {},
           "blocks": {
-            "links_container_f4U6Fh": {
+            "links_container_eqrnPW": {
               "type": "links-container",
               "name": "Links Container",
               "settings": {
                 "content_spacing": "g-1"
               },
               "blocks": {
-                "link_Dtm6kN": {
+                "link_yECKUa": {
                   "type": "link",
                   "settings": {
                     "link_text": "View all faqs",
@@ -482,24 +482,24 @@
                 }
               },
               "block_order": [
-                "link_Dtm6kN"
+                "link_yECKUa"
               ]
             }
           },
           "block_order": [
-            "links_container_f4U6Fh"
+            "links_container_eqrnPW"
           ]
         }
       },
       "name": "FAQ Group",
       "settings": {
-        "faq_group_metaobject": "test-1",
+        "faq_group_metaobject": "delivery",
         "style_selector": "theme",
         "section_styling": "primary",
         "background_color": "linear-gradient(#ffffff, #ffffff)",
         "text_color": "#393939",
         "heading_color": "#000000",
-        "page_width": "page-width--narrow",
+        "page_width": "page-width",
         "vertical_spacing": "",
         "custom_spacing": false,
         "top_spacing": 120,
@@ -514,6 +514,6 @@
     "main",
     "text_media_TTHXBV",
     "recommendations_qPhbHg",
-    "faq_group_rERmHC"
+    "faq_group_4QNNT7"
   ]
 }
