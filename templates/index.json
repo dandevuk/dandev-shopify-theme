@@ -73,12 +73,13 @@
       "name": "Hero",
       "settings": {
         "transparent_header": false,
-        "image": "shopify://shop_images/1782034930759.png",
+        "image": "shopify://shop_images/awkward-af-hero-new.jpg",
+        "mobile_image": "shopify://shop_images/awkward-af-hero-mobile.jpg",
         "desktop_height": 500,
-        "mobile_height": 800,
+        "mobile_height": 590,
         "layout_style": "full-width",
         "style_selector": "theme",
-        "section_styling": "primary",
+        "section_styling": "third",
         "background_color": "linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1) 100%)",
         "text_color": "#393939",
         "overlay_type": "theme",
@@ -87,7 +88,7 @@
         "text_content_horizontal_position": "span-5",
         "text_content_vertical_position": "align-end",
         "text_alignment": "text-left",
-        "truncate_text": true,
+        "truncate_text": false,
         "truncate_lines": 3
       }
     },
@@ -268,6 +269,84 @@
         "background_image_theme": "1",
         "page_width": "page-width",
         "vertical_spacing": "vertical-margin"
+      }
+    },
+    "text_media_JpmT6p": {
+      "type": "text-media",
+      "blocks": {
+        "section_content_jmAqHd": {
+          "type": "section-content",
+          "settings": {
+            "content_spacing": "g-3"
+          },
+          "blocks": {
+            "heading_aakba3": {
+              "type": "heading",
+              "name": "Heading",
+              "settings": {
+                "heading": "Giving a bit back",
+                "heading_type": "h2",
+                "heading_size": "heading-h2"
+              },
+              "blocks": {}
+            },
+            "richtext_drGfgT": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "richtext": "<p>Laughing about the hard stuff helps. But sometimes you need more than a hoodie. That's why [X]% of every order goes to Mind, a mental health charity doing the actual, unglamorous work of helping people get support.</p><p>We're a small brand, so it's a small percentage for now. But it's real, and it grows as we do.</p>"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "heading_aakba3",
+            "richtext_drGfgT"
+          ]
+        }
+      },
+      "block_order": [
+        "section_content_jmAqHd"
+      ],
+      "name": "Text Media",
+      "settings": {
+        "content_type": "image",
+        "html_embed_content": "",
+        "image": "shopify://shop_images/Mind_Squiggle_Wordmark_White_RGB.png",
+        "image_display": "contain",
+        "lazy_load": true,
+        "video_type": "shopify",
+        "video_url": "https://www.youtube.com/watch?v=XXXXXXXX",
+        "video_display": "object-contain",
+        "controls_type": "default",
+        "autoplay": false,
+        "muted": true,
+        "loop": true,
+        "preload": true,
+        "style_selector": "theme",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "background_image_type": "none",
+        "background_image_theme": "1",
+        "container_style_selector": "theme",
+        "container_section_styling": "primary",
+        "container_background_color": "linear-gradient(#ffffff, #ffffff)",
+        "container_text_color": "#393939",
+        "container_background_image_type": "none",
+        "container_background_image_theme": "1",
+        "remove_text_padding": true,
+        "vertical_text_alignment": "align-center",
+        "horizontal_layout": "section-text-left",
+        "vertical_layout": "text-bottom",
+        "page_width": "page-width",
+        "vertical_spacing": "vertical-padding",
+        "custom_spacing": false,
+        "top_spacing": 120,
+        "bottom_spacing": 120,
+        "top_spacing_mobile": 60,
+        "bottom_spacing_mobile": 60,
+        "id_text": ""
       }
     },
     "slider_t6gWc3": {
@@ -467,14 +546,94 @@
         "top_spacing_mobile": 60,
         "bottom_spacing_mobile": 60
       }
+    },
+    "text_media_kbKYKz": {
+      "type": "text-media",
+      "blocks": {
+        "section_content_hHQpLN": {
+          "type": "section-content",
+          "settings": {
+            "content_spacing": "g-3"
+          },
+          "blocks": {
+            "heading_yiCQ7b": {
+              "type": "heading",
+              "name": "Heading",
+              "settings": {
+                "heading": "Who this is for",
+                "heading_type": "h2",
+                "heading_size": "heading-h2"
+              },
+              "blocks": {}
+            },
+            "richtext_HtVHn6": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "richtext": "<p>This is for the overthinkers. The quietly anxious. The neurodivergent. The \"I'm fine\" crowd who are very much not always fine. The people who laugh at themselves because it's genuinely the best coping mechanism going.</p><p>If you have to ask what \"it\" is, you probably still get it.</p>"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "heading_yiCQ7b",
+            "richtext_HtVHn6"
+          ]
+        }
+      },
+      "block_order": [
+        "section_content_hHQpLN"
+      ],
+      "name": "Text Media",
+      "settings": {
+        "content_type": "image",
+        "html_embed_content": "",
+        "image": "shopify://shop_images/who-this-is-for-image.png",
+        "image_display": "contain",
+        "lazy_load": true,
+        "video_type": "shopify",
+        "video_url": "https://www.youtube.com/watch?v=XXXXXXXX",
+        "video_display": "object-contain",
+        "controls_type": "default",
+        "autoplay": false,
+        "muted": true,
+        "loop": true,
+        "preload": true,
+        "style_selector": "theme",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "background_image_type": "none",
+        "background_image_theme": "1",
+        "container_style_selector": "theme",
+        "container_section_styling": "primary",
+        "container_background_color": "linear-gradient(#ffffff, #ffffff)",
+        "container_text_color": "#393939",
+        "container_background_image_type": "none",
+        "container_background_image_theme": "1",
+        "remove_text_padding": true,
+        "vertical_text_alignment": "align-center",
+        "horizontal_layout": "section-text-right",
+        "vertical_layout": "text-bottom",
+        "page_width": "page-width",
+        "vertical_spacing": "vertical-padding",
+        "custom_spacing": false,
+        "top_spacing": 120,
+        "bottom_spacing": 120,
+        "top_spacing_mobile": 60,
+        "bottom_spacing_mobile": 60,
+        "id_text": ""
+      }
     }
   },
   "order": [
     "hero_rtyajP",
     "slider_h7JJLB",
     "slider_e6Yp9W",
+    "text_media_JpmT6p",
     "slider_t6gWc3",
     "slider_B7FdVG",
-    "cta_banner_CPXmnn"
+    "cta_banner_CPXmnn",
+    "text_media_kbKYKz"
   ]
 }

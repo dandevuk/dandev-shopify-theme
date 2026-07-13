@@ -17,23 +17,14 @@
         "slide_ePhakU": {
           "type": "slide",
           "settings": {
-            "text": "Worldwide Delivery Available",
+            "text": "awkward as fuck",
             "link": "",
-            "link_text": ""
-          }
-        },
-        "slide_We4NCM": {
-          "type": "slide",
-          "settings": {
-            "text": "Latest products now available to buy",
-            "link": "shopify://collections",
             "link_text": ""
           }
         }
       },
       "block_order": [
-        "slide_ePhakU",
-        "slide_We4NCM"
+        "slide_ePhakU"
       ],
       "name": "Announcement Bar",
       "settings": {
@@ -246,7 +237,7 @@
           "type": "_mobile-mega-menu",
           "static": true,
           "settings": {
-            "open_to_custiomise": true
+            "open_to_custiomise": false
           },
           "blocks": {
             "mobile_mega_menu_accordion_TBbjgX": {
