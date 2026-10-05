@@ -308,6 +308,7 @@
       "block_order": [
         "section_content_jmAqHd"
       ],
+      "disabled": true,
       "name": "Text Media",
       "settings": {
         "content_type": "image",
