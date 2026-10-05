@@ -61,6 +61,264 @@
         "truncate_lines": 3
       }
     },
+    "slider_yc7LqR": {
+      "type": "slider",
+      "blocks": {
+        "slider_products_EqLbjb": {
+          "type": "_slider-products",
+          "settings": {
+            "block_collection": "awkward-af",
+            "block_products": [],
+            "show_advanced_settings": true,
+            "slider_overflow": "mobile-slider-overflow",
+            "custom_layout": false,
+            "loop": false,
+            "centered_slides": "none",
+            "initial_slide": 0,
+            "autoplay": false,
+            "autoplay_delay": 3,
+            "navigation_display": "desktop-navigation",
+            "navigation_style": "default",
+            "pagination_display": "desktop",
+            "scrollbar_display": "none"
+          },
+          "blocks": {
+            "product-card": {
+              "type": "_product-card",
+              "static": true,
+              "settings": {
+                "show_quickview_button": true
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": []
+        },
+        "heading": {
+          "type": "heading",
+          "static": true,
+          "settings": {
+            "heading": "Awkward As Fuck",
+            "heading_type": "h2",
+            "heading_size": "heading-h1"
+          },
+          "blocks": {}
+        },
+        "richtext": {
+          "type": "richtext",
+          "disabled": true,
+          "static": true,
+          "settings": {
+            "richtext": "<p>Add text here</p>"
+          },
+          "blocks": {}
+        },
+        "link": {
+          "type": "link",
+          "static": true,
+          "settings": {
+            "link_text": "View the full collection",
+            "link": "shopify://collections/awkward-af",
+            "link_title": "View the full Awkward AF collection",
+            "link_style": "button-1",
+            "external_link": false
+          },
+          "blocks": {}
+        },
+        "slider-navigation-arrows": {
+          "type": "_slider-navigation-arrows",
+          "static": true,
+          "settings": {},
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "slider_products_EqLbjb"
+      ],
+      "name": "Awkward As Fuck Slider",
+      "settings": {
+        "style_selector": "theme",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "background_image_type": "none",
+        "background_image_theme": "1",
+        "page_width": "page-width",
+        "vertical_spacing": "vertical-margin"
+      }
+    },
+    "slider_bmWBCD": {
+      "type": "slider",
+      "blocks": {
+        "slider_products_fgn3fG": {
+          "type": "_slider-products",
+          "settings": {
+            "block_collection": "fine-print",
+            "block_products": [],
+            "show_advanced_settings": true,
+            "slider_overflow": "mobile-slider-overflow",
+            "custom_layout": false,
+            "loop": false,
+            "centered_slides": "none",
+            "initial_slide": 0,
+            "autoplay": false,
+            "autoplay_delay": 3,
+            "navigation_display": "desktop-navigation",
+            "navigation_style": "default",
+            "pagination_display": "desktop",
+            "scrollbar_display": "none"
+          },
+          "blocks": {
+            "product-card": {
+              "type": "_product-card",
+              "static": true,
+              "settings": {
+                "show_quickview_button": true
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": []
+        },
+        "heading": {
+          "type": "heading",
+          "static": true,
+          "settings": {
+            "heading": "Read the fine print",
+            "heading_type": "h2",
+            "heading_size": "heading-h1"
+          },
+          "blocks": {}
+        },
+        "richtext": {
+          "type": "richtext",
+          "disabled": true,
+          "static": true,
+          "settings": {
+            "richtext": "<p>Add text here</p>"
+          },
+          "blocks": {}
+        },
+        "link": {
+          "type": "link",
+          "static": true,
+          "settings": {
+            "link_text": "View the full collection",
+            "link": "shopify://collections/fine-print",
+            "link_title": "View the full Fine Print collection",
+            "link_style": "button-3",
+            "external_link": false
+          },
+          "blocks": {}
+        },
+        "slider-navigation-arrows": {
+          "type": "_slider-navigation-arrows",
+          "static": true,
+          "settings": {},
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "slider_products_fgn3fG"
+      ],
+      "name": "Fine Print Slider",
+      "settings": {
+        "style_selector": "theme",
+        "section_styling": "third",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "background_image_type": "none",
+        "background_image_theme": "1",
+        "page_width": "page-width",
+        "vertical_spacing": "vertical-padding"
+      }
+    },
+    "slider_jmfen9": {
+      "type": "slider",
+      "blocks": {
+        "slider_products_MCTCUp": {
+          "type": "_slider-products",
+          "settings": {
+            "block_collection": "talking-to-myself",
+            "block_products": [],
+            "show_advanced_settings": true,
+            "slider_overflow": "mobile-slider-overflow",
+            "custom_layout": false,
+            "loop": false,
+            "centered_slides": "none",
+            "initial_slide": 0,
+            "autoplay": false,
+            "autoplay_delay": 3,
+            "navigation_display": "desktop-navigation",
+            "navigation_style": "default",
+            "pagination_display": "desktop",
+            "scrollbar_display": "none"
+          },
+          "blocks": {
+            "product-card": {
+              "type": "_product-card",
+              "static": true,
+              "settings": {
+                "show_quickview_button": true
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": []
+        },
+        "heading": {
+          "type": "heading",
+          "static": true,
+          "settings": {
+            "heading": "Talking to yourself??",
+            "heading_type": "h2",
+            "heading_size": "heading-h1"
+          },
+          "blocks": {}
+        },
+        "richtext": {
+          "type": "richtext",
+          "disabled": true,
+          "static": true,
+          "settings": {
+            "richtext": "<p>Add text here</p>"
+          },
+          "blocks": {}
+        },
+        "link": {
+          "type": "link",
+          "static": true,
+          "settings": {
+            "link_text": "View the full collection",
+            "link": "shopify://collections/talking-to-myself",
+            "link_title": "View the full Talking to Myself collection",
+            "link_style": "button-1",
+            "external_link": false
+          },
+          "blocks": {}
+        },
+        "slider-navigation-arrows": {
+          "type": "_slider-navigation-arrows",
+          "static": true,
+          "settings": {},
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "slider_products_MCTCUp"
+      ],
+      "name": "Talking to Yourself Slider",
+      "settings": {
+        "style_selector": "theme",
+        "section_styling": "primary",
+        "background_color": "linear-gradient(#ffffff, #ffffff)",
+        "text_color": "#393939",
+        "background_image_type": "none",
+        "background_image_theme": "1",
+        "page_width": "page-width",
+        "vertical_spacing": "vertical-margin"
+      }
+    },
     "recently_viewed_R779H7": {
       "type": "recently-viewed",
       "blocks": {
@@ -112,6 +370,9 @@
   },
   "order": [
     "page_header_hJyjmN",
+    "slider_yc7LqR",
+    "slider_bmWBCD",
+    "slider_jmfen9",
     "recently_viewed_R779H7"
   ]
 }
