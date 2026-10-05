@@ -66,8 +66,8 @@
           "type": "_footer-accordion-item",
           "name": "Accordion Menu",
           "settings": {
-            "title": "Menu",
-            "footer_links": "customer-account-main-menu"
+            "title": "Policies and stuff",
+            "footer_links": "policies-and-stuff"
           },
           "blocks": {}
         },
