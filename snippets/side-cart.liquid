@@ -249,31 +249,7 @@
       {%- endcomment -%}
 
       {%- capture sidecart_recommendations_slider -%}
-        {%- render 'recommendations-slider',
-          use_fallback: true,
-          show_quickview_button: true,
-          slider_aria_label: 'general.side_cart.side_cart_buttons_and_tabs.recommended_products' | t,
-          slider_mobile: 2,
-          slider_tablet: 2,
-          slider_desktop: 3,
-          slider_wide: 4,
-          slider_gap_mobile: 16,
-          slider_gap_tablet: 16,
-          slider_gap_desktop: 24,
-          slider_gap_wide: 30,
-          slider_loop: false,
-          slider_pagination: false,
-          css_mobile_slides: 2,
-          css_tablet_slides: 2,
-          css_desktop_slides: 3,
-          css_wide_slides: 4,
-          css_mobile_gap: 16,
-          css_tablet_gap: 16,
-          css_desktop_gap: 24,
-          css_wide_gap: 30,
-          slider_class: 'blaze-loading cart-recommendations-slider p-2 pt-3 pb-1',
-          ensure_structure: true
-        -%}
+        {%- render 'recommendations-slider', use_fallback: true, show_quickview_button: true, slider_aria_label: 'general.side_cart.side_cart_buttons_and_tabs.recommended_products', slider_mobile: 2, slider_tablet: 2, slider_desktop: 3, slider_wide: 4, slider_gap_mobile: 16, slider_gap_tablet: 16, slider_gap_desktop: 24, slider_gap_wide: 30, slider_loop: false, slider_pagination: false, css_mobile_slides: 2, css_tablet_slides: 2, css_desktop_slides: 3, css_wide_slides: 4, css_mobile_gap: 16, css_tablet_gap: 16, css_desktop_gap: 24, css_wide_gap: 30, slider_class: 'blaze-loading cart-recommendations-slider p-2 pt-3 pb-1', ensure_structure: true -%}
       {%- endcapture -%}
 
       {%- assign sidecart_recommendations_label = 'general.side_cart.side_cart_buttons_and_tabs.recommended_products'
@@ -558,3 +534,45 @@
     transform: rotateX(0deg);
   }
 {% endstylesheet %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {%- render 'recommendations-slider',
+              use_fallback: true,
+              show_quickview_button: true,
+              slider_aria_label: 'general.side_cart.side_cart_buttons_and_tabs.recommended_products' | t,
+              slider_mobile: 2,
+              slider_tablet: 2,
+              slider_desktop: 3,
+              slider_wide: 4,
+              slider_gap_mobile: 16,
+              slider_gap_tablet: 16,
+              slider_gap_desktop: 24,
+              slider_gap_wide: 30,
+              slider_loop: false,
+              slider_pagination: false,
+              css_mobile_slides: 2,
+              css_tablet_slides: 2,
+              css_desktop_slides: 3,
+              css_wide_slides: 4,
+              css_mobile_gap: 16,
+              css_tablet_gap: 16,
+              css_desktop_gap: 24,
+              css_wide_gap: 30,
+              slider_class: 'blaze-loading cart-recommendations-slider p-2 pt-3 pb-1',
+              ensure_structure: true
+            -%}
+  to: "{%- render 'recommendations-slider', use_fallback: true, show_quickview_button:
+    true, slider_aria_label: 'general.side_cart.side_cart_buttons_and_tabs.recommended_products',
+    slider_mobile: 2, slider_tablet: 2, slider_desktop: 3, slider_wide: 4, slider_gap_mobile:
+    16, slider_gap_tablet: 16, slider_gap_desktop: 24, slider_gap_wide: 30, slider_loop:
+    false, slider_pagination: false, css_mobile_slides: 2, css_tablet_slides: 2, css_desktop_slides:
+    3, css_wide_slides: 4, css_mobile_gap: 16, css_tablet_gap: 16, css_desktop_gap:
+    24, css_wide_gap: 30, slider_class: 'blaze-loading cart-recommendations-slider
+    p-2 pt-3 pb-1', ensure_structure: true -%}"
+  position: 10321..10968
+{% endcomment %}

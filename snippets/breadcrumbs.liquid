@@ -132,7 +132,7 @@
           <meta itemprop="position" content="{{ position }}">
         </li>
 
-      {%- when 'collection' and collection.handle -%}
+      {%- when 'collection' -%}
         {%- if collection.metafields.collection_data.parent_collection -%}
           {%- liquid
             assign sub_collection = collection.metafields.collection_data.parent_collection.value
@@ -347,3 +347,13 @@
     flex-direction: row;
   }
 {% endstylesheet %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- when 'collection' and collection.handle -%}"
+  to: "{%- when 'collection' -%}"
+  position: 5179..5204
+{% endcomment %}

@@ -127,14 +127,14 @@
   {%- for resource_type in sidebar_resource_types -%}
     {%- liquid
       assign resource_heading_var = resource_type | append: resource_heading_var_prefix
-      assign resource_heading = [resource_heading_var]
+      assign resource_heading = self[resource_heading_var]
 
       if filter_sidebar_objects == false
         assign resource_results = predictive_search.resources[resource_type]
         assign result_count = resource_results.size
       else
         assign recommended_resources_var = resource_var | append: resource_type
-        assign recommended_resources_object = [recommended_resources_var]
+        assign recommended_resources_object = self[recommended_resources_var]
 
         if resource_type == 'pages' or resource_type == 'useful_links'
           assign resource_results = recommended_resources_object.links
@@ -436,3 +436,16 @@
     }
   }
 {% endstylesheet %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "      assign resource_heading = [resource_heading_var]"
+  to: "      assign resource_heading = self[resource_heading_var]"
+  position: 6430..6488
+- from: "        assign recommended_resources_object = [recommended_resources_var]"
+  to: "        assign recommended_resources_object = self[recommended_resources_var]"
+  position: 6751..6828
+{% endcomment %}

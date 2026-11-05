@@ -104,7 +104,7 @@
 -%}
 {%- assign page_key = page_type | append: '_meta' -%}
 {%- assign page_namespace = 'canonical_' | append: page_type | append: '_handle' -%}
-{%- assign custom_canonical_url = [page_type].metafields[page_key][page_namespace] -%}
+{%- assign custom_canonical_url = self[page_type].metafields[page_key][page_namespace] -%}
 
 {%- if custom_canonical_url != blank -%}
   <link rel="canonical" href="{{ shop.url }}/{{ page_type_slug }}/{{ custom_canonical_url }}">
@@ -117,3 +117,15 @@
 {%- elsif page_description -%}
   <meta name="description" content="{{ page_description | escape }}">
 {%- endif -%}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- assign custom_canonical_url = [page_type].metafields[page_key][page_namespace]
+    -%}"
+  to: "{%- assign custom_canonical_url = self[page_type].metafields[page_key][page_namespace]
+    -%}"
+  position: 2689..2779
+{% endcomment %}
